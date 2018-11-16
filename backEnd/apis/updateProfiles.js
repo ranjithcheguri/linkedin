@@ -1,11 +1,10 @@
 var router = require('express').Router();
 var { applicantProfiles } = require('../models/applicantProfile');
-
-router.post('/applicant/updateProfile', function (req, res) {
+var { recruiterProfiles } = require('../models/recruiterProfile');
+// Two ways of upserting the documents.
+router.put('/applicant/updateProfile', function (req, res) {
     console.log("Inside Applicant update handler");
-    applicantProfiles.updateOne({
-        //email: req.email
-    }, { ...req.body }, function (err, result) {
+    applicantProfiles.updateOne({ email: req.body.email }, { $set: { ...req.body } }, { upsert: true }, function (err, result) {
         if (err) {
             console.log("Error updating the Profile information.");
             console.log(err)
@@ -16,28 +15,21 @@ router.post('/applicant/updateProfile', function (req, res) {
             res.sendStatus(200).end();
         }
     })
-    // jobApplication.save().then((result) => {
-
-    // }, (err) => {
-
-    // })
-
 });
 
-router.post('/recruiter/updateProfile', function (req, res) {
-    console.log("Inside job application");
-    var jobApplication = new jobApplications({
-        ...req.body
-    });
-    jobApplication.save().then((result) => {
-        console.log("jobApplication inserted: ", result);
-        res.sendStatus(200).end();
-    }, (err) => {
-        console.log("Error doing the job Application");
-        console.log(err)
-        res.sendStatus(400).end();
+router.put('/recruiter/updateProfile', function (req, res) {
+    console.log("Inside Recruiter update handler");
+    recruiterProfiles.findOneAndUpdate({ email: req.body.email }, { $set: { ...req.body } }, { upsert: true, new:true }, function (err, result) {
+        if (err) {
+            console.log("Error updating the Profile information.");
+            console.log(err)
+            res.sendStatus(400).end();
+        }
+        else if (result) {
+            console.log("Recruiter Profile updated: ", result);
+            res.sendStatus(200).end();
+        }
     })
-
 });
 
 module.exports = router;
