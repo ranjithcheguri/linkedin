@@ -8,6 +8,14 @@ var cookieParser = require('cookie-parser');
 var cors = require('cors');
 var morgan = require('morgan');
 
+//Route imports
+var jobApplication = require('./apis/jobApplication');
+var updateProfiles = require('./apis/updateProfiles');
+
+//Mongo connection
+var { mongoose } = require('./db/mongoose');
+
+
 // Log requests to console
 app.use(morgan('dev'));
 
@@ -34,6 +42,10 @@ app.use(function (req, res, next) {
 
 // create travelerLogin in apis and write code there.
 //app.use('/', travelerLogin);
+
+app.use('/', jobApplication);
+app.use('/', updateProfiles);
+
 
 app.listen(ENV_VAR.PORT);
 console.log("Server running on port " + ENV_VAR.PORT);
