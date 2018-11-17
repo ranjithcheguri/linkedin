@@ -13,6 +13,7 @@ var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
+var viewJobApplications = require('./apis/viewJobApplications');
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
@@ -49,6 +50,7 @@ app.use('/', jobApplication);
 app.use('/', updateProfiles);
 app.use('/', viewPostedJob);
 app.use('/', editPostedJob);
+app.use('/', viewJobApplications);
 
 
 app.listen(ENV_VAR.PORT);
