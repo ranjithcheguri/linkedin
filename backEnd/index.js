@@ -11,11 +11,13 @@ var morgan = require('morgan');
 //Route imports
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
-var searchJob = require('./apis/searchJob');
+var searchJob = require('./apis/searchjob');
+var viewPostedJob = require('./apis/viewPostedJob');
+var editPostedJob = require('./apis/editPostedJob');
+var viewJobApplications = require('./apis/viewJobApplications');
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
-
 
 // Log requests to console
 app.use(morgan('dev'));
@@ -46,7 +48,10 @@ app.use(function (req, res, next) {
 
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
-app.use('/',searchJob);
+app.use('/', searchJob);
+app.use('/', viewPostedJob);
+app.use('/', editPostedJob);
+app.use('/', viewJobApplications);
 
 //check the pull data.
 
