@@ -11,6 +11,9 @@ var morgan = require('morgan');
 //Route imports
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
+var postJob = require('./apis/postJob');
+var searchPostedJob = require('./apis/searchPostedJob')
+var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
@@ -45,6 +48,13 @@ app.use(function (req, res, next) {
 
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
+
+//This route is used to post a job
+app.use('/', postJob)
+//This route is used to filter posted job
+app.use('/', searchPostedJob)
+//This route is used to view particular application details
+app.use('/', viewParticularAppDetails)
 
 
 app.listen(ENV_VAR.PORT);
