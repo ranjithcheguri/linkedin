@@ -12,9 +12,14 @@ var morgan = require('morgan');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 var searchJob = require('./apis/searchjob');
+
+var postJob = require('./apis/postJob');
+var searchPostedJob = require('./apis/searchPostedJob')
+var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
 var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
+
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
@@ -48,12 +53,19 @@ app.use(function (req, res, next) {
 
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
+// applicant job search results.
 app.use('/', searchJob);
 app.use('/', viewPostedJob);
 app.use('/', editPostedJob);
 app.use('/', viewJobApplications);
 
-//check the pull data.
+//This route is used to post a job
+app.use('/', postJob)
+//This route is used to filter posted job
+app.use('/', searchPostedJob)
+//This route is used to view particular application details
+app.use('/', viewParticularAppDetails)
+
 
 app.listen(ENV_VAR.PORT);
 console.log("Server running on port " + ENV_VAR.PORT);
