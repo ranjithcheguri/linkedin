@@ -12,6 +12,7 @@ var morgan = require('morgan');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 var viewPostedJob = require('./apis/viewPostedJob');
+var editPostedJob = require('./apis/editPostedJob');
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
@@ -46,7 +47,8 @@ app.use(function (req, res, next) {
 
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
-app.use('/', viewPostedJob)
+app.use('/', viewPostedJob);
+app.use('/', editPostedJob);
 
 
 app.listen(ENV_VAR.PORT);
