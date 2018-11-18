@@ -27,6 +27,7 @@ var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
 var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
+var savejob = require('./apis/saveJob');
 
 //Aws s3 upload/import method
 var resumeupload= require('./AWS_s3/s3BucketOperations')
@@ -68,7 +69,8 @@ app.use('/', searchJob);
 app.use('/', viewPostedJob);
 app.use('/', editPostedJob);
 app.use('/', viewJobApplications);
-
+//save Job
+app.use('/', savejob)
 //This route is used to post a job
 app.use('/', postJob)
 //This route is used to filter posted job
@@ -78,7 +80,6 @@ app.use('/', viewParticularAppDetails)
 
 //Aws s3
 app.use('/', resumeupload)
-
 
 app.listen(ENV_VAR.PORT);
 console.log("Server running on port " + ENV_VAR.PORT);
