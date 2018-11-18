@@ -19,6 +19,7 @@ app.use(busboyBodyParser());
 //Route imports
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
+var searchJob = require('./apis/searchjob');
 
 var postJob = require('./apis/postJob');
 var searchPostedJob = require('./apis/searchPostedJob')
@@ -32,7 +33,6 @@ var resumeupload= require('./AWS_s3/s3BucketOperations')
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
-
 
 // Log requests to console
 app.use(morgan('dev'));
@@ -63,6 +63,8 @@ app.use(function (req, res, next) {
 
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
+// applicant job search results.
+app.use('/', searchJob);
 app.use('/', viewPostedJob);
 app.use('/', editPostedJob);
 app.use('/', viewJobApplications);
