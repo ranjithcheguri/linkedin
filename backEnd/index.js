@@ -8,6 +8,14 @@ var cookieParser = require('cookie-parser');
 var cors = require('cors');
 var morgan = require('morgan');
 
+//Only for AWS
+const busboy = require('connect-busboy');
+const busboyBodyParser = require('busboy-body-parser');
+app.use(busboy());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(busboyBodyParser());
+
 //Route imports
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
@@ -19,6 +27,8 @@ var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
 
+//Aws s3 upload/import method
+var resumeupload= require('./AWS_s3/s3BucketOperations')
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
@@ -63,6 +73,9 @@ app.use('/', postJob)
 app.use('/', searchPostedJob)
 //This route is used to view particular application details
 app.use('/', viewParticularAppDetails)
+
+//Aws s3
+app.use('/', resumeupload)
 
 
 app.listen(ENV_VAR.PORT);
