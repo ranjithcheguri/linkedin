@@ -4,7 +4,7 @@ const IP_MONGODB_DATABASE = 'mongodb://user:cmpe273@ds257579.mlab.com:57579/link
 const IP_KAFKA = 'localhost:2181';
 const CORS_ORIGIN = 'http://localhost:3000'
 
-//AWS credentials
+//AWS credentials:Vinay
 const BUCKET_NAME = 'cmpe273';
 const IAM_USER_KEY = 'AKIAJ7VFZCRVNQACNQUQ';
 const IAM_USER_SECRET = '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';

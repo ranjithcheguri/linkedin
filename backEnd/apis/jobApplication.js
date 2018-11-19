@@ -6,15 +6,16 @@ var { jobApplications } = require('../models/jobApplication');
 
 router.post('/jobApplication/apply', function (req, res) {
     console.log("Inside job application");
+    console.log("Received files: ",req.files)
     var busboy = new Busboy({ headers: req.headers });
     var jobApplication = new jobApplications({
         ...req.body,
         resume:req.body.email
     });
     busboy.on('finish', function () {
-        console.log('Upload finished');
+        //console.log('Upload finished');
         const file = req.files.resume;
-        console.log(file);
+        console.log("Resume picked",file);
         // Begins the upload to the AWS S3
         uploadToS3.uploadToS3(file,req.body.email);
     });

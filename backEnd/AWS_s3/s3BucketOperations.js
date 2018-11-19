@@ -27,7 +27,7 @@ uploadToS3=(file,email)=> {
     s3bucket.createBucket(function () {
         var params = {
             Bucket: AWS_CREDS.BUCKET_NAME,
-            Key: email+'.pdf',
+            Key: Resumes/email+'.pdf',
             Body: file.data,
         };
         //Inbuilt access moethod to upload a file to s3
@@ -36,36 +36,36 @@ uploadToS3=(file,email)=> {
                 console.log('error in callback');
                 console.log(err);
             }
-            console.log('success');
-            console.log(data);
+            console.log("Resume pushed is...", data);
+            console.log('Resume uploaded successfully!');
         });
     });
 }
 
-router.get('/api/download', function (req, res, next) {
-    let s3bucket = new AWS.S3({
-        accessKeyId: AWS_CREDS.IAM_USER_KEY,
-        secretAccessKey: AWS_CREDS.IAM_USER_SECRET,
-        Bucket: AWS_CREDS.BUCKET_NAME,
-    });
-    s3bucket.createBucket(function () {
-        var params = {
-            Bucket: AWS_CREDS.BUCKET_NAME,
-            Key: "img041.pdf",
-        };
-        s3bucket.getObject(params, function (err, data) {
-            if (err) {
-                console.log('error in callback');
-                console.log(err);
-            }
-            console.log('success');
-            console.log(data);
-            res.setHeader('Content-disposition', 'attachment; filename=img041.pdf')
-            res.setHeader('Content-length', data.ContentLength);
-            res.end(data.Body)
-        });
-    });
-});
+// router.get('/api/download', function (req, res, next) {
+//     let s3bucket = new AWS.S3({
+//         accessKeyId: AWS_CREDS.IAM_USER_KEY,
+//         secretAccessKey: AWS_CREDS.IAM_USER_SECRET,
+//         Bucket: AWS_CREDS.BUCKET_NAME,
+//     });
+//     s3bucket.createBucket(function () {
+//         var params = {
+//             Bucket: AWS_CREDS.BUCKET_NAME,
+//             Key: "img041.pdf",
+//         };
+//         s3bucket.getObject(params, function (err, data) {
+//             if (err) {
+//                 console.log('error in callback');
+//                 console.log(err);
+//             }
+//             console.log('success');
+//             console.log(data);
+//             res.setHeader('Content-disposition', 'attachment; filename=img041.pdf')
+//             res.setHeader('Content-length', data.ContentLength);
+//             res.end(data.Body)
+//         });
+//     });
+// });
 
 module.exports = router;
 module.exports.uploadToS3=uploadToS3
