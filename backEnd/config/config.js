@@ -2,7 +2,7 @@
 const PORT = '3002';
 const IP_MONGODB_DATABASE = 'mongodb://user:cmpe273@ds257579.mlab.com:57579/linkedin';
 const IP_KAFKA = 'localhost:2181';
-const CORS_ORIGIN = 'http://localhost:3000'
+const CORS_ORIGIN = 'http://localhost:3000';
 
 //AWS credentials
 const BUCKET_NAME = 'cmpe273';
