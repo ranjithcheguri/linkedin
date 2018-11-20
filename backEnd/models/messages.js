@@ -1,12 +1,7 @@
 var mongoose = require('mongoose');
 
 const messagesschema= new mongoose.Schema({
-    person1 :{
-        type : String
-    },
-    person2 :{
-        type : String
-    },
+    person = Array,
     messages : [{
         from    : String,
         msg     : String,
