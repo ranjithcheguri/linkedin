@@ -73,6 +73,8 @@ var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
 var savejob = require('./apis/saveJob');
+var getAllMessages = require('./apis/getAllMessages');
+var getParticularMessages = require('./apis/getParticularMessages');
 //Aws s3 upload/import method
 var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
@@ -97,12 +99,17 @@ app.use('/', postJob)
 app.use('/', searchPostedJob)
 //This route is used to view particular application details
 app.use('/', viewParticularAppDetails)
+//This is used to get all the messages of a particular user
+app.use('/', getAllMessages);
+//This is used to get the conversation between two users
+app.use('/', getParticularMessages);
 //Aws s3
 app.use('/', resumeupload)
 //send connection request
 app.use('/', makeConnection)
 //accept connection request
 app.use('/', acceptConnection)
+
 
 
 
