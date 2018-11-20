@@ -61,6 +61,8 @@ app.use(function (req, res, next) {
 
 
 //Route imports
+var viewUserProfile = require('./apis/viewUserProfile');
+var deleteUserProfile = require('./apis/deleteUserProfile');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 var searchJob = require('./apis/searchjob');
@@ -77,7 +79,10 @@ var makeConnection = require('./apis/makeConnection');
 var acceptConnection = require('./apis/acceptConnection');
 var messages = require('./messages');
 
-
+//This route is used to view the user profile by email
+app.use('/', viewUserProfile);
+//This route is used to delete the user profile by email
+app.use('/', deleteUserProfile);
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
 // applicant job search results.
