@@ -75,6 +75,8 @@ app.use('/',userLogin)
 
 
 //Route imports
+var viewUserProfile = require('./apis/viewUserProfile');
+var deleteUserProfile = require('./apis/deleteUserProfile');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 var searchJob = require('./apis/searchjob');
@@ -89,8 +91,12 @@ var savejob = require('./apis/saveJob');
 var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
 var acceptConnection = require('./apis/acceptConnection');
+var messages = require('./messages');
 
-
+//This route is used to view the user profile by email
+app.use('/', viewUserProfile);
+//This route is used to delete the user profile by email
+app.use('/', deleteUserProfile);
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
 // applicant job search results.
@@ -112,6 +118,8 @@ app.use('/', resumeupload)
 app.use('/', makeConnection)
 //accept connection request
 app.use('/', acceptConnection)
+
+app.use('/',messages)
 
 
 app.listen(ENV_VAR.PORT);

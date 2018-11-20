@@ -1,20 +1,15 @@
-var mongoose = require('mongoose');
+var mongoose=require('mongoose');
+var Schema = mongoose.Schema;
 
-const messagesschema= new mongoose.Schema({
-    person1 :{
-        type : String
-    },
-    person2 :{
-        type : String
-    },
+//Booking schema
+var messgaesSchema = Schema({
+    participants : [String],
     messages : [{
         from    : String,
         msg     : String,
         status  : String
-    }],
-    
-    
-})
-var messages = mongoose.model('messages',messagesschema);
+    }]
+});
 
-module.exports = {applicantProfiles};
+
+module.exports= mongoose.model('Message', messgaesSchema,'Messages');
