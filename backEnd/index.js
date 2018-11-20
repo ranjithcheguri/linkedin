@@ -19,6 +19,10 @@ app.use(busboyBodyParser());
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
 
+//Redis connection
+const redis = require('redis');
+require('./Redis/connectRedis')
+
 // Log requests to console
 app.use(morgan('dev'));
 
@@ -31,8 +35,6 @@ app.use(session({
     activeDuration: 5 * 60 * 1000
 }));
 
-app.use(bodyParser.json());
-
 //Allow Access Control
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', ENV_VAR.CORS_ORIGIN);
@@ -42,6 +44,7 @@ app.use(function (req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
+
 
 
 //Route imports
