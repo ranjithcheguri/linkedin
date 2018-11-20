@@ -1,0 +1,184 @@
+
+import React, { Component } from 'react';
+import {NavLink} from 'react-router-dom';
+import {Redirect} from 'react-router';
+import axios from 'axios';
+import { connect } from "react-redux";
+import '../css/Home.css';
+import { IP_backEnd, IP_NODE_PORT } from '../config/config';
+import { submitLogin } from '../actions/loginActions';
+class Home extends Component {
+    constructor(props) {
+        super(props);
+    this.state = {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        message:"",
+        flag:false
+    }
+    this.handleChange=this.handleChange.bind(this);
+    this.handleClick=this.handleClick.bind(this);
+}
+
+handleChange (e){
+    console.log(" Signup Value getting changed");
+    this.setState({
+        //square brackets must
+        [e.target.name]: e.target.value
+    })
+}
+
+handleClick(e){
+    console.log("I am here inside form submit")
+    e.preventDefault();
+    console.log(this.state);
+    const data = this.state;
+    var errormessage;
+    axios.defaults.withCredentials = true;
+    if(this.state.firstName==""){
+        errormessage="Enter your first name:"
+    }else if(this.state.lastName==""){
+        errormessage="Enter your last name:"
+    }else if(this.state.email==""){
+        errormessage="Enter your email:"
+    }else if(this.state.password==""){
+        errormessage="Enter your password:"
+    }else if(this.state.password.length<6){
+        errormessage="Password must be 6 characters or more:"
+    }
+    else{
+    axios.post(IP_backEnd + '/signup', data)
+        .then(response => {
+            if (response.status === 200) {
+                alert("sign up successfull !");
+                console.log("sign up successful, data inserted");
+                // this.props.history.push('/Login');
+            }
+        })
+        .catch((error) => {
+            alert("Email already exists");
+            // console.log("Response status : ", error.response.status, "Response : ", error.response.data);
+        })
+    }
+    this.setState({message:errormessage})
+}
+
+handleLogin = (e) => {
+    e.preventDefault();
+    console.log("Hello I am here")
+    let { email, password } = this.state;
+    const data= {
+        email:email,
+        password:password
+    }
+    console.log(data)
+    if(this.state.email==""||this.state.password=="")
+      alert("Fill all the information for Login");
+    else{
+    this.props.submitLogin(email, password)
+    }
+    // if(this.props.response === 400) alert(this.props.errormessage)
+    // setTimeout(() => {
+    //     if (this.props.response === 400) alert(this.props.errormessage);
+    // }, 500);
+    // this.renderRedirect();
+
+}
+
+renderRedirect = () => {
+    if (this.props.redirectVar) {
+        console.log("redirecting... email is ",this.state.email)
+        sessionStorage.setItem('username', this.state.email);
+        return <Redirect to='/' />
+    }
+}
+
+    render() { 
+        console.log("On unsuccessfull login message:"+ this.props.errormessage)
+        console.log("Token is:"+window.localStorage.getItem('token'))
+        const{message}=this.state
+        if(message!=""){
+            var al=( <div>
+                {window.scrollTo(0, 0)}
+                   <div className="alert text-white alert-dismissible alertcolor">
+                       <button type="button" className="close" data-dismiss="alert">&times;</button>
+                       <h6> <i className="fa fa-thumbs-o-down mr-1"></i>
+                      {this.state.message}</h6>
+                   </div>
+                  </div>
+                )
+        }
+
+        //  if(this.props.response === 400 && this.props.errormessage!="") alert(this.props.errormessage)
+        return ( 
+        <div class="">
+           <nav className="navbar navbar-light bg-faded test" >
+            <NavLink to="/" className="mb-0 py-0 ml-5" ><img src={require('../images/logo.JPG')} /></NavLink>
+            <div className="navbar">
+            <input type="text" placeholder="Email" name="email" className="text-muted p-1" onChange={this.handleChange}></input>
+            <input type="password" placeholder="Password" name="password" className="text-muted ml-2 p-1" onChange={this.handleChange}></input>
+            <button className="ml-1 p-1 pl-3 pr-3 btn-link text-white" type="submit" onClick={this.handleLogin.bind(this)}>Sign in</button>
+            <div className="mr-5 ml-2"><small className="text-white">Forget Password?</small></div>
+            <div className="mr-5"></div>
+            </div>
+            </nav>
+        {/* <nav className="#212529"></nav> */}
+        <div className="ma">  
+           <img class="img-fluid  im" src={require('../images/1.jpg')} /> 
+        
+           <div className="container-fluid mt-3 bg-light topl col-lg-4 col-lg-offset-3 col-md-5 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12 border border-secondary shadow-lg rounded ">
+          
+            <div className="row-entry">
+             <div className="text-center mb-3 " >
+             <h4 className="title mt-2">Be great at what you do</h4>
+                Get started - it's free.
+                <hr></hr>
+             </div>
+             {al} 
+            <div class="panel-heading ml-1 mr-1 ">
+            <div >
+            <form onSubmit={this.submitEvent}>
+            <div className="mt-3">
+            <label for="firstName">First Name</label>
+            <div><input type="text" id="firstName" name="firstName" className="panel-input w-100" onChange={this.handleChange} required/></div>
+            </div>
+            <div className="mt-3">
+            <label for="lastName">Last Name</label><br></br>
+            <input type="text" id="lastName" name="lastName" className="panel-input w-100" onChange={this.handleChange} required/>
+            </div>
+            <div className="mt-3">
+            <label for="email">Email</label>
+            <div><input type="email" id="email" name="email" className="panel-input w-100" onChange={this.handleChange} required/></div>
+            </div>
+            
+            <div className="mt-3">
+            <label for="password">Password(6 or more characters)</label><br></br>
+            <input type="password" id="password" name="password" className="panel-input w-100" onChange={this.handleChange} required/>
+            </div>
+            <div class="text-center mt-2 text-muted" >
+            <small>  By clicking Join now, you agree to the LinkedIn User Agreement, Privacy Policy, and Cookie Policy.</small> 
+            </div>
+            
+            <button type="submit" className="btn mt-2 mb-3 w-100 text-white btn-primary" onClick={this.handleClick}><strong>Join now</strong></button> 
+        
+        </form>
+        </div>
+        </div>
+            </div>
+            </div>
+         
+          
+        </div>
+        </div> );
+    }
+}
+
+const mapStateToProps = (state) => ({
+    redirectVar: state.loginState.redirectVar,
+    response: state.loginState.response,
+    errormessage:state.loginState.errormessage
+})
+
+export default connect(mapStateToProps, { submitLogin })(Home);

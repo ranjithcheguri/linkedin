@@ -1,5 +1,6 @@
 var ENV_VAR = require('./config/config');
-
+var pool = require('./config/mysql');
+var mysql=require('mysql')
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -9,11 +10,20 @@ var cors = require('cors');
 var morgan = require('morgan');
 
 //Route imports
+var signUp = require('./apis/signUp');
+var userLogin = require('./apis/userLogin');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
+
+// con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("Connected!");
+//   });
+
+
 
 
 // Log requests to console
@@ -42,10 +52,10 @@ app.use(function (req, res, next) {
 
 // create travelerLogin in apis and write code there.
 //app.use('/', travelerLogin);
-
+app.use('/',signUp);
+app.use('/',userLogin)
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
-
 
 app.listen(ENV_VAR.PORT);
 console.log("Server running on port " + ENV_VAR.PORT);

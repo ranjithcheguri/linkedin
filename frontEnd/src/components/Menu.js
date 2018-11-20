@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Navbar from './Navbar';
+import Home from './Home';
 class Menu extends Component {
     constructor(props) {
         super(props);
@@ -9,7 +10,8 @@ class Menu extends Component {
     render() {
         return (
             <div>
-                <Route path="/" component={Navbar} />
+                <Route path="/" component={Home} /> 
+                <Route path="/navbar" component={Navbar} />
             </div>
         );
     }
