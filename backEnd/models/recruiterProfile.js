@@ -1,34 +1,34 @@
 var mongoose = require('mongoose');
 
 const recruiterProfileschema= new mongoose.Schema({
-    remail :{
+    email :{
         type : String,
-        required:true,
-        unique:true
+        // required:true,
+        // unique:true
         
     },
-    rfName : {
+    fName : {
         type : String
     },
-    rlName : {
+    lName : {
         type : String
     },
-    raddress : {
+    address : {
         type : String
     },
-    rcity : {
+    city : {
         type : String
     },
-    rstate : {
+    state : {
         type : String
     },
-    rzcode : {
+    zcode : {
         type : String
     },
-    rphone : {
+    phone : {
         type : String
     },
-    rcompany : {
+    company : {
         type : String
     },
     

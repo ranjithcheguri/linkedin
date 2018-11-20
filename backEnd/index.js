@@ -9,11 +9,28 @@ var cookieParser = require('cookie-parser');
 var cors = require('cors');
 var morgan = require('morgan');
 
+
 //Route imports
 var signUp = require('./apis/signUp');
 var userLogin = require('./apis/userLogin');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
+var postJob = require('./apis/postJob');
+var searchPostedJob = require('./apis/searchPostedJob')
+var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
+var viewPostedJob = require('./apis/viewPostedJob');
+var editPostedJob = require('./apis/editPostedJob');
+var viewJobApplications = require('./apis/viewJobApplications');
+
+
+//Only for AWS
+const busboy = require('connect-busboy');
+const busboyBodyParser = require('busboy-body-parser');
+app.use(busboy());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(busboyBodyParser());
+
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
@@ -25,6 +42,9 @@ var { mongoose } = require('./db/mongoose');
 
 
 
+//Redis connection
+const redis = require('redis');
+require('./Redis/connectRedis')
 
 // Log requests to console
 app.use(morgan('dev'));
@@ -38,11 +58,9 @@ app.use(session({
     activeDuration: 5 * 60 * 1000
 }));
 
-app.use(bodyParser.json());
-
 //Allow Access Control
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin',ENV_VAR.CORS_ORIGIN);
+    res.setHeader('Access-Control-Allow-Origin', ENV_VAR.CORS_ORIGIN);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
@@ -54,8 +72,47 @@ app.use(function (req, res, next) {
 //app.use('/', travelerLogin);
 app.use('/',signUp);
 app.use('/',userLogin)
+
+
+//Route imports
+var jobApplication = require('./apis/jobApplication');
+var updateProfiles = require('./apis/updateProfiles');
+var searchJob = require('./apis/searchjob');
+var postJob = require('./apis/postJob');
+var searchPostedJob = require('./apis/searchPostedJob')
+var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
+var viewPostedJob = require('./apis/viewPostedJob');
+var editPostedJob = require('./apis/editPostedJob');
+var viewJobApplications = require('./apis/viewJobApplications');
+var savejob = require('./apis/saveJob');
+//Aws s3 upload/import method
+var resumeupload = require('./AWS_s3/s3BucketOperations');
+var makeConnection = require('./apis/makeConnection');
+var acceptConnection = require('./apis/acceptConnection');
+
+
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
+// applicant job search results.
+app.use('/', searchJob);
+app.use('/', viewPostedJob);
+app.use('/', editPostedJob);
+app.use('/', viewJobApplications);
+//save Job
+app.use('/', savejob)
+//This route is used to post a job
+app.use('/', postJob)
+//This route is used to filter posted job
+app.use('/', searchPostedJob)
+//This route is used to view particular application details
+app.use('/', viewParticularAppDetails)
+//Aws s3
+app.use('/', resumeupload)
+//send connection request
+app.use('/', makeConnection)
+//accept connection request
+app.use('/', acceptConnection)
+
 
 app.listen(ENV_VAR.PORT);
 console.log("Server running on port " + ENV_VAR.PORT);

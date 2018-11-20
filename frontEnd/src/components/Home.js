@@ -15,8 +15,8 @@ class Home extends Component {
         lastName: "",
         email: "",
         password: "",
-        message:"",
-        flag:false
+        message:"success",
+        flag:0
     }
     this.handleChange=this.handleChange.bind(this);
     this.handleClick=this.handleClick.bind(this);
@@ -35,24 +35,31 @@ handleClick(e){
     e.preventDefault();
     console.log(this.state);
     const data = this.state;
-    var errormessage;
+    var ackmessage;
     axios.defaults.withCredentials = true;
     if(this.state.firstName==""){
-        errormessage="Enter your first name:"
+        ackmessage="Enter your first name:"
+        this.setState({flag:1})
     }else if(this.state.lastName==""){
-        errormessage="Enter your last name:"
+        ackmessage="Enter your last name:"
+        this.setState({flag:1})
     }else if(this.state.email==""){
-        errormessage="Enter your email:"
+        ackmessage="Enter your email:"
+        this.setState({flag:1})
     }else if(this.state.password==""){
-        errormessage="Enter your password:"
+        ackmessage="Enter your password:"
+        this.setState({flag:1})
     }else if(this.state.password.length<6){
-        errormessage="Password must be 6 characters or more:"
+        ackmessage="Password must be 6 characters or more:"
+        this.setState({flag:1})
     }
     else{
     axios.post(IP_backEnd + '/signup', data)
         .then(response => {
             if (response.status === 200) {
                 alert("sign up successfull !");
+                ackmessage="sucess"
+                this.setState({flag:0})
                 console.log("sign up successful, data inserted");
                 // this.props.history.push('/Login');
             }
@@ -62,7 +69,7 @@ handleClick(e){
             // console.log("Response status : ", error.response.status, "Response : ", error.response.data);
         })
     }
-    this.setState({message:errormessage})
+    this.setState({message:ackmessage})
 }
 
 handleLogin = (e) => {
@@ -98,8 +105,10 @@ renderRedirect = () => {
     render() { 
         console.log("On unsuccessfull login message:"+ this.props.errormessage)
         console.log("Token is:"+window.localStorage.getItem('token'))
+        console.log(this.state.message)
         const{message}=this.state
-        if(message!=""){
+        if(this.state.message!="success" && this.state.flag==1){
+            console.log(this.state.message)
             var al=( <div>
                 {window.scrollTo(0, 0)}
                    <div className="alert text-white alert-dismissible alertcolor">

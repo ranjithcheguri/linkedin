@@ -1,9 +1,9 @@
 
 var mysql=require('mysql')
-
+var MY_SQL = require('./config')
   var pool = mysql.createPool({
   connectionLimit: 200,
-  host: "cmpe273db.cqumuz1tfjsq.us-east-1.rds.amazonaws.com",
+  host: MY_SQL.IP_MYSQL_DATABASE,
   user: "admin",
   password: "cmpe273db",
   database: "cmpe273db",
