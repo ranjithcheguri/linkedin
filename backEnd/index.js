@@ -11,7 +11,6 @@ var morgan = require('morgan');
 //Route imports
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
-
 var postJob = require('./apis/postJob');
 var searchPostedJob = require('./apis/searchPostedJob')
 var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
