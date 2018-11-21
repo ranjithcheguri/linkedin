@@ -7,26 +7,25 @@ import 'font-awesome/css/font-awesome.min.css';
 
 /* REDUX STORE */
 import { Provider } from 'react-redux';
-import store from './store';
-/* REDUX STORE */
+import { store } from './store';
+//Redux-persist
+import { persistor } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    console.log("Inside App");
-  }
-
   render() {
+    console.log(store);
     return (
-      <Provider store={store}>
-        <BrowserRouter>
-          <div>
-            <Menu />
-          </div>
-        </BrowserRouter>
-      </Provider>
-
+      <PersistGate loading={null} persistor={persistor}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <div>
+              <Menu/>
+            </div>
+          </BrowserRouter>
+        </Provider>
+      </PersistGate>
     );
   }
 }
