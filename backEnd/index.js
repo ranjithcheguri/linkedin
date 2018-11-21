@@ -77,7 +77,7 @@ var savejob = require('./apis/saveJob');
 var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
 var acceptConnection = require('./apis/acceptConnection');
-var messages = require('./messages');
+var messages = require('./apis/messages');
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
