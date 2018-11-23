@@ -1,5 +1,6 @@
 var ENV_VAR = require('./config/config');
-
+var pool = require('./config/mysql');
+var mysql=require('mysql')
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -7,6 +8,20 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var cors = require('cors');
 var morgan = require('morgan');
+
+
+//Route imports
+var signUp = require('./apis/signUp');
+var userLogin = require('./apis/userLogin');
+var jobApplication = require('./apis/jobApplication');
+var updateProfiles = require('./apis/updateProfiles');
+var postJob = require('./apis/postJob');
+var searchPostedJob = require('./apis/searchPostedJob')
+var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
+var viewPostedJob = require('./apis/viewPostedJob');
+var editPostedJob = require('./apis/editPostedJob');
+var viewJobApplications = require('./apis/viewJobApplications');
+
 
 //Only for AWS
 const busboy = require('connect-busboy');
@@ -16,8 +31,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(busboyBodyParser());
 
+
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
+
+// con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("Connected!");
+//   });
+
+
 
 //Redis connection
 const redis = require('redis');
@@ -45,9 +68,15 @@ app.use(function (req, res, next) {
     next();
 });
 
+// create travelerLogin in apis and write code there.
+//app.use('/', travelerLogin);
+app.use('/',signUp);
+app.use('/',userLogin)
 
 
 //Route imports
+var viewUserProfile = require('./apis/viewUserProfile');
+var deleteUserProfile = require('./apis/deleteUserProfile');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 var searchJob = require('./apis/searchjob');
@@ -58,12 +87,18 @@ var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
 var savejob = require('./apis/saveJob');
+var getAllMessages = require('./apis/getAllMessages');
+var getParticularMessages = require('./apis/getParticularMessages');
 //Aws s3 upload/import method
 var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
 var acceptConnection = require('./apis/acceptConnection');
+var messages = require('./apis/messages');
 
-
+//This route is used to view the user profile by email
+app.use('/', viewUserProfile);
+//This route is used to delete the user profile by email
+app.use('/', deleteUserProfile);
 app.use('/', jobApplication);
 app.use('/', updateProfiles);
 // applicant job search results.
@@ -79,12 +114,19 @@ app.use('/', postJob)
 app.use('/', searchPostedJob)
 //This route is used to view particular application details
 app.use('/', viewParticularAppDetails)
+//This is used to get all the messages of a particular user
+app.use('/', getAllMessages);
+//This is used to get the conversation between two users
+app.use('/', getParticularMessages);
 //Aws s3
 app.use('/', resumeupload)
 //send connection request
 app.use('/', makeConnection)
 //accept connection request
 app.use('/', acceptConnection)
+
+app.use('/',messages)
+
 
 
 
