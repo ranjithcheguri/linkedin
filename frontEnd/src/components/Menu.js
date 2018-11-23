@@ -13,9 +13,8 @@ class Menu extends Component {
         return (
             <div>
                 <Route path="/" component={Navbar} />
+                <Route path="/home" component={Home} />
                 <Route path='/profile' component={Profile} />
-                <Route path="/" component={Home} /> 
-                <Route path="/navbar" component={Navbar} />
             </div>
         );
     }
