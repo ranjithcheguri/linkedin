@@ -80,6 +80,7 @@ var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
 var acceptConnection = require('./apis/acceptConnection');
 var messages = require('./apis/messages');
+var changeMessageStatus = require('./apis/changeMessageStatus')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -110,8 +111,10 @@ app.use('/', resumeupload)
 app.use('/', makeConnection)
 //accept connection request
 app.use('/', acceptConnection)
-
+//this route is used to send the messages 
 app.use('/',messages)
+//this route is used to update the status of the message
+app.use('/',changeMessageStatus)
 
 
 

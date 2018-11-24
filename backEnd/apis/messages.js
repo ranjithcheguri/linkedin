@@ -19,8 +19,6 @@ router.post('/messages', function (req, res) {
         messages        : msgs
     });
 
-    messagesModule.find
-
     messagesModule.find({participants : {$all : parties}}, function (err, result) {
         if(err){
             callback(null, {
