@@ -3,7 +3,7 @@ var { applicantProfiles } = require('../models/applicantProfile');
 var { recruiterProfiles } = require('../models/recruiterProfile');
 // Two ways of upserting the documents.
 router.put('/applicant/updateProfile', function (req, res) {
-    console.log("Inside Applicant update handler");
+    console.log("Inside Applicant update handler",req.body);
     applicantProfiles.updateOne({ email: req.body.email }, { $set: { ...req.body } }, { upsert: true }, function (err, result) {
         if (err) {
             console.log("Error updating the Profile information.");

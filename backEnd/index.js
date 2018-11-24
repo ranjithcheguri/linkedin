@@ -1,5 +1,6 @@
 var ENV_VAR = require('./config/config');
-
+var pool = require('./config/mysql');
+var mysql=require('mysql')
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -10,6 +11,8 @@ var morgan = require('morgan');
 
 
 //Route imports
+var signUp = require('./apis/signUp');
+var userLogin = require('./apis/userLogin');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 var postJob = require('./apis/postJob');
@@ -31,6 +34,13 @@ app.use(busboyBodyParser());
 
 //Mongo connection
 var { mongoose } = require('./db/mongoose');
+
+// con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("Connected!");
+//   });
+
+
 
 //Redis connection
 const redis = require('redis');
@@ -58,6 +68,10 @@ app.use(function (req, res, next) {
     next();
 });
 
+// create travelerLogin in apis and write code there.
+//app.use('/', travelerLogin);
+app.use('/',signUp);
+app.use('/',userLogin)
 
 
 //Route imports
