@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Navbar from './Navbar';
 import Profile from './Profile';
+import PostAJob from './PostAJob'
+import RecHome from './RecHome'
 
 import Home from './Home';
 class Menu extends Component {
@@ -12,9 +14,11 @@ class Menu extends Component {
     render() {
         return (
             <div>
-                <Route path="/" component={Navbar} />
+                <Route exact path="/" component={Navbar} />
                 <Route path="/home" component={Home} />
                 <Route path='/profile' component={Profile} />
+                <Route exact path='/postAJob' component={PostAJob} />
+                <Route path='/recHome' component={RecHome} />
             </div>
         );
     }
