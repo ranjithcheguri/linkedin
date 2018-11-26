@@ -4,6 +4,7 @@ var { jobApplications } = require('../models/jobApplication');
 router.get('/jobApplication', (req, res) => {
     console.log("Inside job Application List GET request");
     let jobID = req.query.jobId;
+    console.log(jobID);
     jobApplications.find({
         jobID,
     }, (err, results) => {
