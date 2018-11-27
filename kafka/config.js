@@ -1,7 +1,8 @@
 
 
 module.exports={
-    IP_MONGODB_DATABASE : 'mongodb://user:cmpe273@ds257579.mlab.com:57579/linkedin',
+    // IP_MONGODB_DATABASE : 'mongodb://user:cmpe273@ds257579.mlab.com:57579/linkedin',
+    IP_MONGODB_DATABASE : 'mongodb://admin:admin@52.53.77.103:27017/admin',
     PORT : '3002',
     IP_MYSQL_DATABASE:'cmpe273db.cqumuz1tfjsq.us-east-1.rds.amazonaws.com',
 
