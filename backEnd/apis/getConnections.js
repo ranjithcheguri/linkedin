@@ -1,10 +1,11 @@
 var router = require('express').Router();
 var kafka = require('../kafka/client');
 
-router.get('/jobApplication', (req, res) => {
-    console.log("Inside job Application List GET request");
-    //let jobID = req.query.jobId;
-    kafka.make_request('viewJobApplications', req.query, (err, results) => {
+router.post('/getConnections', function (req, res) {
+
+    console.log("Inside Get connections : ");
+
+    kafka.make_request('getConnections', req.body, (err, results) => {
         console.log("In node kf --> Post Message Handler")
         if (err) {
             console.log("Error occured")
@@ -18,7 +19,7 @@ router.get('/jobApplication', (req, res) => {
             })
             res.end(JSON.stringify(results));
         }
-    })  
+    })    
 })
 
 module.exports = router;

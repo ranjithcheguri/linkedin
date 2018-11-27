@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Navbar from './Navbar';
 import Profile from './Profile';
+import connections from './connections'
 
 import Home from './Home';
 class Menu extends Component {
@@ -12,9 +13,9 @@ class Menu extends Component {
     render() {
         return (
             <div>
-                <Route path="/" component={Navbar} />
                 <Route path="/home" component={Home} />
                 <Route path='/profile' component={Profile} />
+                <Route path='/connections' component={connections} />
             </div>
         );
     }
