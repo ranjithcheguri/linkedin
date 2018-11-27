@@ -24,14 +24,9 @@ width: 32px;
     padding: 0px 5px 0px 5px;
   }
   
-  .navbarRecruiter{
+  .navbar{
       background-color: #283E4A;
   }
-
-  .navbar{
-    background-color: #283E4A;
-}
-
 
   .iconColour{
       color:#C7D1D8;
@@ -50,15 +45,3 @@ width: 32px;
     border-right : 0.5px solid #C7D1D8;
     padding: 0px 5px 0px 5px;
 }
-  .links{
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    color : "white"
-  }
-
-  .rec-post{
-    background-image: url("../images/PostAJob.jpg");
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }

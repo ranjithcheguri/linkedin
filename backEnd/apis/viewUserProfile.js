@@ -16,7 +16,7 @@ router.get('/userProfile', (req, res) => {
         } else {
             console.log("Successfully retrieved User Profile");
             res.writeHead(200, {
-                'Content-type' : 'profile/json',
+                'Content-type' : 'application/json',
             })
             res.end(JSON.stringify(results));
         }

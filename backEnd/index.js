@@ -71,7 +71,7 @@ app.use(function (req, res, next) {
 // create travelerLogin in apis and write code there.
 //app.use('/', travelerLogin);
 app.use('/',signUp);
-app.use('/',userLogin)
+app.use('/',userLogin);
 
 
 //Route imports
