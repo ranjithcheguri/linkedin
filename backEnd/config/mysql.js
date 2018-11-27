@@ -2,7 +2,7 @@
 var mysql=require('mysql')
 var MY_SQL = require('./config')
   var pool = mysql.createPool({
-  connectionLimit: 200,
+  connectionLimit: 0,
   host: MY_SQL.IP_MYSQL_DATABASE,
   user: "admin",
   password: "cmpe273db",

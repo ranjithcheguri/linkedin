@@ -43,8 +43,8 @@ var { mongoose } = require('./db/mongoose');
 
 
 //Redis connection
-const redis = require('redis');
-require('./Redis/connectRedis')
+// const redis = require('redis');
+// require('./Redis/connectRedis')
 
 // Log requests to console
 app.use(morgan('dev'));
@@ -71,7 +71,7 @@ app.use(function (req, res, next) {
 // create travelerLogin in apis and write code there.
 //app.use('/', travelerLogin);
 app.use('/',signUp);
-app.use('/',userLogin)
+app.use('/',userLogin);
 
 
 //Route imports
@@ -79,7 +79,7 @@ var viewUserProfile = require('./apis/viewUserProfile');
 var deleteUserProfile = require('./apis/deleteUserProfile');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
-var searchJob = require('./apis/searchjob');
+var searchJob = require('./apis/searchJob');
 var postJob = require('./apis/postJob');
 var searchPostedJob = require('./apis/searchPostedJob')
 var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
@@ -96,6 +96,7 @@ var acceptConnection = require('./apis/acceptConnection');
 var messages = require('./apis/messages');
 var getConnections = require('./apis/getConnections');
 // var changeMessageStatus = require('./apis/changeMessageStatus')
+var changeMessageStatus = require('./apis/changeMessageStatus')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -132,6 +133,9 @@ app.use('/',messages)
 // app.use('/',changeMessageStatus)
 //To Get the connections of the User.
 app.use('/',getConnections)
+//this route is used to update the status of the message
+app.use('/',changeMessageStatus)
+
 
 
 
