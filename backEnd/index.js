@@ -43,8 +43,8 @@ var { mongoose } = require('./db/mongoose');
 
 
 //Redis connection
-const redis = require('redis');
-require('./Redis/connectRedis')
+// const redis = require('redis');
+// require('./Redis/connectRedis')
 
 // Log requests to console
 app.use(morgan('dev'));
