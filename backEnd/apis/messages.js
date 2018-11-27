@@ -21,9 +21,10 @@ router.post('/messages', function (req, res) {
 
     messagesModule.find({participants : {$all : parties}}, function (err, result) {
         if(err){
-            callback(null, {
+            res.send({
                 status  : 400,
-                message : "Failed while fetching booked properties details."
+                message : "Failed while fetching booked properties details.",
+                Error   : err
             })
         }else{
             console.log("Result of finding the participant:",result);
