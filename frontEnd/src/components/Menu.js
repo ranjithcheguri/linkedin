@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Navbar from './Navbar';
 import Profile from './Profile';
+import connections from './connections'
 import ViewAllApplicants from './ViewAllApplicants';
 import ViewAllMessages from './Messages/ViewAllMessages';
 import PostAJob from './PostAJob';
@@ -17,6 +18,9 @@ class Menu extends Component {
     render() {
         return (
             <div>
+                <Route path="/home" component={Home} />
+                <Route path='/profile' component={Profile} />
+                <Route path='/connections' component={connections} />
                 <Route exact path="/" component={Navbar} />
                 <Route exact path="/home" component={Home} />
                 <Route path='/profile' component={Profile} />

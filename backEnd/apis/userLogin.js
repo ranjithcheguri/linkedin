@@ -22,6 +22,7 @@ var JwtStrategy = passportJWT.Strategy;
 var jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();;
 jwtOptions.secretOrKey = 'tasmanianDevil';
+var redisMiddleware=require('../Redis/connectRedis')
 
 
 
