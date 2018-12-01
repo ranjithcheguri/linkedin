@@ -13,11 +13,15 @@ class JobDisplay extends Component {
             id:0,
             searchjob:null,
             searchlocation:null,
-            experience_level:""
+            experience_level:"",
+            type_of_apply:"any",
+            company:""
          }
          this.handleEvent=this.handleEvent.bind(this)
          this.handleArray=this.handleArray.bind(this)
+         this.submitJob=this.submitJob.bind(this)
          this.submitJobCriteria=this.submitJobCriteria.bind(this)
+         this.submitAdvanceJobCriteria=this.submitAdvanceJobCriteria.bind(this)
     }
 
 
@@ -49,16 +53,42 @@ class JobDisplay extends Component {
         this.setState({experience_level:this.state.experience_level.concat(value+",")})
         console.log("Hello in select checkbox")
     }
+    resetJob=(e)=>{
+            console.log("reset data of type of apply")
+            this.setState({type_of_apply:"any"})
+            this.submitAdvanceJobCriteria()
+    }
+    submitJob(){
+        this.setState({experience_level:""})
+        this.submitAdvanceJobCriteria()
+    }
 
     submitJobCriteria(e){
         console.log("Hello")
         console.log(this.state.searchjob)
         const data={
+            searchonly:true,
             searchjob:this.state.searchjob,
             searchlocation:this.state.searchlocation,
-            experience_level:this.state.experience_level
         }
         this.props.submitJobSearch(data)
+    }
+    submitAdvanceJobCriteria(e){
+        console.log("Hello")
+        console.log(this.state.searchjob)
+        if(this.state.searchjob==null||this.state.searchlocation==null)
+        window.alert("First enter search criteria")
+        else{
+        const data={
+            search:true,
+            searchjob:this.state.searchjob,
+            searchlocation:this.state.searchlocation,
+            experience_level:this.state.experience_level,
+            type_of_apply:this.state.type_of_apply,
+            company:this.state.company
+        }
+        this.props.submitAdvanceJobSearch(data)
+    }
     }
 
     handleNew(operation){
@@ -227,7 +257,10 @@ class JobDisplay extends Component {
                 <a className="dropdown-item" href="#">Something else here</a>
                 <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href="#">Separated link</a>
+                <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+                <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 </div>
+                
             </li>
       
         {/* LinkedIn Features */}
@@ -236,13 +269,15 @@ class JobDisplay extends Component {
                 <strong>LinkedIn Features <i className="fa fa-caret-down"></i></strong></a>
                 <div className="dropdown-menu">
                 <div className="dropdown-item ml-3 text-muted">
-                                <input type="checkbox" onClick={this.handleEvent} id="easyapply" name="feature" value="easyapply"  />
+                                <input type="checkbox" onClick={this.handleEvent} id="easyapply" name="type_of_apply" value="easyapply" onClick={this.handleEvent}  />
                                 <label for="easyapply" className="ml-2">Easy Apply</label>
                 </div>
                 <div className=" dropdown-item ml-3 text-muted">
                                 <input type="checkbox" onClick={this.handleEvent} id="under10" name="feature" value="under10"  />
                                 <label for="under10" className="ml-2">Under 10 applicants</label>
                 </div>
+                <button className="btn btn-link ml-1" type="reset" onClick={this.resetJob}>Cancel</button>
+                <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 </div>
             </li>
 
@@ -253,7 +288,7 @@ class JobDisplay extends Component {
                 <strong>Company <i className="fa fa-caret-down"></i></strong></a>
                 <div className="dropdown-menu w-100">
                 <div className="dropdown-item">
-                <input type="text" className="w-100" ></input></div>
+                <input type="text" className="w-100" name="company" onChange={this.handleEvent}></input></div>
                 <div className=" dropdown-item ml-3 text-muted">
                                 <input type="checkbox" onClick={this.handleEvent} id="adobe" name="feature" value="Adobe"  />
                                 <label for="Adobe" className="ml-2">Adobe</label>
@@ -270,6 +305,8 @@ class JobDisplay extends Component {
                                 <input type="checkbox" onClick={this.handleEvent} id="Tesla" name="feature" value="Tesla"  />
                                 <label for="Tesla" className="ml-2">Tesla</label>
                 </div>
+                <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+                <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 
                 </div>
             </li>
@@ -308,7 +345,8 @@ class JobDisplay extends Component {
                                 <input type="checkbox" onClick={this.handleArray} id="notapplicable" name="feature" value="notapplicable"  />
                                 <label for="notapplicable" className="ml-2">Not Applicable</label>
                 </div>
-                <button className="btn" type="submit" onClick={this.submitJobCriteria}>Search</button>
+                <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+                <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 </div>
             </li>
       </ul>
@@ -342,6 +380,13 @@ const mapDispatchStateToProps = dispatch => {
             });
         },
         submitJobSearch : (data) =>{
+            axios.post(IP_backEnd+'/searchjob', data)
+                .then((response) => {
+                    console.log("After search job request")
+                    dispatch({type: 'JOB_DISPLAY',payload : response.data,statusCode : response.status})
+            });
+        },
+        submitAdvanceJobSearch : (data) =>{
             axios.post(IP_backEnd+'/searchjob', data)
                 .then((response) => {
                     console.log("After search job request")

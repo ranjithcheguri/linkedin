@@ -16,11 +16,36 @@ class RecruiterPostJob extends Component {
             seniorlevel:"",
             jobdescribe:"",
             companyurl:"",
-            typeofapply:""
+            typeofapply:"",
+            companylogo:""
          }
          this.handleEvent=this.handleEvent.bind(this);
         this.handleRadio=this.handleRadio.bind(this);
         this.submitJobPost=this.submitJobPost.bind(this);
+    }
+
+    onFileSelect =(e)=>{
+        const files = e.target.files
+        console.log(files)
+        this.setState({
+            photos:files
+        });
+    }
+
+    onSubmitForm =(e) =>{
+        console.log("here in form");
+        let formData = new FormData();
+        const files = this.state.photos;
+        console.log(files.originalname)
+        for(var i=0;i<files.length;++i){
+            formData.append("files",files[i]);
+        }
+        this.setState({pid:true})
+        const config= {
+            headers:{
+                'content-type':'multipart/form-data'
+            }
+        }
     }
 
     handleEvent(e){
@@ -124,7 +149,7 @@ class RecruiterPostJob extends Component {
                                 <option value="internship">Internship</option>
                                 <option value="entrylevel">Entry level</option>
                                 <option value="associate">Associate</option>
-                                <option value="middeniorlevel">Mid-Senior level</option>
+                                <option value="midseniorlevel">Mid-Senior level</option>
                                 <option value="director">Director</option>
                                 <option value="executive">Executive</option>
                                 <option value="notapplicable">Not applicable</option>
@@ -137,6 +162,14 @@ class RecruiterPostJob extends Component {
                     <div className="mt-5">
                         <div className=""><small>Job Description</small><sup className="text-primary"> *</sup></div>
                         <textarea rows="4" cols="88.5" onChange={this.handleEvent} name="jobdescribe" className="pl-2 pr-2"></textarea>
+                    </div>
+
+                    {/* Company Logo */}
+                    <div className="mt-3">
+                        <div className=""><small>Upload your Company Logo</small>
+                        <sup className="text-primary"> *</sup></div>
+                        <input type="file" name="files" onChange={this.onFileSelect} multiple/>
+                      <button  onClick={this.onSubmitForm} className="btn btn-primary w-25 ml-5 text-center btn-btn-lg btn-rounded btn-save">Save</button>
                     </div>
 
 
