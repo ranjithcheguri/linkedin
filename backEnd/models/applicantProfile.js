@@ -13,43 +13,38 @@ const applicantProfileschema = new mongoose.Schema({
     cover: {
         type: String
     },
-    fName: {
-        type: String
-    },
-    lName: {
-        type: String
-    },
-    address: {
-        type: String
-    },
-    city: {
-        type: String
-    },
-    state: {
-        type: String
-    },
-    zcode: {
-        type: String
+    personalProfile: {
+        firstName: String,
+        lastName: String,
+        headLine: String,
+        city: String,
+        country: String,
+        zipcode: String,
+        contactInfo: String,
+        summary: String,
+        views: Number
     },
     experience: {
-        type: String
+        designation: String,
+        company: String,
+        empStart: String,
+        empEnd: String,
+        empCity: String,
+        empCountry: String
     },
     education: {
-        type: String
-    },
-    skill: {
-        type: String
-    },
-    summary: {
-        type: String
+        college: String,
+        major: String,
+        eduStart: String,
+        eduEnd: String
     },
     resume: {
         type: String
     },
-    savedJobs: {
-        type: Array
-    }
-
+    savedJobs: [{
+        type: String
+    }],
+    skills: String
 })
 var applicantProfiles = mongoose.model('applicantProfile', applicantProfileschema);
 
