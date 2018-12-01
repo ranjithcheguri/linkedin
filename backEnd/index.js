@@ -21,6 +21,9 @@ var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
 var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
+var searchJob = require('./apis/searchjob');
+var logData =require('./apis/logData')
+var logSavedJob=require('./apis/logSavedJob')
 
 
 //Only for AWS
@@ -71,6 +74,10 @@ app.use(function (req, res, next) {
 // create travelerLogin in apis and write code there.
 //app.use('/', travelerLogin);
 app.use('/',signUp);
+app.use('/',userLogin)
+app.use('/',searchJob)
+app.use('/',logData)
+app.use('/',logSavedJob)
 app.use('/',userLogin);
 
 
@@ -79,6 +86,7 @@ var viewUserProfile = require('./apis/viewUserProfile');
 var deleteUserProfile = require('./apis/deleteUserProfile');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
+
 var searchJob = require('./apis/searchJob');
 var postJob = require('./apis/postJob');
 var searchPostedJob = require('./apis/searchPostedJob')

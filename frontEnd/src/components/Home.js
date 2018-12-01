@@ -135,7 +135,7 @@ renderRedirect = () => {
             </nav>
         {/* <nav className="#212529"></nav> */}
         <div className="ma">  
-           <img class="img-fluid  im" src={require('../images/1.jpg')} /> 
+           <img className="img-fluid  im" src={require('../images/1.jpg')} /> 
         
            <div className="container-fluid mt-3 bg-light topl col-lg-4 col-lg-offset-3 col-md-5 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12 border border-secondary shadow-lg rounded ">
           

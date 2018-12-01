@@ -36,7 +36,7 @@ router.get('/userProfile', (req, res) => {
         if(err){
             console.log("Error finding mongo results for User Profile");
             res.writeHead(400, {
-                'Content-Type': 'text/plain'
+                'Content-type': 'text/plain'
             })
             res.end("Error finding mongo results for User Profile");
         } else {

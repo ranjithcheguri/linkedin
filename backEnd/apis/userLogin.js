@@ -49,6 +49,7 @@ router.post('/login', function (req, res) {
                 })
                 res.send("Error");
             } else if(result.length>0) {
+                con.release()
                 console.log(result);
                 console.log(result[0].password)
                 if (bcrypt.compareSync(req.body.password, result[0].password)) {
