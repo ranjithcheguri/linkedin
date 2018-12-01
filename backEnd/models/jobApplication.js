@@ -33,6 +33,12 @@ const jobApplicationschema= new mongoose.Schema({
     },
     disability : {
         type : String
+    },
+    city:{
+        type: String
+    },
+    month:{
+        type: String
     }
     
 })

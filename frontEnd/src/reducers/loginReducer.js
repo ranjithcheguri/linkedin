@@ -1,5 +1,6 @@
 import { SUBMIT_LOGIN, LOGIN_SUCCESS, LOGIN_ERROR, TRAVELER_SIGNOUT } from '../actions/types';
 
+
 const initialState = {
   redirectVar: false,
   response: "",

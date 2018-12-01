@@ -40,6 +40,7 @@ router.post('/login', function (req, res) {
         res.end("Could Not Get Connection Object");
     } else {
         con.query(sql, function (err, result) {
+            con.release()
             if (err) {
                 console.log(err);
                 res.writeHead(400, {
@@ -47,6 +48,7 @@ router.post('/login', function (req, res) {
                 })
                 res.send("Error");
             } else if(result.length>0) {
+                con.release()
                 console.log(result);
                 console.log(result[0].password)
                 if (bcrypt.compareSync(req.body.password, result[0].password)) {
