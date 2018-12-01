@@ -1,9 +1,10 @@
 import { SUBMIT_LOGIN, LOGIN_SUCCESS, LOGIN_ERROR, TRAVELER_SIGNOUT } from '../actions/types';
 
+
 const initialState = {
   redirectVar: false,
   response: "",
-  cookie: "",
+  userEmail: "",
   errormessage:""
 };
 
@@ -16,7 +17,7 @@ export default function (state = initialState, action) {
           ...state,
           redirectVar: true,
           response: action.payload,
-          cookie: action.cookie,
+          userEmail: action.userEmail,
           errormessage:""
         }
       } else {
@@ -26,7 +27,7 @@ export default function (state = initialState, action) {
           redirectVar: false,
           response: action.payload,
           errormessage:action.errormessage,
-          cookie: action.cookie
+          userEmail: action.userEmail
         }
       }
 
@@ -36,7 +37,7 @@ export default function (state = initialState, action) {
         ...state,
         response: "",
         redirectVar: action.payload,
-        cookie: action.cookie
+        userEmail: action.userEmail
       }
     default:
       return state;

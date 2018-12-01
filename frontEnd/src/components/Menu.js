@@ -8,7 +8,20 @@ import ViewAllMessages from './Messages/ViewAllMessages';
 // import PostAJob from './PostAJob';
 // import RecHome from './RecHome';
 
+import RecHome from './RecHome'
 import Home from './Home';
+import PostAJob from './PostAJob'
+
+
+// import PostAJob from './PostAJob';
+// import RecHome from './RecHome';
+
+
+import JobDisplay from './JobDisplay';
+import RecruiterPostJob from './RecruiterPostJob';
+import Dashboard from './AdminDashboard';
+import LogSaveJob from './logSavedJob';
+
 import ViewConversation from './Messages/ViewConversation';
 class Menu extends Component {
     constructor(props) {
@@ -18,17 +31,18 @@ class Menu extends Component {
     render() {
         return (
             <div>
-                <Route path="/home" component={Home} />
+                <Route exact path="/" component={Home} /> 
+                <Route path="/jobdisplay" component={JobDisplay} />
+                <Route path="/dashboard" component={Dashboard} />
+                <Route path="/postJob" component={RecruiterPostJob} />               
+                <Route path="/logSaveJob" component={LogSaveJob} />
                 <Route path='/profile' component={Profile} />
                 <Route path='/connections' component={connections} />
-                <Route exact path="/" component={Navbar} />
-                <Route exact path="/home" component={Home} />
                 <Route path='/viewApplicants' component={ViewAllApplicants}/>
                 <Route path='/messages' component={ViewAllMessages}/>
                 <Route path='/conversation' component={ViewConversation}/>
-                <Route path="/home" component={Home} />
-                {/* <Route exact path='/postAJob' component={PostAJob} />
-                <Route path='/recHome' component={RecHome} /> */}
+                <Route path='/recHome' component={RecHome}/>
+                <Route path='/postAJob' component={PostAJob}/>
             </div>
         );
     }
