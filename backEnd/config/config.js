@@ -1,6 +1,7 @@
 //const CORS_ORIGIN = 'http://ec2-13-58-95-68.us-east-2.compute.amazonaws.com:3000';
 const PORT = '3002';
-const IP_MONGODB_DATABASE = 'mongodb://user:cmpe273@ds257579.mlab.com:57579/linkedin';
+//const IP_MONGODB_DATABASE = 'mongodb://user:cmpe273@ds257579.mlab.com:57579/linkedin';
+const IP_MONGODB_DATABASE = 'mongodb://admin:admin@52.53.77.103:27017/admin';
 const IP_MYSQL_DATABASE='cmpe273db.cqumuz1tfjsq.us-east-1.rds.amazonaws.com'
 
 const IP_KAFKA = 'localhost:2181';

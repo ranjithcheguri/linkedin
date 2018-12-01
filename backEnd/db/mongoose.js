@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var configLink=require('../config/config');
 mongoose.Promise = global.Promise;
 
-mongoose.connect(configLink.IP_MONGODB_DATABASE,{ useNewUrlParser: true,useCreateIndex: true });
+mongoose.connect(configLink.IP_MONGODB_DATABASE,{ poolSize: 100,useNewUrlParser: true,useCreateIndex: true });
 var mdb=mongoose.connection;
 mdb.on('error',console.error.bind(console,'Connection error'))
 mdb.on('open',()=>{
