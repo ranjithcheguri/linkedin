@@ -1,9 +1,10 @@
 //const CORS_ORIGIN = 'http://ec2-13-58-95-68.us-east-2.compute.amazonaws.com:3000';
 const PORT = '3002';
-//const IP_MONGODB_DATABASE = 'mongodb://user:cmpe273@ds257579.mlab.com:57579/linkedin';
+const IP_MONGODB_DATABASE = 'mongodb://user:cmpe273@ds257579.mlab.com:57579/linkedin';
 //const IP_MONGODB_DATABASE = 'mongodb://admin:admin@52.53.77.103:27017,52.52.124.103:27017,13.52.65.236:27017/admin?replicaSet=linkedin';
+
 //change db name accordingly
-const IP_MONGODB_DATABASE = 'mongodb://admin:admin@52.53.77.103:27017/admin';
+//const IP_MONGODB_DATABASE = 'mongodb://admin:admin@52.53.77.103:27017/admin';
 
 /*
 // Retrieve
