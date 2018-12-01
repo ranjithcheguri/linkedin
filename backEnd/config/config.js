@@ -4,11 +4,8 @@ const IP_MONGODB_DATABASE = 'mongodb://user:cmpe273@ds257579.mlab.com:57579/link
 //const IP_MONGODB_DATABASE = 'mongodb://admin:admin@52.53.77.103:27017,52.52.124.103:27017,13.52.65.236:27017/admin?replicaSet=linkedin';
 
 //change db name accordingly
-<<<<<<< HEAD
 //const IP_MONGODB_DATABASE = 'mongodb://admin:admin@52.53.77.103:27017/admin';
-=======
-// const IP_MONGODB_DATABASE = 'mongodb://admin:admin@52.53.77.103:27017/admin';
->>>>>>> 62da0aaf861c55b4e115e00a5801eec3b62b13b2
+
 
 /*
 // Retrieve
