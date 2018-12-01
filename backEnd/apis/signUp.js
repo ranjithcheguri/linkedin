@@ -33,6 +33,7 @@ router.post('/signup', function (req, res) {
             // res.end("Could Not Get Connection Object");
         } else {
             con.query(sql, function (err, result) {
+                con.release();
                 if (err) {
                     console.log(err);
                     // res.writeHead(400, {

@@ -78,6 +78,7 @@ app.use('/',userLogin)
 app.use('/',searchJob)
 app.use('/',logData)
 app.use('/',logSavedJob)
+app.use('/',userLogin);
 
 
 //Route imports
@@ -86,6 +87,7 @@ var deleteUserProfile = require('./apis/deleteUserProfile');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
 
+var searchJob = require('./apis/searchJob');
 var postJob = require('./apis/postJob');
 var searchPostedJob = require('./apis/searchPostedJob')
 var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
@@ -100,6 +102,9 @@ var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
 var acceptConnection = require('./apis/acceptConnection');
 var messages = require('./apis/messages');
+var getConnections = require('./apis/getConnections');
+// var changeMessageStatus = require('./apis/changeMessageStatus')
+var changeMessageStatus = require('./apis/changeMessageStatus')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -130,8 +135,14 @@ app.use('/', resumeupload)
 app.use('/', makeConnection)
 //accept connection request
 app.use('/', acceptConnection)
-
+//this route is used to send the messages 
 app.use('/',messages)
+// //this route is used to update the status of the message
+// app.use('/',changeMessageStatus)
+//To Get the connections of the User.
+app.use('/',getConnections)
+//this route is used to update the status of the message
+app.use('/',changeMessageStatus)
 
 
 

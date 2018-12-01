@@ -22,6 +22,7 @@ var JwtStrategy = passportJWT.Strategy;
 var jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();;
 jwtOptions.secretOrKey = 'tasmanianDevil';
+var redisMiddleware=require('../Redis/connectRedis')
 
 
 
@@ -40,7 +41,7 @@ router.post('/login', function (req, res) {
         res.end("Could Not Get Connection Object");
     } else {
         con.query(sql, function (err, result) {
-            con.release()
+            con.release();
             if (err) {
                 console.log(err);
                 res.writeHead(400, {
