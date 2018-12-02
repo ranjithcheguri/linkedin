@@ -4,6 +4,7 @@ import Footer from './Footer';
 import Loading from './Loading';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
+import {PDFViewer} from 'mgr-pdf-viewer-react';
 
 class Profile extends Component {
     constructor(props) {
@@ -68,7 +69,7 @@ class Profile extends Component {
         //console.log("inside profile click...")
     }
 
-    getProfileData = async() => {
+    getProfileData = async () => {
         await axios.get(IP_backEnd + '/userProfile/?email=' + this.state.email)
             .then(response => {
                 console.log("profile details retrieved", response.data[0]);
@@ -88,7 +89,7 @@ class Profile extends Component {
     }
 
     submitProfilePic = async () => {
-        
+
         this.setState({
             profilePic: ""
         })
@@ -103,7 +104,7 @@ class Profile extends Component {
             });
         //this.getProfilePic();
         console.log("after setting profile pic")
-        setTimeout(()=>this.getProfilePic(),1500);
+        setTimeout(() => this.getProfilePic(), 1500);
     }
 
     //react directly doesn't support to change nested objects, so we copy nested obj from state and change here.
@@ -183,9 +184,12 @@ class Profile extends Component {
             });
     }
 
-    render() {
 
+
+
+    render() {
         var profilePicDiv;
+        var ExamplePDFViewer;
         if (this.state.profilePic) {
             console.log("data is present in this.state.profilePic");
             profilePicDiv = (<div className="profilePic">
@@ -222,6 +226,7 @@ class Profile extends Component {
         } else {
             return (
                 <div className="profilePageBody" >
+                    {ExamplePDFViewer}
                     <div className="container">
                         <div className="row">
                             <div className="col-md-8 column paddingBottom">
