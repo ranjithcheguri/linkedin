@@ -36,11 +36,10 @@ class PostAJob extends Component {
                 }
             })
             .then(response => {
-                console.log("The response received after recruiter authentication before posting the job")
+                console.log("The response received after recruiter authentication before posting the job",response.data)
                 if(response.data.status === 200){
                     console.log("Recruiter successfully authenticated.")
-                    this.props.history.push('/postjob');
-                    //Here redirect to Aditis page for job posting.
+                    this.props.history.push('/postJob');
                 }else if(response.data.status === 401){
                     this.setState({
                         authError   :   response.data.message
@@ -93,9 +92,8 @@ class PostAJob extends Component {
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary" onClick={this.authRecruiter}>Authenticate</button>
-                                    <button type="button" class="btn btn-primary"
-                                            data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" data-dismiss="modal" onClick={this.authRecruiter}>Authenticate</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
