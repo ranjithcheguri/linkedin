@@ -4,7 +4,6 @@ import Footer from './Footer';
 import Loading from './Loading';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
-import { PDFViewer } from 'mgr-pdf-viewer-react';
 import PDF from 'react-pdf-js';
 
 
@@ -43,7 +42,9 @@ class Profile extends Component {
             generateSkillFlag: true,
             isLoading: true,
             profilePic: "",
-            resume: ''
+            resume: '',
+            tempResume:'',
+            isNewResumeUploading: false,
         }
     }
 
@@ -51,22 +52,29 @@ class Profile extends Component {
         console.log("Skills details in component did mount", this.state.skills)
         await this.getProfileData();
         this.getProfilePic();
-        this.getResume();
+        //this.getResume();
         // this.setState({
         //     isLoading:false
         // })
         setTimeout(() => this.setState({ isLoading: false }), 1000);
     }
 
-    getProfilePic = () => {
+    getProfilePic = async () => {
         console.log("fetching user profile pic...");
-        axios.get(IP_backEnd + '/userProfile/getProfilePic/?email=' + this.state.email)
+        await axios.get(IP_backEnd + '/userProfile/getProfilePic/?email=' + this.state.email)
             .then((res) => {
-                console.log("response from AWS S3 bucket... ", res.data);
+                console.log("base64 Image received");
+                //console.log("response from AWS S3 bucket... ", res.data);
                 this.setState({
                     profilePic: res.data
                 })
             })
+    }
+
+    onResumeClose=()=>{
+        this.setState({
+            resume:""
+        })
     }
 
     onProfileClick = () => {
@@ -83,11 +91,12 @@ class Profile extends Component {
             })
     }
 
-    getResume = () => {
+    getResume = async () => {
         console.log("fetching user resume");
-        axios.get(IP_backEnd + '/userProfile/getResume/?email=' + this.state.email)
+        await axios.get(IP_backEnd + '/userProfile/getResume/?email=' + this.state.email)
             .then((res) => {
-                console.log("Resume from AWS S3 bucket... ", res.data);
+                console.log("base64 Resume received");
+                //console.log("Resume from AWS S3 bucket... ", res.data);
                 this.setState({
                     resume: res.data
                 })
@@ -95,29 +104,33 @@ class Profile extends Component {
     }
 
     submitResume = async () => {
-        //this.setState({ resume: "" });
+        console.log("in Submit Resume");
+        this.setState({ resume: '' });
         let formData = new FormData();
         formData.append('email', this.state.email);
-        formData.append('resume', this.state.resume);
-        console.log("resume file :: before uploading ::", this.state.resume);
+        formData.append('resume', this.state.tempResume);
+        console.log("resume file :: before uploading ::", this.state.tempResume);
         await axios.post(IP_backEnd + '/applicant/updateProfile/resumeUpload', formData)
             .then((response) => {
                 console.log(response.data);
             });
-        //this.getProfilePic();
+        //this.getResume();
         console.log("after uploading Resume");
-        setTimeout(() => this.getResume(), 1500);
+        //setTimeout(() => this.getResume(), 1500);
+        //this.setState({ isNewResumeUploading: false });
+
     }
 
     handleResumeChange = (e) => {
+        //this.setState({isNewResumeUploading: true})
         if (e.target.name == 'resume') {
             this.setState({
-                resume: e.target.files[0]
+                tempResume: e.target.files[0]
             })
         }
     }
 
-    submitProfilePic = () => {
+    submitProfilePic = async () => {
 
         this.setState({ profilePic: "" });
 
@@ -126,7 +139,7 @@ class Profile extends Component {
         formData.append('email', this.state.email);
         formData.append('profilePic', this.state.profilePic);
         console.log("before setting profile pic")
-        axios.post(IP_backEnd + '/applicant/updateProfile/profilePicUpload', formData)
+        await axios.post(IP_backEnd + '/applicant/updateProfile/profilePicUpload', formData)
             .then((response) => {
                 console.log(response.data);
             });
@@ -184,6 +197,10 @@ class Profile extends Component {
 
     submitPersonalProfile = async () => {
         console.log("personal profile data : ", this.state);
+        this.setState({
+            tempResume:"",
+            resume:"",
+        })
         await axios.put(IP_backEnd + '/applicant/updateProfile', this.state)
             .then(response => {
                 console.log(response);
@@ -234,7 +251,8 @@ class Profile extends Component {
         }
 
         var resumeDiv;
-        if (this.state.resume) {
+        console.log("state before redering resume...",this.state);
+        if (this.state.resume && !this.state.isNewResumeUploading) {
             var pdf = `data:application/pdf;base64,${this.state.resume}`;
             resumeDiv = (
                 <div>
@@ -310,7 +328,7 @@ class Profile extends Component {
                                             </div>
                                         </div>
                                         <div className="mr-auto  borderMe">
-                                            <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" data-target="#viewResume"> view resume</button>
+                                            <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
                                             <button className="btn btn-outline-dark linkedInBtn marginLeft"> more...</button>
                                         </div>
                                     </div>
@@ -691,7 +709,7 @@ class Profile extends Component {
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="viewResumeTitle">Resume</h5>
-                                        <button type="button" class="close linkedInBtn" data-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="close linkedInBtn" data-dismiss="modal" onClick={this.onResumeClose} aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>

@@ -5,16 +5,15 @@ import Profile from './Profile';
 import connections from './connections'
 import ViewAllApplicants from './ViewAllApplicants';
 import ViewAllMessages from './Messages/ViewAllMessages';
-// import PostAJob from './PostAJob';
-// import RecHome from './RecHome';
+//import PostAJob from './PostAJob';
+//import RecHome from './RecHome';
+import newsFeed from './newsFeed';
+
 
 import RecHome from './RecHome'
 import Home from './Home';
 import PostAJob from './PostAJob'
 
-
-// import PostAJob from './PostAJob';
-// import RecHome from './RecHome';
 
 
 import JobDisplay from './JobDisplay';
@@ -32,21 +31,26 @@ class Menu extends Component {
     render() {
         return (
             <div>
-                <Route exact path="/" component={Home} /> 
+                <Route path="/" component={Navbar} />
+                <Route path="/home" component={Home} />
                 <Route path="/jobdisplay" component={JobDisplay} />
                 <Route path="/dashboard" component={Dashboard} />
-                <Route path="/postJob" component={RecruiterPostJob} />               
+                <Route path="/postJob" component={RecruiterPostJob} />
                 <Route path="/logSaveJob" component={LogSaveJob} />
                 <Route path='/profile' component={Profile} />
                 <Route path='/connections' component={connections} />
-                <Route path='/viewApplicants' component={ViewAllApplicants}/>
-                <Route path='/messages' component={ViewAllMessages}/>
-                <Route path='/conversation' component={ViewConversation}/>
-                <Route path='/recHome' component={RecHome}/>
-                <Route path='/postAJob' component={PostAJob}/>
-                <Route path='/reactPDF' component={ReactPDF}/>
+                <Route path='/viewApplicants' component={ViewAllApplicants} />
+                <Route path='/messages' component={ViewAllMessages} />
+                <Route path='/conversation' component={ViewConversation} />
+                <Route path='/newsFeed' component={newsFeed} />
+                <Route path='/recHome' component={RecHome} />
+                <Route path='/postAJob' component={PostAJob} />
+                <Route path='/reactPDF' component={ReactPDF} />
             </div>
         );
     }
 }
 export default Menu;
+
+//<Route exact path='/postAJob' component={PostAJob} />
+//<Route path='/recHome' component={RecHome} />

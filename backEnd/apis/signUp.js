@@ -6,7 +6,6 @@ var mysql= require('mysql')
 router.post('/signup', function (req, res) {
     console.log("Inside User Signup handler");
     console.log(req.body);
-    var i
     
         var firstname1=req.body.firstName
         var lastname1=req.body.lastName

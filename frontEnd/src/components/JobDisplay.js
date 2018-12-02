@@ -13,11 +13,15 @@
 //             id:0,
 //             searchjob:null,
 //             searchlocation:null,
-//             experience_level:""
+//             experience_level:"",
+//             type_of_apply:"any",
+//             company:""
 //          }
 //          this.handleEvent=this.handleEvent.bind(this)
 //          this.handleArray=this.handleArray.bind(this)
+//          this.submitJob=this.submitJob.bind(this)
 //          this.submitJobCriteria=this.submitJobCriteria.bind(this)
+//          this.submitAdvanceJobCriteria=this.submitAdvanceJobCriteria.bind(this)
 //     }
 
 
@@ -49,16 +53,42 @@
 //         this.setState({experience_level:this.state.experience_level.concat(value+",")})
 //         console.log("Hello in select checkbox")
 //     }
+//     resetJob=(e)=>{
+//             console.log("reset data of type of apply")
+//             this.setState({type_of_apply:"any"})
+//             this.submitAdvanceJobCriteria()
+//     }
+//     submitJob(){
+//         this.setState({experience_level:""})
+//         this.submitAdvanceJobCriteria()
+//     }
 
 //     submitJobCriteria(e){
 //         console.log("Hello")
 //         console.log(this.state.searchjob)
 //         const data={
+//             searchonly:true,
 //             searchjob:this.state.searchjob,
 //             searchlocation:this.state.searchlocation,
-//             experience_level:this.state.experience_level
 //         }
 //         this.props.submitJobSearch(data)
+//     }
+//     submitAdvanceJobCriteria(e){
+//         console.log("Hello")
+//         console.log(this.state.searchjob)
+//         if(this.state.searchjob==null||this.state.searchlocation==null)
+//         window.alert("First enter search criteria")
+//         else{
+//         const data={
+//             search:true,
+//             searchjob:this.state.searchjob,
+//             searchlocation:this.state.searchlocation,
+//             experience_level:this.state.experience_level,
+//             type_of_apply:this.state.type_of_apply,
+//             company:this.state.company
+//         }
+//         this.props.submitAdvanceJobSearch(data)
+//     }
 //     }
 
 //     handleNew(operation){
@@ -69,15 +99,45 @@
        
 //     }
 //     render() { 
+//         var tempDate = new Date()-new Date("2018-11-24T07:04:13.000Z");
+//         console.log(tempDate)
+//         var day = 1000 * 60 * 60 * 24;
+//         var hours=1000 * 60 * 60
+//         var hours=Math.floor(tempDate/hours)
+//         var days = Math.floor(tempDate/day);
+//         var months = Math.floor(days/31);
+//         console.log("hours"+hours)
+//         console.log(days)
+//         console.log(months)
+//         var a=hours>24?days+"days ago": hours+"hours ago"
+//         console.log(a)
+
 //         console.log("particular job id"+this.props.jobid)
 //         var details,fulldetails
 //         if(this.props.jobdetails.length==0){
 //             details= <h4 className="text-danger text-center">No property matches your search criteria! Search again</h4>
 //         }
 //         else{
+//                 // Displaying whole list
 //                 <h6>Showing {this.props.jobdetails.length} results</h6>
-//                     details= this.props.jobdetails.map(job => {
+//                     details=
+                   
+//                      this.props.jobdetails.map(job => {
 //                           var al
+//                           var tempDate = new Date()-new Date(job.posted_date_time);
+//                           console.log(tempDate)
+//                           var day = 1000 * 60 * 60 * 24;
+//                           var hours=1000 * 60 * 60
+//                           var hours=Math.floor(tempDate/hours)
+//                           var days = Math.floor(tempDate/day);
+//                           var months = Math.floor(days/31);
+//                           console.log("hours"+hours)
+//                           console.log(days)
+//                           console.log(months)
+//                           var diffdate=hours>24?days+" days ago": hours+" hours ago"
+//                           if(months>0)
+//                                 diffdate= months+" months ago"
+                      
 //                         if(job.type_of_apply=="easyapply")
 //                         al=(<span><i className=" fa fa-lg text-primary fa-linkedin-square"></i>
 //                         <span className="ml-1">Easy Apply</span></span>)
@@ -94,7 +154,7 @@
 //                         <div className="text-muted text-capitalize">{job.location}</div>
 //                         <div className="jobdescribe"><small>{job.description}</small></div>
 //                         <div className="text-muted">
-//                         <small>3 days ago-{al}</small></div>
+//                         <small>{diffdate} -{al}</small></div>
 //                         <hr></hr>
 //                         </div>
 //                         </div>
@@ -108,10 +168,24 @@
 //         else{
            
 //                 <h6>Showing {this.props.jobdetails.length} results</h6>
+//                 // Displaying particular job display
 //                     fulldetails=
                    
 //                      this.props.jobdetails.map(job => {
 //                          var al
+//                          var tempDate = new Date()-new Date(job.posted_date_time);
+//                           console.log(tempDate)
+//                           var day = 1000 * 60 * 60 * 24;
+//                           var hours=1000 * 60 * 60
+//                           var hours=Math.floor(tempDate/hours)
+//                           var days = Math.floor(tempDate/day);
+//                           var months = Math.floor(days/31);
+//                           console.log("hours"+hours)
+//                           console.log(days)
+//                           console.log(months)
+//                           var diffdate=hours>24?days+" days ago": hours+" hours ago"
+//                           if(months>0)
+//                                 diffdate= months+" months ago"
 //                         if(job.type_of_apply=="easyapply")
 //                         al=(<button className="btn btn-primary text-white ml-2 p-2"><i className=" fa fa-lg text-white fa-linkedin-square"></i> <strong>Easy Apply</strong></button>)
 //                         else
@@ -128,7 +202,7 @@
 //                             <h4 className="text-capitalize ">{job.company}</h4>
 //                             <div className="text-muted text-capitalize">{job.location}</div>
 //                             <div className="text-muted">
-//                             <small>Posted 3 days ago <span>-- views</span></small></div> 
+//                             <small>Posted {diffdate} ago <span>-- views</span></small></div> 
 //                             <div className="mt-2">
 //                             <button className="btn btn-primary text-white p-2 "><strong>Save</strong></button> 
 //                             {al}
@@ -185,6 +259,7 @@
 //               <div>
 //               <Navbar />
 //             </div>
+           
 //             <div className="row bg-dark p-3">
 //              <div className="form-inline my-2 my-lg-0 ml-5 col-lg-5">
 //                             <input type="text" className="form-control mr-sm-2 fontAwesome bg-white iconColour w-100" type="search" placeholder="&#xF002; Search Jobs" aria-label="Search" name="searchjob" onChange={this.handleEvent} />
@@ -196,6 +271,8 @@
 //                             <button className="btn btn-outline-light my-2 my-sm-0 ml-2 iconColour" type="submit" onClick={this.submitJobCriteria}>Search</button>
 //             </div>
 //             </div>
+
+           
             
 //             <nav class="navbar navbar-expand-lg navbar-light bg-white mt-2">
 //   {/* <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -225,7 +302,10 @@
 //                 <a className="dropdown-item" href="#">Something else here</a>
 //                 <div className="dropdown-divider"></div>
 //                 <a className="dropdown-item" href="#">Separated link</a>
+//                 <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+//                 <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
 //                 </div>
+                
 //             </li>
       
 //         {/* LinkedIn Features */}
@@ -234,13 +314,15 @@
 //                 <strong>LinkedIn Features <i className="fa fa-caret-down"></i></strong></a>
 //                 <div className="dropdown-menu">
 //                 <div className="dropdown-item ml-3 text-muted">
-//                                 <input type="checkbox" onClick={this.handleEvent} id="easyapply" name="feature" value="easyapply"  />
+//                                 <input type="checkbox" onClick={this.handleEvent} id="easyapply" name="type_of_apply" value="easyapply" onClick={this.handleEvent}  />
 //                                 <label for="easyapply" className="ml-2">Easy Apply</label>
 //                 </div>
 //                 <div className=" dropdown-item ml-3 text-muted">
 //                                 <input type="checkbox" onClick={this.handleEvent} id="under10" name="feature" value="under10"  />
 //                                 <label for="under10" className="ml-2">Under 10 applicants</label>
 //                 </div>
+//                 <button className="btn btn-link ml-1" type="reset" onClick={this.resetJob}>Cancel</button>
+//                 <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
 //                 </div>
 //             </li>
 
@@ -251,7 +333,7 @@
 //                 <strong>Company <i className="fa fa-caret-down"></i></strong></a>
 //                 <div className="dropdown-menu w-100">
 //                 <div className="dropdown-item">
-//                 <input type="text" className="w-100" ></input></div>
+//                 <input type="text" className="w-100" name="company" onChange={this.handleEvent}></input></div>
 //                 <div className=" dropdown-item ml-3 text-muted">
 //                                 <input type="checkbox" onClick={this.handleEvent} id="adobe" name="feature" value="Adobe"  />
 //                                 <label for="Adobe" className="ml-2">Adobe</label>
@@ -268,6 +350,8 @@
 //                                 <input type="checkbox" onClick={this.handleEvent} id="Tesla" name="feature" value="Tesla"  />
 //                                 <label for="Tesla" className="ml-2">Tesla</label>
 //                 </div>
+//                 <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+//                 <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 
 //                 </div>
 //             </li>
@@ -306,7 +390,8 @@
 //                                 <input type="checkbox" onClick={this.handleArray} id="notapplicable" name="feature" value="notapplicable"  />
 //                                 <label for="notapplicable" className="ml-2">Not Applicable</label>
 //                 </div>
-//                 <button className="btn" type="submit" onClick={this.submitJobCriteria}>Search</button>
+//                 <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+//                 <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
 //                 </div>
 //             </li>
 //       </ul>
@@ -345,6 +430,13 @@
 //                     console.log("After search job request")
 //                     dispatch({type: 'JOB_DISPLAY',payload : response.data,statusCode : response.status})
 //             });
+//         },
+//         submitAdvanceJobSearch : (data) =>{
+//             axios.post(IP_backEnd+'/searchjob', data)
+//                 .then((response) => {
+//                     console.log("After search job request")
+//                     dispatch({type: 'JOB_DISPLAY',payload : response.data,statusCode : response.status})
+//             });
 //         }
 
 //         // onSubmitId:(data) => {
@@ -357,4 +449,4 @@
 //     }
 // }
 
-// export default connect(mapStateToProps, mapDispatchStateToProps)(JobDisplay);    
+// export default connect(mapStateToProps, mapDispatchStateToProps)(JobDisplay);
