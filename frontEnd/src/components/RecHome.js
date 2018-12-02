@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Navbar from './RecHomeNavbar';
 import axios from 'axios';
+import {setCurrentJob} from '../actions/jobDisplayActions';
 import { Card, CardTitle, CardText, CardImg, CardImgOverlay } from 'reactstrap';
 import '../css/RecHome.css';
 import Select from 'react-select';
 import 'react-dropdown/style.css';
+import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
 
 const options = [
     { value: 'Active', label: 'Active' },
@@ -35,9 +38,9 @@ class RecHome extends Component {
     componentDidMount=()=>{
         console.log("Inside componentDidMount of recruiter Home")
         axios.get("http://localhost:3002/recruiter/getPostedJobs",{
-        params: {
-           email : "nayak11@infy.com"
-        }
+            params: {
+            email : "nayak11@infy.com"
+            }
         })
         .then(response => {
             if(response.data.status === 200){
@@ -57,6 +60,12 @@ class RecHome extends Component {
         this.setState({ 
             filter1 : selectedOption
         });
+    }
+
+    detailsClickHandler = (e,jobID) => {
+        e.preventDefault();
+        this.props.setCurrentJob(jobID);
+        this.props.history.push('/viewApplicants');
     }
     
     availabilityChangeHandler= (selectedOption) => {
@@ -107,7 +116,7 @@ class RecHome extends Component {
             <div class="footerHack">
                 <img style={{width : "100%", display: "block"}} src={require('../images/RecFooter.png')} alt="Not able to find recruiter footer"/>
             </div>)
-        }else if(jobs.length>1){
+        }else if(jobs.length>1 || jobs.length==0){
             footDisp=(
             <div class="footer">
                 <img style={{width : "100%", display: "block"}} src={require('../images/RecFooter.png')} alt="Not able to find recruiter footer"/>
@@ -162,6 +171,8 @@ class RecHome extends Component {
                                             <small className="text-muted">Number of Applicants: {job.no_of_applicants}<br/>
                                             &emsp;&emsp;Number of Views:&nbsp;{job.no_of_views}</small>
                                         </CardText>
+                                        <button>Edit</button>
+                                        <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.jobID)}>Details</button>
                                         </CardImgOverlay>
                                     </Card>
                                     <hr></hr>
@@ -180,4 +191,15 @@ class RecHome extends Component {
         );
     }
 }
-export default RecHome;
+
+const mapStateToProps = ({applicationState}) => ({
+    applicationState,
+})
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        setCurrentJob,
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecHome);
