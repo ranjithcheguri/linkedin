@@ -1,87 +1,183 @@
-
 import React, { Component } from 'react';
-import {NavLink} from 'react-router-dom';
-import {Redirect} from 'react-router';
+import { Route } from 'react-router-dom';
+import Navbar from './RecHomeNavbar';
 import axios from 'axios';
-import { connect } from "react-redux";
-import '../css/Home.css';
-import { IP_backEnd, IP_NODE_PORT } from '../config/config';
-import { submitLogin } from '../actions/loginActions';
-import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
-import NavbarRecruiter from './NavbarRecruiter.js'
+import { Card, CardTitle, CardText, CardImg, CardImgOverlay } from 'reactstrap';
+import '../css/RecHome.css';
+import Select from 'react-select';
+import 'react-dropdown/style.css';
 
-class Home extends Component {
+const options = [
+    { value: 'Active', label: 'Active' },
+    { value: 'Draft', label: 'Draft' },
+    { value: 'Closed', label: 'Closed' }
+];
+
+const options1 = [
+    { value: 'Newest first', label: 'Newest first' },
+    { value: 'Oldest first', label: 'Oldest first' },
+    { value: 'A-Z', label: 'A-Z' },
+    { value: 'Z-A', label: 'Z-A' }
+];
+
+
+class RecHome extends Component {
+
     constructor(props) {
         super(props);
-    this.state = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        message:"success",
-        flag:0
-    }
-    this.handleChange=this.handleChange.bind(this);
-    this.handleClick=this.handleClick.bind(this);
-}
-
-handleChange (e){
-
-}
-
-handleClick(e){
-    
-}
-
-handleLogin = (e) => {
-
-}
-
-renderRedirect = () => {
-
-}
-
-    render() { 
-        console.log("On unsuccessfull login message:"+ this.props.errormessage)
-        console.log("Token is:"+window.localStorage.getItem('token'))
-        console.log(this.state.message)
-        const{message}=this.state
-        if(this.state.message!="success" && this.state.flag==1){
-            console.log(this.state.message)
-            var al=( <div>
-                {window.scrollTo(0, 0)}
-                   <div className="alert text-white alert-dismissible alertcolor">
-                       <button type="button" className="close" data-dismiss="alert">&times;</button>
-                       <h6> <i className="fa fa-thumbs-o-down mr-1"></i>
-                      {this.state.message}</h6>
-                   </div>
-                  </div>
-                )
+        this.state={
+            postedJobs  :   [],
+            filter1     :   '',
+            filter2     :   '',
         }
+    }
 
-        //  if(this.props.response === 400 && this.props.errormessage!="") alert(this.props.errormessage)
-        //  
-        return ( 
-        <div class="">
-        <div className="ma">  
-        <NavbarRecruiter/>
-           
+    componentDidMount=()=>{
+        console.log("Inside componentDidMount of recruiter Home")
+        axios.get("http://localhost:3002/recruiter/getPostedJobs",{
+        params: {
+           email : "nayak11@infy.com"
+        }
+        })
+        .then(response => {
+            if(response.data.status === 200){
+                console.log("Posted Job Details-",response.data)
+                this.setState({
+                    postedJobs : response.data.result
+                })
+            }else{
+                console.log("Hey recruiter you haven't posted any job, first do that")
+            }
+        }).catch(err=>{
+            console.log("Something went wrong while fetching the posted jobs",err);
+        })
+    }
 
-        <div className="ma">  
-            <img style={{width : "70%"}} class="img-fluid  im" src={require('../images/NoJobsPosted.png')} /> 
-            <img class="img-fluid  im" src={require('../images/Rec_Home_Footer.png')} /> 
-        </div>      
+    ratingChangeHandler=(selectedOption)=>{
+        this.setState({ 
+            filter1 : selectedOption
+        });
+    }
+    
+    availabilityChangeHandler= (selectedOption) => {
+        console.log("Filter 2 selected option is",selectedOption.value);
+        let filPostedJobs=[];
+        if(selectedOption.value==='Newest first'){
+            console.log("Newest first selected");
+            filPostedJobs=[...this.state.postedJobs];
+            filPostedJobs.sort(function(a,b){
+                var alc = a.posted_date_time, blc = b.posted_date_time;
+                return alc > blc ? -1 : alc < blc ? 1 : 0;
+            })
+        }else if(selectedOption.value==='Oldest first'){
+            console.log("Oldest first selected");
+            filPostedJobs=[...this.state.postedJobs];
+            filPostedJobs.sort(function(a,b){
+                var alc = a.posted_date_time, blc = b.posted_date_time;
+                return alc > blc ? 1 : alc < blc ? -1 : 0;
+            })
+        }else if(selectedOption.value==='A-Z'){
+            console.log("A-Z selected");
+            filPostedJobs=[...this.state.postedJobs];
+            filPostedJobs.sort(function(a,b){
+                var alc = a.company.toLowerCase(), blc = b.company.toLowerCase();
+                return alc > blc ? 1 : alc < blc ? -1 : 0;
+            })
+        }else if(selectedOption.value==='Z-A'){
+            console.log("Z-A selected");
+            filPostedJobs=[...this.state.postedJobs];
+            filPostedJobs.sort(function(a,b){
+                var alc = a.company.toLowerCase(), blc = b.company.toLowerCase();
+                return alc > blc ? -1 : alc < blc ? 1 : 0;
+            })
+        }
+        this.setState({ 
+            filter2     : selectedOption,
+            postedJobs  : filPostedJobs
+        });
+    }
 
+    render() {
+        console.log("State display",this.state.postedJobs)
+        const jobs=[...this.state.postedJobs];
+        let jobsDisp=null;
+        let footDisp=null;
+        if(jobs.length==1){
+            footDisp=(
+            <div class="footerHack">
+                <img style={{width : "100%", display: "block"}} src={require('../images/RecFooter.png')} alt="Not able to find recruiter footer"/>
+            </div>)
+        }else if(jobs.length>1){
+            footDisp=(
+            <div class="footer">
+                <img style={{width : "100%", display: "block"}} src={require('../images/RecFooter.png')} alt="Not able to find recruiter footer"/>
+            </div>)
+        }
+        if(jobs.length==0){
+            jobsDisp=(
+                <div>
+                    <img style={{width : "60%",  display: "block", paddingTop : "7%", paddingLeft : "3%"}} src={require('../images/NoJobs.png')} alt="Tu job post kele nayse re!"/>
+                </div>
+            )
+        }        
+        return (
+            <div>
+                <div>
+                  <Navbar/>
+                </div>
+                <div>
+                    <div class="split left">
+                        <br/>
 
-        </div>
-        </div> );
+                        <div className="">
+                            <nav className="navbar navbar-rec-fil navbar-expand-lg navbar-light">
+                                <div class="row" style={{width : "65%", paddingLeft : "5%", border : "1px black solid", backgroundColor : "honeydew"}}>
+                                    <form className="form-inline my-2 my-lg-0">
+                                        <input className="form-control mr-sm-2 fontAwesome iconColour" type="search" placeholder="&#xF002; Search" aria-label="Search"/>
+                                        <button className="btn btn-outline-light my-2 my-sm-0 iconColour" type="submit" style={{color : "black", border : "0.5px black solid"}}>Search</button>
+                                    </form>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="form-group" style={{color : "black", width : "20%", paddingTop : "12px"}}>
+                                        <Select class="form-control"  value={this.state.filter1} onChange={this.ratingChangeHandler} options={options}/>
+                                    </div>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="form-group" style={{color : "black", width : "20%", paddingTop : "12px"}}>
+                                        <Select class="form-control"  value={this.state.filter2} onChange={this.availabilityChangeHandler} options={options1}/>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+
+                        {jobsDisp}
+                        <div>
+                            <br/>
+                            {jobs.map(job=>(
+                                <div style={{width : "50%",paddingLeft : "15%", color : "black"}}>
+                                    <Card inverse>
+                                        <CardImg width="100%" src={require('../images/RecJobBackground.jpg')} alt="Card image cap" />
+                                        <CardImgOverlay>
+                                        <CardTitle style={{color : "black"}}>{job.company}</CardTitle>
+                                        <CardText style={{color : "black"}}>{job.description}</CardText>
+                                        <CardText style={{color : "black"}}>
+                                            <small className="text-muted">Number of Applicants: {job.no_of_applicants}<br/>
+                                            &emsp;&emsp;Number of Views:&nbsp;{job.no_of_views}</small>
+                                        </CardText>
+                                        </CardImgOverlay>
+                                    </Card>
+                                    <hr></hr>
+                                </div>
+                            ))}
+                        </div>
+                        {footDisp}
+                    </div>
+                    <div class="split right">
+                        <div>
+                        <img style={{width : "80%", display: "block", paddingTop : "40%"}} src={require('../images/JobHomeRightSide.png')} alt="Not able to find recruiter footer"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
-
-const mapStateToProps = (state) => ({
-    redirectVar: state.loginState.redirectVar,
-    response: state.loginState.response,
-    errormessage:state.loginState.errormessage
-})
-
-export default connect(mapStateToProps, { submitLogin })(Home);
+export default RecHome;

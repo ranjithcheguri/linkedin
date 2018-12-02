@@ -32,6 +32,13 @@ width: 32px;
     background-color: #283E4A;
 }
 
+  .navbar-rec{
+    background-color: #2774AE;
+  }
+
+  .navbar-rec-fil{
+    background-color: white;
+  }
 
   .iconColour{
       color:#C7D1D8;

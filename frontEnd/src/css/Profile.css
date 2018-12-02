@@ -5,7 +5,7 @@
 .coverPic{
 height: 200px;
 width: auto;
-background-image: url("../images/cover.png");
+background-image: url("../images/coverPic.svg");
 background-size: cover;
 }
 
@@ -17,12 +17,12 @@ background-size: cover;
 width: 160px;
 height: 160px;
 border-radius: 50%; 
-background-image: url('../images/Me.jpg');
+background-image: url('../images/user.png');
 /*background-position: center center;*/
 background-size: cover;
 border: 5px solid white;
 margin-top: -80px;
-margin-left: 25px;
+margin-left: 40px;
 }   
 
 .borderRed{
@@ -33,13 +33,27 @@ margin-left: 25px;
     margin-right: 20px;
 }
 
+.marginRight2{
+    margin-right: 40px;
+}
+
 .marginTop{
     margin-top:10px;
 }
 
 .editIcon{
     color: #0073B1;
-    font-size: 18px;
+    font-size: 20px;
+    padding: 10px;
+    z-index:1;
+}
+.zoomMe :hover{
+    border:1px solid #0073B1;
+    border-radius: 50%;
+}
+
+.cursorMe :hover{
+    cursor: pointer;
 }
 
 .profileIcons{
@@ -122,6 +136,7 @@ background-color: #0073b1;
     height:100px;
     width:auto;
 }
+
 .paddingTop{
 padding-top:20px;
 }
@@ -143,3 +158,16 @@ padding-top:20px;
 .paddingBottom{
     padding-bottom: 30px;
 }
+
+/* NO SPACE : TO CUSTOMIZE BOOTSTRAP BUTTON */
+.btn.linkedInBtn{
+    border-radius: 0;
+}
+/* 
+SCROLL MODAL
+210px -> sum of: modal header, modal footer, top and bottom space between modal and window borders.  */
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+

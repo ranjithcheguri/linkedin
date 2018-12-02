@@ -2,19 +2,32 @@ var router = require('express').Router();
 var pool = require("../db/mysql");
 var mysql = require('mysql');
 
-router.get('/searchjob', function (req, res) {
+router.post('/searchjob', function (req, res) {
     console.log("Inside job search");
-
-    if (req.query.title != null || req.query.industry != null || req.query.employment_type != null || req.query.location != null) {
+    console.log(req.body.experience_level)
+    var searchjob="%"+req.body.searchjob+"%"
+    var searchlocation="%"+req.body.searchlocation+"%"
     
-        var sql = "SELECT * from `job` WHERE `title` = "
-            + mysql.escape(req.query.title) + " OR " + "`industry` = "
-            + mysql.escape(req.query.industry) + " OR " + "`employment_type` = "
-            + mysql.escape(req.query.employment_type) + " OR " + "`location` = "
-            + mysql.escape(req.query.location) + ";"
+    var experience_level=  "internship" +"," +'entrylevel'
+      console.log(searchjob)
+
+    if (req.body.searchjob != null || req.body.searchlocation != null) {
+        var a=req.body.experience_level
+    if(a===null || a===""){
+        experience_level="internship,director,entrylevel"
+        experience_level=experience_level.split(",")
+    }
+    else{
+         experience_level=req.body.experience_level.split(",")
+    }
+    console.log(req.body.experience_level.split(","))
+    
+        var sql = "SELECT * from `job` WHERE title like "
+            + mysql.escape(searchjob) + "AND " + "location like "
+            + mysql.escape(searchlocation) + "AND experience_level IN ("+mysql.escape(experience_level)+");"
     }
     else {
-        var sql = "SELECT * from `job`;"
+        var sql = "SELECT * from `job` limit 3;"
     }
 
     console.log(sql);
@@ -39,11 +52,11 @@ router.get('/searchjob', function (req, res) {
                 } else {
                     console.log(result);
                     //send result
-                    res.writeHead(200, {
-                        'Content-Type': 'text/plain'
-                    })
-                    res.end(JSON.stringify(result)); //error here 
-
+                    // res.writeHead(200, {
+                    //     'Content-Type': 'application/json'
+                    // })
+                    // res.end(JSON.stringify(result)); //error here 
+                    res.status(200).json({ success: true, result:result });
                 }
             });
         }

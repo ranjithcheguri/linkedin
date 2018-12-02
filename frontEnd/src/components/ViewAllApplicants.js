@@ -30,11 +30,16 @@ class ViewAllApplicants extends Component {
 
     let renderApplications = this.state.Applications.map(application => {
       return(
+        
         <tr>
-          <h4>Name : {application.fName + " " + application.lName}</h4>
-          <p>Email ID : {application.email}</p>
-          <p>Address : {application.address}</p>
+          <div className="mt-3 ml-4 mr-4 border rounded shadow">
+          <h4 className="ml-2 pl-2 pt-2">Name : {application.fName + " " + application.lName}</h4>
+            <p className="ml-2 pl-2">Email ID : {application.email}</p>
+            <p className="ml-2 pl-2">Address : {application.address}</p>
+            <p className="ml-2 pl-2 pb-1"><a href="http://localhost:3002/PP-18.pdf">Resume</a></p>
+          </div>
         </tr>
+        
       )
     })
 
@@ -43,11 +48,13 @@ class ViewAllApplicants extends Component {
         <Navbar/>
         <div class="container">
         <h3>Applications</h3>
-          <table class="table">
-            <tbody>
+        <div class="applications-table">
+          <table class="table w-100">
+            <tbody> 
               {renderApplications}
             </tbody>
           </table>
+        </div>
         </div>
         <Footer/>
       </div>

@@ -21,6 +21,9 @@ var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
 var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
+var searchJob = require('./apis/searchjob');
+var logData =require('./apis/logData')
+var logSavedJob=require('./apis/logSavedJob')
 
 
 //Only for AWS
@@ -40,11 +43,11 @@ var { mongoose } = require('./db/mongoose');
 //     console.log("Connected!");
 //   });
 
-
+app.use(express.static('uploads'));
 
 //Redis connection
-const redis = require('redis');
-require('./Redis/connectRedis')
+// const redis = require('redis');
+// require('./Redis/connectRedis')
 
 // Log requests to console
 app.use(morgan('dev'));
@@ -72,6 +75,10 @@ app.use(function (req, res, next) {
 //app.use('/', travelerLogin);
 app.use('/',signUp);
 app.use('/',userLogin)
+app.use('/',searchJob)
+app.use('/',logData)
+app.use('/',logSavedJob)
+app.use('/',userLogin);
 
 
 //Route imports
@@ -79,7 +86,8 @@ var viewUserProfile = require('./apis/viewUserProfile');
 var deleteUserProfile = require('./apis/deleteUserProfile');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
-var searchJob = require('./apis/searchjob');
+
+var searchJob = require('./apis/searchJob');
 var postJob = require('./apis/postJob');
 var searchPostedJob = require('./apis/searchPostedJob')
 var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
@@ -94,7 +102,10 @@ var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
 var acceptConnection = require('./apis/acceptConnection');
 var messages = require('./apis/messages');
+var getConnections = require('./apis/getConnections');
+// var changeMessageStatus = require('./apis/changeMessageStatus')
 var changeMessageStatus = require('./apis/changeMessageStatus')
+var getAllPostedJobs = require('./apis/getAllPostedJobs')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -127,8 +138,14 @@ app.use('/', makeConnection)
 app.use('/', acceptConnection)
 //this route is used to send the messages 
 app.use('/',messages)
+// //this route is used to update the status of the message
+// app.use('/',changeMessageStatus)
+//To Get the connections of the User.
+app.use('/',getConnections)
 //this route is used to update the status of the message
 app.use('/',changeMessageStatus)
+//this route is used to get all the jobs posted by a particular recruiter
+app.use('/',getAllPostedJobs)
 
 
 
