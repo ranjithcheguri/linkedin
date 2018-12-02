@@ -24,7 +24,7 @@ router.get('/authRecruiter/', (req, res) => {
                         status  : 400, 
                         message : 'Incorrect SQL statement' 
                     });
-                } else{
+                } else if(results.length>0){
                     console.log("Sending this result...................",results[0].password);
                     
                     bcrypt.compare(recPwd,results[0].password,(err,result)=>{
@@ -47,6 +47,11 @@ router.get('/authRecruiter/', (req, res) => {
                             });
                         }
                     })
+                }else{
+                    res.send({ 
+                        status  : 401, 
+                        message : 'Authentication failed, try again!!!' 
+                    });
                 }
             })
         }

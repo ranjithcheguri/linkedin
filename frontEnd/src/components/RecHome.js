@@ -29,9 +29,11 @@ class RecHome extends Component {
     constructor(props) {
         super(props);
         this.state={
-            postedJobs  :   [],
-            filter1     :   '',
-            filter2     :   '',
+            postedJobs      :   [],
+            filter1         :   '',
+            filter2         :   '',
+            searchCriteria  :   '',
+            postedJobsBckp  :   ''
         }
     }
 
@@ -46,7 +48,8 @@ class RecHome extends Component {
             if(response.data.status === 200){
                 console.log("Posted Job Details-",response.data)
                 this.setState({
-                    postedJobs : response.data.result
+                    postedJobs      : response.data.result,
+                    postedJobsBckp  : response.data.result
                 })
             }else{
                 console.log("Hey recruiter you haven't posted any job, first do that")
@@ -62,10 +65,33 @@ class RecHome extends Component {
         });
     }
 
+    searchChangeHandler=(e)=>{
+        this.setState({ 
+            searchCriteria : e.target.value
+        });
+    }
+
     detailsClickHandler = (e,jobID) => {
         e.preventDefault();
         this.props.setCurrentJob(jobID);
         this.props.history.push('/viewApplicants');
+    }
+
+    searchFilterChangeHandler=(e)=>{
+        e.preventDefault();
+        this.setState({
+            postedJobs  : [...this.state.postedJobsBckp]
+        },()=>{
+            let filPostedJobs=[...this.state.postedJobs];
+            console.log("Filter criteria",this.state.searchCriteria)
+            filPostedJobs=filPostedJobs.filter((job)=>{
+                return job.company.includes(this.state.searchCriteria);
+            })
+            console.log("Jobs after filtering",filPostedJobs)
+            this.setState({
+                postedJobs  : [...filPostedJobs]
+            })
+        })
     }
     
     availabilityChangeHandler= (selectedOption) => {
@@ -142,8 +168,8 @@ class RecHome extends Component {
                             <nav className="navbar navbar-rec-fil navbar-expand-lg navbar-light">
                                 <div class="row" style={{width : "65%", paddingLeft : "5%", border : "1px black solid", backgroundColor : "honeydew"}}>
                                     <form className="form-inline my-2 my-lg-0">
-                                        <input className="form-control mr-sm-2 fontAwesome iconColour" type="search" placeholder="&#xF002; Search" aria-label="Search"/>
-                                        <button className="btn btn-outline-light my-2 my-sm-0 iconColour" type="submit" style={{color : "black", border : "0.5px black solid"}}>Search</button>
+                                        <input onChange = {this.searchChangeHandler} className="form-control mr-sm-2 fontAwesome iconColour" type="search" placeholder="&#xF002; Search" aria-label="Search"/>
+                                        <button onClick={this.searchFilterChangeHandler} className="btn btn-outline-light my-2 my-sm-0 iconColour" type="submit" style={{color : "black", border : "0.5px black solid"}}>Search</button>
                                     </form>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div class="form-group" style={{color : "black", width : "20%", paddingTop : "12px"}}>
@@ -171,8 +197,9 @@ class RecHome extends Component {
                                             <small className="text-muted">Number of Applicants: {job.no_of_applicants}<br/>
                                             &emsp;&emsp;Number of Views:&nbsp;{job.no_of_views}</small>
                                         </CardText>
-                                        <button>Edit</button>
                                         <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.jobID)}>Details</button>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <button class="btn btn-primary">Edit</button>
                                         </CardImgOverlay>
                                     </Card>
                                     <hr></hr>
