@@ -83,7 +83,7 @@ class Profile extends Component {
             })
     }
 
-     getResume = () => {
+    getResume = () => {
         console.log("fetching user resume");
         axios.get(IP_backEnd + '/userProfile/getResume/?email=' + this.state.email)
             .then((res) => {
@@ -92,7 +92,7 @@ class Profile extends Component {
                     resume: res.data
                 })
             })
-     }
+    }
 
     submitResume = async () => {
         //this.setState({ resume: "" });
@@ -532,11 +532,11 @@ class Profile extends Component {
                                                 <textarea id="" className="form-control" rows="3" name="summary" value={this.state.personalProfile.summary} onChange={this.handlePersonalProfileChange} />
                                             </div>
                                         </div>
-                                        <div class="row marginTop">
-                                            <div class="col-md-8">
+                                        <div class="row marginTop marginBottom">
+                                            <div class="col-md-8 marginTop">
                                                 <input type="file" id="" className="form-control" name="resume" onChange={this.handleResumeChange} />
                                             </div>
-                                            <div className="mr-auto">
+                                            <div className="mr-auto marginTop ">
                                                 <button className="btn btn-outline-dark linkedInBtn" onClick={this.submitResume}>Upload Resume</button>
                                             </div>
                                         </div>
@@ -720,5 +720,4 @@ class Profile extends Component {
 
     }
 }
-
 export default Profile;
