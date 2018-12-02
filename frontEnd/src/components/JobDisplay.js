@@ -15,11 +15,11 @@ class JobDisplay extends Component {
             searchlocation:null,
             experience_level:"",
             type_of_apply:"any",
-            company:""
+            company:"",
+            timelapse:23445
          }
          this.handleEvent=this.handleEvent.bind(this)
          this.handleArray=this.handleArray.bind(this)
-         this.submitJob=this.submitJob.bind(this)
          this.submitJobCriteria=this.submitJobCriteria.bind(this)
          this.submitAdvanceJobCriteria=this.submitAdvanceJobCriteria.bind(this)
     }
@@ -56,16 +56,26 @@ class JobDisplay extends Component {
     resetJob=(e)=>{
             console.log("reset data of type of apply")
             this.setState({type_of_apply:"any"})
-            this.submitAdvanceJobCriteria()
-    }
-    submitJob(){
-        this.setState({experience_level:""})
-        this.submitAdvanceJobCriteria()
+            // this.submitAdvanceJobCriteria()
+            const data={
+                search:true,
+                searchjob:this.state.searchjob,
+                searchlocation:this.state.searchlocation,
+                experience_level:e.target.id=="reset"?"":this.state.experience_level,
+                type_of_apply:this.state.type_of_apply,
+                company:this.state.company,
+                timelapse:this.state.timelapse
+            }
+            this.props.submitAdvanceJobSearch(data)
     }
 
+    
     submitJobCriteria(e){
         console.log("Hello")
         console.log(this.state.searchjob)
+        if(this.state.searchjob==null||this.state.searchlocation==null||this.state.searchjob==""||this.state.searchlocation=="")
+        window.alert("First enter search criteria")
+        else{
         const data={
             searchonly:true,
             searchjob:this.state.searchjob,
@@ -73,7 +83,9 @@ class JobDisplay extends Component {
         }
         this.props.submitJobSearch(data)
     }
+}
     submitAdvanceJobCriteria(e){
+        console.log("target type"+e.target)
         console.log("Hello")
         console.log(this.state.searchjob)
         if(this.state.searchjob==null||this.state.searchlocation==null)
@@ -83,19 +95,28 @@ class JobDisplay extends Component {
             search:true,
             searchjob:this.state.searchjob,
             searchlocation:this.state.searchlocation,
-            experience_level:this.state.experience_level,
-            type_of_apply:this.state.type_of_apply,
-            company:this.state.company
+            experience_level:e.target.id=="resetexperience"?"":this.state.experience_level,
+            type_of_apply:e.target.id=="resettypeofapply"?"any":this.state.type_of_apply,
+            company:e.target.id=="resetcompany"?"":this.state.company,
+            timelapse:e.target.id=="resettimelapse"?"30000":this.state.timelapse,
         }
         this.props.submitAdvanceJobSearch(data)
     }
     }
 
-    handleNew(operation){
+    handleNew(operation,email){
+        console.log("reaced inside"+ operation + email) 
         console.log("operation")
         this.setState({id:operation})
+        const data={
+            clicks:1,
+            job_id:operation,
+            recruiter_email:email,
+            half_filled:0,
+            full_filled:0
+        }
          console.log("Inside handleNew")
-         console.log("reaced inside"+ operation)
+        
        
     }
     render() { 
@@ -115,7 +136,7 @@ class JobDisplay extends Component {
         console.log("particular job id"+this.props.jobid)
         var details,fulldetails
         if(this.props.jobdetails.length==0){
-            details= <h4 className="text-danger text-center">No property matches your search criteria! Search again</h4>
+            details= <h4 className="text-danger text-center">No job matches your search criteria! Search again</h4>
         }
         else{
                 // Displaying whole list
@@ -149,7 +170,7 @@ class JobDisplay extends Component {
                      
                         <div className="col-lg-4 mt-2"> <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} /></div>
                         <div className="col-lg-7 mt-2 ml-2">
-                        <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={()=>this.handleNew(job.job_id)}><h5>{job.title}</h5></button>
+                        <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={()=>this.handleNew(job.job_id,job.recruiter_email)}><h5>{job.title}</h5></button>
                         <h6 className="text-capitalize m-0 p-0">{job.company}</h6>
                         <div className="text-muted text-capitalize">{job.location}</div>
                         <div className="jobdescribe"><small>{job.description}</small></div>
@@ -191,7 +212,7 @@ class JobDisplay extends Component {
                         else
                             al=(<button className="btn btn-primary text-white ml-2 p-2"> <strong>Apply</strong></button>)
                         //  if(this.state.id==0) this.setState({id:this.props.jobid})
-                         if(job.job_id==this.state.id)
+                        if(job.job_id==this.state.id)
                     return(
                         <div className="ml-2">    
                         <div className="row smooth-scroll mt-3">
@@ -284,11 +305,10 @@ class JobDisplay extends Component {
                 <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" className="p-2 text-muted nav-link">
                 <strong>Jobs</strong></a>
                 <div className="dropdown-menu">
-                <a className="dropdown-item" href="#">Action</a>
-                <a className="dropdown-item" href="#">Another action</a>
-                <a className="dropdown-item" href="#">Something else here</a>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="#">Separated link</a>
+                <a className="dropdown-item" href="#">All</a>
+                <a className="dropdown-item" href="#">People</a>
+                <a className="dropdown-item" href="#">Content</a>
+                <a className="dropdown-item" href="#">Companies</a>
                 </div>
             </li>
   
@@ -296,14 +316,17 @@ class JobDisplay extends Component {
           <li className="nav-item dropdown ml-0 navbar-left">
                 <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" className="border border-dark p-2 text-muted nav-link">
                 <strong>Date Posted <i className="fa fa-caret-down"></i></strong></a>
+                
                 <div className="dropdown-menu">
-                <a className="dropdown-item" href="#">Action</a>
-                <a className="dropdown-item" href="#">Another action</a>
-                <a className="dropdown-item" href="#">Something else here</a>
+                <div>
+                <input type="radio" name="timelapse" value="1"className="dropdown-item ml-0" onClick={this.handleEvent}></input>Past 24 </div>
+                <input type="radio" name="timelapse" value="8" className="dropdown-item" onClick={this.handleEvent}></input>Past week
+                <input type="radio" name="timelapse" value="31" className="dropdown-item" onClick={this.handleEvent}></input>Past Month
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="#">Separated link</a>
-                <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+                <input type="radio" name="timelapse" value="0" className="dropdown-item" onClick={this.handleEvent}></input>Any Time<br></br>
+                <button className="btn btn-primary ml-1" type="reset" id="resettimelapse" onClick={this.submitAdvanceJobCriteria}>Cancel</button>
                 <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
+                
                 </div>
                 
             </li>
@@ -321,8 +344,8 @@ class JobDisplay extends Component {
                                 <input type="checkbox" onClick={this.handleEvent} id="under10" name="feature" value="under10"  />
                                 <label for="under10" className="ml-2">Under 10 applicants</label>
                 </div>
-                <button className="btn btn-link ml-1" type="reset" onClick={this.resetJob}>Cancel</button>
-                <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
+                <button className="btn btn-primary ml-5" type="reset" id="resettypeofapply"onClick={this.submitAdvanceJobCriteria}>Cancel</button>
+                <button className="btn btn-primary ml-2" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 </div>
             </li>
 
@@ -334,23 +357,8 @@ class JobDisplay extends Component {
                 <div className="dropdown-menu w-100">
                 <div className="dropdown-item">
                 <input type="text" className="w-100" name="company" onChange={this.handleEvent}></input></div>
-                <div className=" dropdown-item ml-3 text-muted">
-                                <input type="checkbox" onClick={this.handleEvent} id="adobe" name="feature" value="Adobe"  />
-                                <label for="Adobe" className="ml-2">Adobe</label>
-                </div>
-                <div className="dropdown-item ml-3 text-muted">
-                                <input type="checkbox" onClick={this.handleEvent} id="Mozilla" name="feature" value="Mozilla"  />
-                                <label for="Mozilla" className="ml-2">Mozilla</label>
-                </div>
-                <div className="dropdown-item ml-3 text-muted">
-                                <input type="checkbox" onClick={this.handleEvent} id="Oath" name="feature" value="Oath"  />
-                                <label for="Oath" className="ml-2">Oath</label>
-                </div>
-                <div className="dropdown-item ml-3 text-muted">
-                                <input type="checkbox" onClick={this.handleEvent} id="Tesla" name="feature" value="Tesla"  />
-                                <label for="Tesla" className="ml-2">Tesla</label>
-                </div>
-                <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+              
+                <button className="btn btn-primary ml-1" type="reset" id="resetcompany" onClick={this.submitAdvanceJobCriteria}>Cancel</button>
                 <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 
                 </div>
@@ -390,7 +398,7 @@ class JobDisplay extends Component {
                                 <input type="checkbox" onClick={this.handleArray} id="notapplicable" name="feature" value="notapplicable"  />
                                 <label for="notapplicable" className="ml-2">Not Applicable</label>
                 </div>
-                <button className="btn btn-link ml-1" type="reset" onClick={this.submitJob}>Cancel</button>
+                <button className="btn btn-primary ml-1" type="reset" id="resetexperience" onClick={this.submitAdvanceJobCriteria}>Cancel</button>
                 <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 </div>
             </li>
@@ -399,8 +407,10 @@ class JobDisplay extends Component {
   </nav><hr className="shadow"></hr>
 
             <div className="row ml-5 mr-3 mt-2 border">
-            <div className="col-lg-5 bg-light border anyclass" > {details}</div>
-            <div className="col-lg-6 border anyClass" > {fulldetails}</div>
+            <div className="col-lg-5 bg-light border anylistclass" > {details}</div>
+            <div className="col-lg-6 border anyClass" > {fulldetails}
+            <h4 className="mt-3 ml-3">If interested, click on particular job to view details</h4>
+            </div>
             </div>
             </div>
         );

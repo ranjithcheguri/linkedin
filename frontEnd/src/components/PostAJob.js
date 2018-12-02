@@ -31,7 +31,8 @@ class PostAJob extends Component {
         console.log("Inside Authenticate Recruiter",this.state.email,this.state.password)
         axios.get("http://localhost:3002/authRecruiter",{
                 params: {
-                    email       : this.state.email,
+                    // email       : this.state.email,
+                    email:window.localStorage.getItem('userEmail'),
                     password    : this.state.password
                 }
             })
@@ -81,8 +82,10 @@ class PostAJob extends Component {
                                         <div style={{color : "red"}}>{this.state.authError}</div>
                                         <div class="form-group">
                                             <label for="inputUserName">Email/Username</label>
+                                            {/* <input class="form-control" placeholder="Login Email/Username"
+                                                    type="text" id="inputUserName" onChange = {this.emailChangeHandler}/> */}
                                             <input class="form-control" placeholder="Login Email/Username"
-                                                    type="text" id="inputUserName" onChange = {this.emailChangeHandler}/>
+                                                    type="text" id="inputUserName" value={window.localStorage.getItem('userEmail')}/>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputPassword">Password</label>
