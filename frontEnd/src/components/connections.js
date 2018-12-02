@@ -10,19 +10,22 @@ class connections extends Component {
         this.state = {
             acceptedConnections: [],
             pendingConnections: [],
-            acceptedCProfiles: []
+            acceptedCProfiles: [],
+            pendingCProfiles: []
         }
+        this.acceptConnection = this.acceptConnection.bind(this);
     }
-    componentDidMount() {
+    async componentDidMount() {
         //${localStorage.getItem('email')}
         let acceptedConnections = []
         let pendingConnections = []
         let data = {
             email: "vinay@gmail.com"
         }
-        let acceptedCProfiles=[]
-        axios.post(IP_backEnd + `/getConnections`, data)
-            .then((response) => {
+        let acceptedCProfiles = []
+        let pendingCProfiles = []
+        await axios.post(IP_backEnd + `/getConnections`, data)
+            .then(async (response) => {
                 console.log("Inside Connections: ")
                 console.log("Status Code: ", response.data);
                 if (response.status === 200) {
@@ -30,17 +33,17 @@ class connections extends Component {
                         //console.log(response.data[i])
                         if (response.data[i].status == 1) {
                             acceptedConnections.push(response.data[i])
-                            console.log(response.data[i])
+                            console.log("Accepted:" + response.data[i])
                             let data = {
                                 email: response.data[i].to
                             }
-                            axios.post(IP_backEnd + `/userProfile`, data)
+                            await axios.get(IP_backEnd + `/userProfile?email=${response.data[i].to}`)
                                 .then((response) => {
                                     console.log("Inside user Profiles: ")
                                     console.log("Status Code: ", response.data);
                                     if (response.status == 200) {
                                         acceptedCProfiles.push(response.data[0])
-                                        console.log("acceptedCProfiles value: "+acceptedCProfiles)
+                                        console.log("acceptedCProfiles value: " + acceptedCProfiles)
                                     } else {
                                         console.log("not done")
                                     }
@@ -51,21 +54,38 @@ class connections extends Component {
                         }
                         else if (response.data[i].status == 0) {
                             pendingConnections.push(response.data[i])
+                            await axios.get(IP_backEnd + `/userProfile?email=${response.data[i].to}`)
+                                .then((response) => {
+                                    console.log("Inside user Profiles: ")
+                                    console.log("Status Code: ", response.data);
+                                    if (response.status == 200) {
+                                        pendingCProfiles.push(response.data[0])
+                                        console.log("pendingCProfiles value: " + pendingCProfiles)
+                                    } else {
+                                        console.log("not done")
+                                    }
+                                }).catch(err => {
+                                    console.log(err);
+                                });
                         }
                     }
-                    
+
                     console.log(acceptedConnections)
+                    console.log("Pending Connections: ")
                     console.log(pendingConnections)
-                    console.log("acceptedCProfiles value: "+acceptedCProfiles)
-                    setTimeout(() => {
+                    console.log(pendingCProfiles)
+                    console.log("acceptedCProfiles value: " + acceptedCProfiles)
+                    // setTimeout(() => {
+                    // }, 1000);
                         this.setState({
                             // ...response.data,
                             // acceptedConnections,
                             // pendingConnections
-                            acceptedCProfiles
+                            acceptedCProfiles,
+                            pendingCProfiles
                         })
-                    }, 1000);
                     
+
                 } else {
                     console.log("Did not find the server api")
                 }
@@ -74,16 +94,77 @@ class connections extends Component {
                 console.log(err);
             });
     }
-    //<td>{c1.fName}</td>
+
+    async acceptConnection(email, event) {
+        console.log(email)
+        var data={
+            from:"vinay@gmail.com",
+            to:email,
+            status:1
+        }
+        await axios.put(IP_backEnd + `/acceptConnection`,data)
+            .then((response) => {
+                console.log("Inside Accepting Connection: ")
+                console.log("Status Code: ", response.data);
+                if (response.status == 200) {
+                    console.log("Accepted the connection")
+                } else {
+                    console.log("Not done")
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+            window.location.reload();
+        return;
+    }
+    async declineConnection(email, event) {
+        console.log(email)
+        var data={
+            from:"vinay@gmail.com",
+            to:email,
+            status:2
+        }
+        await axios.put(IP_backEnd + `/declineConnection`,data)
+            .then((response) => {
+                console.log("Inside Declining Connection: ")
+                console.log("Status Code: ", response.data);
+                if (response.status == 200) {
+                    console.log("Declined the connection")
+                } else {
+                    console.log("not done")
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+            window.location.reload();
+        return;
+    }
     render() {
         //iterate over acceptedConnections to create a table row
         let details = this.state.acceptedCProfiles.map(connection => {
             return (
-                
+
                 <div className="column insideCard paddingLeft">
-                <hr></hr>
-                <h5>{connection.email}</h5>
-                <p>{connection.address}</p>
+                    <hr></hr>
+                    <h5>{connection.email}</h5>
+                    <p>{connection.address}</p>
+                </div>
+
+            )
+        })
+        let details1 = this.state.pendingCProfiles.map(connection => {
+            return (
+
+                <div className="column insideCard paddingLeft">
+                    <hr></hr>
+                    <div className="row"><h5>{connection.email}</h5>
+                        <div className="row float-right">
+                            <input className="ml-5 btn btn-success" type="button" onClick={() => this.acceptConnection(connection.email)} value="Accept"></input>
+                            <input className="ml-2 btn btn-danger" type="button" onClick={() => this.declineConnection(connection.email)} value="Decline"></input>
+                        </div>
+                    </div>
+                    <p>{connection.address}</p>
+
                 </div>
 
             )
@@ -94,7 +175,13 @@ class connections extends Component {
                 <div className="free-space"></div>
                 <div className="row">
                     <div className="col-md-8">
-                        <div className="col-md-12 profileCard ml-3">
+                        <div className="col-md-12 profileCard shadow-lg ml-3">
+                            <div className="pt-4 pl-3">
+                                <h5>{this.state.pendingCProfiles.length} Pending Connections</h5>
+                            </div>
+                            {details1}
+                        </div>
+                        <div className="col-md-12 profileCard shadow-lg ml-3">
                             <div className="pt-4 pl-3">
                                 <h5>{this.state.acceptedCProfiles.length} Connections</h5>
                             </div>

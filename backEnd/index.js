@@ -92,7 +92,7 @@ var getParticularMessages = require('./apis/getParticularMessages');
 //Aws s3 upload/import method
 var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
-var acceptConnection = require('./apis/acceptConnection');
+var Connections = require('./apis/Connections');
 var messages = require('./apis/messages');
 var getConnections = require('./apis/getConnections');
 // var changeMessageStatus = require('./apis/changeMessageStatus')
@@ -126,7 +126,7 @@ app.use('/', resumeupload)
 //send connection request
 app.use('/', makeConnection)
 //accept connection request
-app.use('/', acceptConnection)
+app.use('/', Connections)
 //this route is used to send the messages 
 app.use('/',messages)
 // //this route is used to update the status of the message

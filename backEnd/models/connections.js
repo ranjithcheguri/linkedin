@@ -15,3 +15,7 @@ const connectionSchema= new mongoose.Schema({
 var connections = mongoose.model('connections',connectionSchema);
 
 module.exports = {connections};
+
+//status:1--> connected
+//status:0--> In progress
+//status:2--> Not accepted
