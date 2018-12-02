@@ -70,8 +70,9 @@ class RecruiterPostJob extends Component {
         const currDate = "Current Date= "+date;
         console.log(currDate)
 
-        return ( <div >
-             <div className="row bg-light">
+        return ( 
+            <div >
+             <div >
              <div class="col-sm-3 col-md-6 col-lg-7 border ml-5 mt-5 bg-white mb-5" >
                    
                     <h4 className="mt-3">Step 1: What job do you want to post?</h4>
