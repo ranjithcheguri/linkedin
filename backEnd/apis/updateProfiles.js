@@ -1,9 +1,15 @@
 var router = require('express').Router();
 var { applicantProfiles } = require('../models/applicantProfile');
 var { recruiterProfiles } = require('../models/recruiterProfile');
+const Busboy = require('busboy');
+const AWS = require('aws-sdk');
+var AWS_operations = require('../AWS_s3/s3BucketOperations');
+
+
 // Two ways of upserting the documents.
 router.put('/applicant/updateProfile', function (req, res) {
-    console.log("Inside Applicant update handler",req.body);
+    console.log("Inside Applicant update handler", req.body);
+
     applicantProfiles.updateOne({ email: req.body.email }, { $set: { ...req.body } }, { upsert: true }, function (err, result) {
         if (err) {
             console.log("Error updating the Profile information.");
@@ -17,19 +23,34 @@ router.put('/applicant/updateProfile', function (req, res) {
     })
 });
 
-router.put('/recruiter/updateProfile', function (req, res) {
-    console.log("Inside Recruiter update handler");
-    recruiterProfiles.findOneAndUpdate({ email: req.body.email }, { $set: { ...req.body } }, { upsert: true, new:true }, function (err, result) {
-        if (err) {
-            console.log("Error updating the Profile information.");
-            console.log(err)
-            res.sendStatus(400).end();
-        }
-        else if (result) {
-            console.log("Recruiter Profile updated: ", result);
-            res.sendStatus(200).end();
-        }
-    })
+router.post('/applicant/updateProfile/profilePicUpload', function (req, res) {
+    console.log("inside profile pic upload", req.body);
+    var busboy = new Busboy({ headers: req.headers });
+    busboy.on('finish', function () {
+        //console.log('Upload finished');
+        const file = req.files.profilePic;
+        console.log("ImageUpload", file);
+        // Begins the upload to the AWS S3
+        fileType = "profilePic";
+        AWS_operations.uploadToS3(file, req.body.email, fileType);
+    });
+    req.pipe(busboy);
+    res.sendStatus(200).end('Profile pic updated');
 });
+
+// router.put('/recruiter/updateProfile', function (req, res) {
+//     console.log("Inside Recruiter update handler");
+//     recruiterProfiles.findOneAndUpdate({ email: req.body.email }, { $set: { ...req.body } }, { upsert: true, new:true }, function (err, result) {
+//         if (err) {
+//             console.log("Error updating the Profile information.");
+//             console.log(err)
+//             res.sendStatus(400).end();
+//         }
+//         else if (result) {
+//             console.log("Recruiter Profile updated: ", result);
+//             res.sendStatus(200).end();
+//         }
+//     })
+// });
 
 module.exports = router;
