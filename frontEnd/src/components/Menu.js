@@ -16,7 +16,7 @@ import PostAJob from './PostAJob'
 
 
 
-import JobDisplay from './JobDisplay';
+//import JobDisplay from './JobDisplay';
 import RecruiterPostJob from './RecruiterPostJob';
 import Dashboard from './AdminDashboard';
 import LogSaveJob from './logSavedJob';
@@ -33,7 +33,7 @@ class Menu extends Component {
             <Route path="/" component={Navbar} />
                 <Route path="/home" component={Home} />
                 <Route exact path="/" component={Home} /> 
-                <Route path="/jobdisplay" component={JobDisplay} />
+                {/* <Route path="/jobdisplay" component={JobDisplay} /> */}
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/postJob" component={RecruiterPostJob} />               
                 <Route path="/logSaveJob" component={LogSaveJob} />

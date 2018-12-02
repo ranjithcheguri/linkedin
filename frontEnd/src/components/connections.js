@@ -20,7 +20,7 @@ class connections extends Component {
         let acceptedConnections = []
         let pendingConnections = []
         let data = {
-            email: "vinay@gmail.com"
+            email: localStorage.getItem('userEmail')
         }
         let acceptedCProfiles = []
         let pendingCProfiles = []
@@ -98,7 +98,7 @@ class connections extends Component {
     async acceptConnection(email, event) {
         console.log(email)
         var data={
-            from:"vinay@gmail.com",
+            from:localStorage.getItem('userEmail'),
             to:email,
             status:1
         }
@@ -120,7 +120,7 @@ class connections extends Component {
     async declineConnection(email, event) {
         console.log(email)
         var data={
-            from:"vinay@gmail.com",
+            from:localStorage.getItem('userEmail'),
             to:email,
             status:2
         }

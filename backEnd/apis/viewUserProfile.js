@@ -29,16 +29,9 @@ var { applicantProfiles } = require ('../models/applicantProfile');
 
 router.get('/userProfile/', (req, res) => {
     console.log("Inside user profile List GET request");
-<<<<<<< HEAD
     let email = req.query.email;
     applicantProfiles.find({
         email,
-=======
-    var email = req.query.email;
-    console.log(email)
-    applicantProfiles.find({
-        email:email,
->>>>>>> 2b29e9f02f69e5a1930adeb581d3f8641331cacf
     }, (err, results) => {
         if(err){
             console.log("Error finding mongo results for User Profile");
