@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import {Link} from 'react-router-dom';
 import { IP_NODE_PORT, IP_backEnd } from '../config/config.js'
+import Navbar from './RecHomeNavbar'
 class RecruiterPostJob extends Component {
     constructor(props) {
         super(props);
@@ -89,13 +90,10 @@ class RecruiterPostJob extends Component {
     }
 
     render() { 
-        var tempDate = new Date();
-        console.log(tempDate)
-        var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
-        const currDate = "Current Date= "+date;
-        console.log(currDate)
+        
 
         return ( <div >
+            <Navbar />
              <div className="row bg-light">
              <div class="col-sm-3 col-md-6 col-lg-7 border ml-5 mt-5 bg-white mb-5" >
                    

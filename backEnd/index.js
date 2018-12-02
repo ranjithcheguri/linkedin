@@ -105,6 +105,7 @@ var messages = require('./apis/messages');
 var getConnections = require('./apis/getConnections');
 // var changeMessageStatus = require('./apis/changeMessageStatus')
 var changeMessageStatus = require('./apis/changeMessageStatus')
+var getAllPostedJobs = require('./apis/getAllPostedJobs')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -143,6 +144,8 @@ app.use('/',messages)
 app.use('/',getConnections)
 //this route is used to update the status of the message
 app.use('/',changeMessageStatus)
+//this route is used to get all the jobs posted by a particular recruiter
+app.use('/',getAllPostedJobs)
 
 
 

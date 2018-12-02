@@ -40,8 +40,8 @@ router.post('/login', function (req, res) {
         })
         res.end("Could Not Get Connection Object");
     } else {
-        con.query(sql, function (err, result) {
-            con.release();
+        con.query(sql, async function (err, result) {
+            //con.release();
             if (err) {
                 console.log(err);
                 res.writeHead(400, {
@@ -49,14 +49,14 @@ router.post('/login', function (req, res) {
                 })
                 res.send("Error");
             } else if(result.length>0) {
-                con.release()
+             con.release()
                 console.log(result);
                 console.log(result[0].password)
                 if (bcrypt.compareSync(req.body.password, result[0].password)) {
                     console.log("Validatiing bcrypt... ");
                     var payload='what';
                     var token = jwt.sign(payload, jwtOptions.secretOrKey);
-                    res.status(200).json({ success: true, token:token,cookie: req.body.email });
+                    res.status(200).json({ success: true, token:token,userEmail: req.body.email });
                 }else{
                     // res.writeHead(400, {
                     //     'Content-Type': 'text/plain'

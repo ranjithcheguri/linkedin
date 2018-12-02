@@ -99,17 +99,45 @@ class JobDisplay extends Component {
        
     }
     render() { 
+        var tempDate = new Date()-new Date("2018-11-24T07:04:13.000Z");
+        console.log(tempDate)
+        var day = 1000 * 60 * 60 * 24;
+        var hours=1000 * 60 * 60
+        var hours=Math.floor(tempDate/hours)
+        var days = Math.floor(tempDate/day);
+        var months = Math.floor(days/31);
+        console.log("hours"+hours)
+        console.log(days)
+        console.log(months)
+        var a=hours>24?days+"days ago": hours+"hours ago"
+        console.log(a)
+
         console.log("particular job id"+this.props.jobid)
         var details,fulldetails
         if(this.props.jobdetails.length==0){
             details= <h4 className="text-danger text-center">No property matches your search criteria! Search again</h4>
         }
         else{
+                // Displaying whole list
                 <h6>Showing {this.props.jobdetails.length} results</h6>
                     details=
                    
                      this.props.jobdetails.map(job => {
                           var al
+                          var tempDate = new Date()-new Date(job.posted_date_time);
+                          console.log(tempDate)
+                          var day = 1000 * 60 * 60 * 24;
+                          var hours=1000 * 60 * 60
+                          var hours=Math.floor(tempDate/hours)
+                          var days = Math.floor(tempDate/day);
+                          var months = Math.floor(days/31);
+                          console.log("hours"+hours)
+                          console.log(days)
+                          console.log(months)
+                          var diffdate=hours>24?days+" days ago": hours+" hours ago"
+                          if(months>0)
+                                diffdate= months+" months ago"
+                      
                         if(job.type_of_apply=="easyapply")
                         al=(<span><i className=" fa fa-lg text-primary fa-linkedin-square"></i>
                         <span className="ml-1">Easy Apply</span></span>)
@@ -126,7 +154,7 @@ class JobDisplay extends Component {
                         <div className="text-muted text-capitalize">{job.location}</div>
                         <div className="jobdescribe"><small>{job.description}</small></div>
                         <div className="text-muted">
-                        <small>3 days ago-{al}</small></div>
+                        <small>{diffdate} -{al}</small></div>
                         <hr></hr>
                         </div>
                         </div>
@@ -140,10 +168,24 @@ class JobDisplay extends Component {
         else{
            
                 <h6>Showing {this.props.jobdetails.length} results</h6>
+                // Displaying particular job display
                     fulldetails=
                    
                      this.props.jobdetails.map(job => {
                          var al
+                         var tempDate = new Date()-new Date(job.posted_date_time);
+                          console.log(tempDate)
+                          var day = 1000 * 60 * 60 * 24;
+                          var hours=1000 * 60 * 60
+                          var hours=Math.floor(tempDate/hours)
+                          var days = Math.floor(tempDate/day);
+                          var months = Math.floor(days/31);
+                          console.log("hours"+hours)
+                          console.log(days)
+                          console.log(months)
+                          var diffdate=hours>24?days+" days ago": hours+" hours ago"
+                          if(months>0)
+                                diffdate= months+" months ago"
                         if(job.type_of_apply=="easyapply")
                         al=(<button className="btn btn-primary text-white ml-2 p-2"><i className=" fa fa-lg text-white fa-linkedin-square"></i> <strong>Easy Apply</strong></button>)
                         else
@@ -160,7 +202,7 @@ class JobDisplay extends Component {
                             <h4 className="text-capitalize ">{job.company}</h4>
                             <div className="text-muted text-capitalize">{job.location}</div>
                             <div className="text-muted">
-                            <small>Posted 3 days ago <span>-- views</span></small></div> 
+                            <small>Posted {diffdate} ago <span>-- views</span></small></div> 
                             <div className="mt-2">
                             <button className="btn btn-primary text-white p-2 "><strong>Save</strong></button> 
                             {al}
@@ -217,6 +259,7 @@ class JobDisplay extends Component {
               <div>
               <Navbar />
             </div>
+           
             <div className="row bg-dark p-3">
              <div className="form-inline my-2 my-lg-0 ml-5 col-lg-5">
                             <input type="text" className="form-control mr-sm-2 fontAwesome bg-white iconColour w-100" type="search" placeholder="&#xF002; Search Jobs" aria-label="Search" name="searchjob" onChange={this.handleEvent} />
@@ -228,6 +271,8 @@ class JobDisplay extends Component {
                             <button className="btn btn-outline-light my-2 my-sm-0 ml-2 iconColour" type="submit" onClick={this.submitJobCriteria}>Search</button>
             </div>
             </div>
+
+           
             
             <nav class="navbar navbar-expand-lg navbar-light bg-white mt-2">
   {/* <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

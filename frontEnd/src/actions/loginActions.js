@@ -14,17 +14,17 @@ export const submitLogin = (email, password) => dispatch => {
         password: password
     }
     console.log(data);
-
     
     axios.post(IP_backEnd + '/login', data)
         .then(response => {
             console.log("response received after login :", response.data);
             console.log("response received after login :", response.data.token);
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userEmail', response.data.userEmail);
             dispatch({
                 type: SUBMIT_LOGIN,
                 payload: response.status,
-                cookie: response.data.cookie
+                userEmail: response.data.userEmail
             })
         })
         .catch((error) => {
@@ -35,7 +35,7 @@ export const submitLogin = (email, password) => dispatch => {
                 type: SUBMIT_LOGIN,
                 payload: error.response.status,
                 errormessage:error.response.data,
-                cookie: ""
+                userEmail: ""
             })
         })
 }
