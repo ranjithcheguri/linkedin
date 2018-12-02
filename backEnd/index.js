@@ -30,8 +30,24 @@ var logSavedJob=require('./apis/logSavedJob')
 const busboy = require('connect-busboy');
 const busboyBodyParser = require('busboy-body-parser');
 app.use(busboy());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
+//TO INCREASE PAYLOAD LIMIT TO 50MB : NOT RECOMMENDED
+app.use(bodyParser.urlencoded({
+    extended: true,
+    limit: '50mb',
+    parameterLimit: 100000
+  }))
+
+  app.use(bodyParser.json({
+    limit: '50mb',
+    parameterLimit: 100000
+  }))
+
+   app.use(bodyParser.raw({
+    limit: '50mb',
+    inflate: true,
+    parameterLimit: 100000
+  }))
 app.use(busboyBodyParser());
 
 
@@ -43,7 +59,7 @@ var { mongoose } = require('./db/mongoose');
 //     console.log("Connected!");
 //   });
 
-
+app.use(express.static('uploads'));
 
 //Redis connection
 // const redis = require('redis');

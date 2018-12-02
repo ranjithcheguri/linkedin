@@ -6,6 +6,7 @@ const IP_MONGODB_DATABASE = 'mongodb://user:cmpe273@ds257579.mlab.com:57579/link
 //change db name accordingly
 //const IP_MONGODB_DATABASE = 'mongodb://admin:admin@52.53.77.103:27017/admin';
 
+
 /*
 // Retrieve
 var MongoClient = require('mongodb').MongoClient;
