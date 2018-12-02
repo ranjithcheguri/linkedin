@@ -4,6 +4,8 @@ import Footer from './Footer';
 import Loading from './Loading';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
+import PDF from 'react-pdf-js';
+
 
 class Profile extends Component {
     constructor(props) {
@@ -39,19 +41,48 @@ class Profile extends Component {
             skills: "",
             generateSkillFlag: true,
             isLoading: true,
+            profilePic: "",
+            resume: '',
+            tempResume:'',
+            isNewResumeUploading: false,
         }
     }
 
     componentDidMount = async () => {
-
         console.log("Skills details in component did mount", this.state.skills)
         await this.getProfileData();
+        this.getProfilePic();
+        //this.getResume();
+        // this.setState({
+        //     isLoading:false
+        // })
         setTimeout(() => this.setState({ isLoading: false }), 1000);
-
     }
 
-    getProfileData = () => {
-        axios.get(IP_backEnd + '/userProfile/?email=' + this.state.email)
+    getProfilePic = async () => {
+        console.log("fetching user profile pic...");
+        await axios.get(IP_backEnd + '/userProfile/getProfilePic/?email=' + this.state.email)
+            .then((res) => {
+                console.log("base64 Image received");
+                //console.log("response from AWS S3 bucket... ", res.data);
+                this.setState({
+                    profilePic: res.data
+                })
+            })
+    }
+
+    onResumeClose=()=>{
+        this.setState({
+            resume:""
+        })
+    }
+
+    onProfileClick = () => {
+        //console.log("inside profile click...")
+    }
+
+    getProfileData = async () => {
+        await axios.get(IP_backEnd + '/userProfile/?email=' + this.state.email)
             .then(response => {
                 console.log("profile details retrieved", response.data[0]);
                 this.setState({
@@ -60,8 +91,71 @@ class Profile extends Component {
             })
     }
 
+    getResume = async () => {
+        console.log("fetching user resume");
+        await axios.get(IP_backEnd + '/userProfile/getResume/?email=' + this.state.email)
+            .then((res) => {
+                console.log("base64 Resume received");
+                //console.log("Resume from AWS S3 bucket... ", res.data);
+                this.setState({
+                    resume: res.data
+                })
+            })
+    }
+
+    submitResume = async () => {
+        console.log("in Submit Resume");
+        this.setState({ resume: '' });
+        let formData = new FormData();
+        formData.append('email', this.state.email);
+        formData.append('resume', this.state.tempResume);
+        console.log("resume file :: before uploading ::", this.state.tempResume);
+        await axios.post(IP_backEnd + '/applicant/updateProfile/resumeUpload', formData)
+            .then((response) => {
+                console.log(response.data);
+            });
+        //this.getResume();
+        console.log("after uploading Resume");
+        //setTimeout(() => this.getResume(), 1500);
+        //this.setState({ isNewResumeUploading: false });
+
+    }
+
+    handleResumeChange = (e) => {
+        //this.setState({isNewResumeUploading: true})
+        if (e.target.name == 'resume') {
+            this.setState({
+                tempResume: e.target.files[0]
+            })
+        }
+    }
+
+    submitProfilePic = async () => {
+
+        this.setState({ profilePic: "" });
+
+        console.log(this.state.profilePic);
+        let formData = new FormData();
+        formData.append('email', this.state.email);
+        formData.append('profilePic', this.state.profilePic);
+        console.log("before setting profile pic")
+        await axios.post(IP_backEnd + '/applicant/updateProfile/profilePicUpload', formData)
+            .then((response) => {
+                console.log(response.data);
+            });
+        //this.getProfilePic();
+        console.log("after setting profile pic")
+        setTimeout(() => this.getProfilePic(), 1500);
+    }
 
 
+    handleProfilePicChange = (e) => {
+        if (e.target.name == 'profilePic') {
+            this.setState({
+                profilePic: e.target.files[0]
+            })
+        }
+    }
     //react directly doesn't support to change nested objects, so we copy nested obj from state and change here.
     handlePersonalProfileChange = (event) => {
         console.log(event.target.name);
@@ -101,10 +195,12 @@ class Profile extends Component {
         })
     }
 
-
-
     submitPersonalProfile = async () => {
         console.log("personal profile data : ", this.state);
+        this.setState({
+            tempResume:"",
+            resume:"",
+        })
         await axios.put(IP_backEnd + '/applicant/updateProfile', this.state)
             .then(response => {
                 console.log(response);
@@ -141,10 +237,36 @@ class Profile extends Component {
             });
     }
 
-
-
-
     render() {
+        var profilePicDiv;
+        if (this.state.profilePic) {
+            console.log("data is present in this.state.profilePic");
+            profilePicDiv = (<div className="profilePic">
+                <img className="img-fluid" onClick={this.onProfileClick} data-toggle="modal" src={'data:image/jpeg;base64,' + this.state.profilePic} data-target="#profilePicUpload" ></img>
+            </div>)
+        } else {
+            profilePicDiv = (<div className="profilePic">
+                <img className="img-fluid" onClick={this.onProfileClick} data-toggle="modal" data-target="#profilePicUpload" ></img>
+            </div>)
+        }
+
+        var resumeDiv;
+        console.log("state before redering resume...",this.state);
+        if (this.state.resume && !this.state.isNewResumeUploading) {
+            var pdf = `data:application/pdf;base64,${this.state.resume}`;
+            resumeDiv = (
+                <div>
+                    <PDF file={pdf} />
+                </div>
+            );
+        } else {
+            resumeDiv = (
+                <div>
+                    <p>No resume found</p>
+                </div>
+            );
+        }
+
 
         var skillsList = this.state.skills;
         skillsList = skillsList.toString().split(',');
@@ -179,14 +301,12 @@ class Profile extends Component {
                                         <img className="img-fluid"></img>
                                     </div>
                                     <div className="row borderMe">
-                                        <div className="profilePic" >
-                                            <img className="img-fluid"></img>
-                                        </div>
+                                        {profilePicDiv}
                                         <div className="ml-auto paddingTop zoomMe">
                                             <i className="fal fa-pen editIcon marginRight2  broderRed" data-toggle="modal" data-target="#profileSummaryModal" ></i>
                                         </div>
                                     </div>
-                                    <div className="row insideCard">
+                                    <div className="row insideCard" style={{ "marginTop": 10 + 'px' }}>
                                         <div className="col-md-8 borderMe">
                                             <h3>{this.state.personalProfile.firstName}{' '}{this.state.personalProfile.lastName}</h3>
                                             <p>{this.state.personalProfile.headLine}</p>
@@ -198,9 +318,9 @@ class Profile extends Component {
                                             <a><i className="fal fa-users profileIcons"></i><span>{' '}{'connections count'}</span></a>
                                         </div>
                                     </div>
-                                    <div className="row insideCard" style={{"marginTop":-10+'px'}}>
+                                    <div className="row insideCard" style={{ "marginTop": -5 + 'px' }}>
                                         <div className="dropdown borderMe" >
-                                            <button className="btn btn-primary linkedInBtn dropdown-toggle marginLeft"  type="button" data-toggle="dropdown">Add profile section</button>
+                                            <button className="btn btn-primary linkedInBtn dropdown-toggle marginLeft" type="button" data-toggle="dropdown">Add profile section</button>
                                             <div className="dropdown-menu profileCard marginLeft">
                                                 <a className="dropdown-item" href="#">Link 1</a>
                                                 <a className="dropdown-item" href="#">Link 2</a>
@@ -208,6 +328,7 @@ class Profile extends Component {
                                             </div>
                                         </div>
                                         <div className="mr-auto  borderMe">
+                                            <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
                                             <button className="btn btn-outline-dark linkedInBtn marginLeft"> more...</button>
                                         </div>
                                     </div>
@@ -429,8 +550,13 @@ class Profile extends Component {
                                                 <textarea id="" className="form-control" rows="3" name="summary" value={this.state.personalProfile.summary} onChange={this.handlePersonalProfileChange} />
                                             </div>
                                         </div>
-                                        <div class="row marginTop paddingLeft">
-                                            <button className="btn btn-outline-dark linkedInBtn">Upload</button>
+                                        <div class="row marginTop marginBottom">
+                                            <div class="col-md-8 marginTop">
+                                                <input type="file" id="" className="form-control" name="resume" onChange={this.handleResumeChange} />
+                                            </div>
+                                            <div className="mr-auto marginTop ">
+                                                <button className="btn btn-outline-dark linkedInBtn" onClick={this.submitResume}>Upload Resume</button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -554,6 +680,53 @@ class Profile extends Component {
                                 </div>
                             </div>
                         </div>
+                        {/* PROFILE PIC MODAL UPLOAD 5 */}
+                        <div class="modal fade" id="profilePicUpload" tabindex="-1" role="dialog" aria-labelledby="profilePicModal" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="skillsModalTitle">Upload profile pic</h5>
+                                        <button type="button" class="close linkedInBtn" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row marginTop">
+                                            <div class="col-md-12">
+                                                <input type="file" id="" className="form-control" name="profilePic" onChange={this.handleProfilePicChange} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" className="btn btn-primary linkedInBtn" onClick={this.submitProfilePic} data-dismiss="modal">Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* RESUME MODAL UPLOAD 5 */}
+                        <div class="modal fade" id="viewResume" tabindex="-1" role="dialog" aria-labelledby="viewResumeModal" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="viewResumeTitle">Resume</h5>
+                                        <button type="button" class="close linkedInBtn" data-dismiss="modal" onClick={this.onResumeClose} aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {resumeDiv}
+                                        {/* <div class="row marginTop">
+                                            <div class="col-md-12">
+                                                <input type="file" id="" className="form-control" name="profilePic" onChange={this.handleProfilePicChange} />
+                                            </div>
+                                        </div> */}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" className="btn btn-primary linkedInBtn" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div>
                         <Footer />
@@ -565,5 +738,4 @@ class Profile extends Component {
 
     }
 }
-
 export default Profile;

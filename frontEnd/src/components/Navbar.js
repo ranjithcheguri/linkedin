@@ -1,8 +1,41 @@
 import React, { Component } from 'react';
 import '../css/Navbar.css';
 import '../fontawesome/css/all.css';
+import { Badge } from 'antd';
+import { IP_backEnd } from '../config/config';
+import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 class Navbar extends Component {
+    constructor() {
+        super();
+        this.state = {
+            acceptedConnections: [],
+        }
+    }
+    async componentWillMount() {
+        let data = {
+            email: "vinay@gmail.com"
+        }
+        let acceptedConnections=[];
+        await axios.post(IP_backEnd + `/getConnections`, data)
+            .then(async (response) => {
+                console.log("Inside Connections: ")
+                //console.log("Status Code: ", response.data);
+                if (response.status === 200) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        //console.log(response.data[i])
+                        if (response.data[i].status == 0) {
+                            acceptedConnections.push(response.data[i])
+                            //console.log("Accepted:" + response.data[i])
+                            this.setState({
+                                acceptedConnections
+                            })
+                        }
+                    }
+                }
+            })
+    }
     render() {
         return (
             <div className="">
@@ -24,20 +57,25 @@ class Navbar extends Component {
                                             <span class="nav-icon-text">Home</span><span class="sr-only">(current)</span></a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#"><i class="fal fa-users fa-lg iconColour"></i><br />
+                                        <a className="nav-link" href="/connections"><i class="fal fa-users fa-lg iconColour"></i><br />
                                             <span class="nav-icon-text">My Network</span></a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fal fa-suitcase fa-lg iconColour"></i><br />
-                                            <span class="nav-icon-text">Jobs</span></a>
+                                            <Link to="/jobdisplay" class="nav-icon-text">Jobs</Link></a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fal fa-envelope fa-lg iconColour"></i><br />
                                             <span class="nav-icon-text">Messaging</span></a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="#"><i class="fal fa-bell fa-lg iconColour"></i><br />
-                                            <span class="nav-icon-text">Notifications</span></a>
+                                        <a className="nav-link" href="#"><i class="fal fa-bell fa-lg iconColour">
+                                            <Badge count={this.state.acceptedConnections.length} showZero>
+                                                <a href="/connections" className="head-example" />
+                                            </Badge></i><br />
+                                            <span class="nav-icon-text">Notifications </span></a>
+
+
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fa fa-user fa-lg iconColour"></i><br />
@@ -63,6 +101,7 @@ class Navbar extends Component {
                         </div>
                     </div>
                 </nav>
+                
             </div>
         );
     }

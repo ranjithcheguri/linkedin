@@ -18,7 +18,7 @@ class ViewAllApplicants extends Component {
   }
 
   componentDidMount(){
-    axios.get(IP_backEnd+'/jobApplication?jobId=123')//+this.props.applicationState.jobID)
+    axios.get(IP_backEnd+'/jobApplication?jobId='+this.props.applicationState.jobID)
       .then(response => {
         this.setState({
           Applications : this.state.Applications.concat(response.data),

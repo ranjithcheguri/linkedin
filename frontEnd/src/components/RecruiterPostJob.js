@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import axios from "axios";
 import {Link} from 'react-router-dom';
 import { IP_NODE_PORT, IP_backEnd } from '../config/config.js'
+import Navbar from './RecHomeNavbar'
+import RecruiterPostJobReducer  from './RecruiterPostJob'
 class RecruiterPostJob extends Component {
     constructor(props) {
         super(props);
@@ -16,11 +18,38 @@ class RecruiterPostJob extends Component {
             seniorlevel:"",
             jobdescribe:"",
             companyurl:"",
-            typeofapply:""
+            typeofapply:"",
+            companylogo:"",
+            recruiter_email:window.localStorage.getItem('userEmail')
+            
          }
          this.handleEvent=this.handleEvent.bind(this);
         this.handleRadio=this.handleRadio.bind(this);
         this.submitJobPost=this.submitJobPost.bind(this);
+    }
+
+    onFileSelect =(e)=>{
+        const files = e.target.files
+        console.log(files)
+        this.setState({
+            photos:files
+        });
+    }
+
+    onSubmitForm =(e) =>{
+        console.log("here in form");
+        let formData = new FormData();
+        const files = this.state.photos;
+        console.log(files.originalname)
+        for(var i=0;i<files.length;++i){
+            formData.append("files",files[i]);
+        }
+        this.setState({pid:true})
+        const config= {
+            headers:{
+                'content-type':'multipart/form-data'
+            }
+        }
     }
 
     handleEvent(e){
@@ -48,7 +77,11 @@ class RecruiterPostJob extends Component {
     }
 
     submitJobPost(){
+        if(this.state.company===""||this.state.location===""||this.state.title===""||this.state.jobfunction===""||this.state.industry===""||this.state.employementtype===""||this.state.seniorlevel===""||this.state.jobdescribe===""||this.state.typeofapply)
+         {window.alert("Enter all the fields:")}
+        else{
         const data={
+            recruiter_email:window.localStorage.getItem('userEmail'),
             company:this.state.company,
             location:this.state.location,
             title:this.state.title,
@@ -58,19 +91,20 @@ class RecruiterPostJob extends Component {
             seniorlevel:this.state.seniorlevel,
             jobdescribe:this.state.jobdescribe,
             companyurl:this.state.companyurl,
-            typeofapply:this.state.typeofapply
+            typeofapply:this.state.typeofapply,
+           
         }
         this.props.submitJobPost(data)
     }
+}
 
     render() { 
-        var tempDate = new Date();
-        console.log(tempDate)
-        var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
-        const currDate = "Current Date= "+date;
-        console.log(currDate)
-
+        console.log("inside render")
+        console.log(this.props.postjobstatus)
+        if(this.props.postjobstatus===true)
+            window.alert("Job Posted successfully!")
         return ( <div >
+            <Navbar />
              <div className="row bg-light">
              <div class="col-sm-3 col-md-6 col-lg-7 border ml-5 mt-5 bg-white mb-5" >
                    
@@ -124,7 +158,7 @@ class RecruiterPostJob extends Component {
                                 <option value="internship">Internship</option>
                                 <option value="entrylevel">Entry level</option>
                                 <option value="associate">Associate</option>
-                                <option value="middeniorlevel">Mid-Senior level</option>
+                                <option value="midseniorlevel">Mid-Senior level</option>
                                 <option value="director">Director</option>
                                 <option value="executive">Executive</option>
                                 <option value="notapplicable">Not applicable</option>
@@ -137,6 +171,14 @@ class RecruiterPostJob extends Component {
                     <div className="mt-5">
                         <div className=""><small>Job Description</small><sup className="text-primary"> *</sup></div>
                         <textarea rows="4" cols="88.5" onChange={this.handleEvent} name="jobdescribe" className="pl-2 pr-2"></textarea>
+                    </div>
+
+                    {/* Company Logo */}
+                    <div className="mt-3">
+                        <div className=""><small>Upload your Company Logo</small>
+                        <sup className="text-primary"> *</sup></div>
+                        <input type="file" name="files" onChange={this.onFileSelect} multiple/>
+                      <button  onClick={this.onSubmitForm} className="btn btn-primary w-25 ml-5 text-center btn-btn-lg btn-rounded btn-save">Save</button>
                     </div>
 
 
@@ -174,7 +216,8 @@ class RecruiterPostJob extends Component {
 const mapStateToProps = state =>{
     return {
         authFlag : state.authFlag,
-        newproperty:state.newproperty
+        newproperty:state.newproperty,
+        postjobstatus:state.postjobstatus
     };
 }
 
@@ -184,6 +227,10 @@ const mapDispatchStateToProps = dispatch => {
             axios.post(IP_backEnd+'/postJob', data)
                 .then((response) => {
                     console.log("After post job request")
+                    if(response.status===200) window.alert("Successfully posted")
+                    else{
+                        window.alert("There was some error")
+                    }
                     dispatch({type: 'JOB_POST',payload : response.data,statusCode : response.status})
             });
         },

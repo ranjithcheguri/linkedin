@@ -30,8 +30,24 @@ var logSavedJob=require('./apis/logSavedJob')
 const busboy = require('connect-busboy');
 const busboyBodyParser = require('busboy-body-parser');
 app.use(busboy());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
+//TO INCREASE PAYLOAD LIMIT TO 50MB : NOT RECOMMENDED
+app.use(bodyParser.urlencoded({
+    extended: true,
+    limit: '50mb',
+    parameterLimit: 100000
+  }))
+
+  app.use(bodyParser.json({
+    limit: '50mb',
+    parameterLimit: 100000
+  }))
+
+   app.use(bodyParser.raw({
+    limit: '50mb',
+    inflate: true,
+    parameterLimit: 100000
+  }))
 app.use(busboyBodyParser());
 
 
@@ -100,12 +116,13 @@ var getParticularMessages = require('./apis/getParticularMessages');
 //Aws s3 upload/import method
 var resumeupload = require('./AWS_s3/s3BucketOperations');
 var makeConnection = require('./apis/makeConnection');
-var acceptConnection = require('./apis/acceptConnection');
+var Connections = require('./apis/Connections');
 var messages = require('./apis/messages');
 var getConnections = require('./apis/getConnections');
 // var changeMessageStatus = require('./apis/changeMessageStatus')
 var changeMessageStatus = require('./apis/changeMessageStatus')
 var getAllPostedJobs = require('./apis/getAllPostedJobs')
+var authRecruiter = require('./apis/authRecruiter')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -135,7 +152,7 @@ app.use('/', resumeupload)
 //send connection request
 app.use('/', makeConnection)
 //accept connection request
-app.use('/', acceptConnection)
+app.use('/', Connections)
 //this route is used to send the messages 
 app.use('/',messages)
 // //this route is used to update the status of the message
@@ -146,6 +163,8 @@ app.use('/',getConnections)
 app.use('/',changeMessageStatus)
 //this route is used to get all the jobs posted by a particular recruiter
 app.use('/',getAllPostedJobs)
+//this route is used to authenticate the recruiter before posting the job
+app.use('/',authRecruiter)
 
 
 
