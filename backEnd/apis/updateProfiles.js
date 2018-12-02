@@ -38,6 +38,21 @@ router.post('/applicant/updateProfile/profilePicUpload', function (req, res) {
     res.sendStatus(200).end('Profile pic updated');
 });
 
+router.post('/applicant/updateProfile/resumeUpload', function (req, res) {
+    console.log("inside resume upload", req.body);
+    var busboy = new Busboy({ headers: req.headers });
+    busboy.on('finish', function () {
+        //console.log('Upload finished');
+        const file = req.files.resume;
+        console.log("ResumeUpload", file);
+        // Begins the upload to the AWS S3
+        fileType = "resume";
+        AWS_operations.uploadToS3(file, req.body.email, fileType);
+    });
+    req.pipe(busboy);
+    res.sendStatus(200).end('Resume uploaded successfully !!!');
+});
+
 // router.put('/recruiter/updateProfile', function (req, res) {
 //     console.log("Inside Recruiter update handler");
 //     recruiterProfiles.findOneAndUpdate({ email: req.body.email }, { $set: { ...req.body } }, { upsert: true, new:true }, function (err, result) {

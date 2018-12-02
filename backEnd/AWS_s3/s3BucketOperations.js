@@ -18,6 +18,7 @@ var fs = require('fs');
 
 uploadToS3 = (file, email, fileType) => {
 
+    console.log("Uploading file to S3 bucket....")
     let filePathInAws;
     let extension = path.extname(file.name);
     switch (fileType) {
@@ -26,10 +27,7 @@ uploadToS3 = (file, email, fileType) => {
         case "coverPic": filePathInAws = "coverPics/" + email + extension; break;
         case "logo": filePathInAws = "logos/" + email + extension; break;
     }
-
-    console.log("Inside AWS_s3/upload/uploadToS3()")
-    console.log("Uploading file to S3 bucket....")
-
+    console.log(filePathInAws);
     //it accesses s3 bucket
     let s3bucket = new AWS.S3({
         accessKeyId: AWS_CREDS.IAM_USER_KEY,
@@ -48,37 +46,48 @@ uploadToS3 = (file, email, fileType) => {
                 console.log('error in callback');
                 console.log(err);
             }
-            console.log("Resume pushed is...", data);
-            console.log('Resume uploaded successfully!');
+            console.log("File pushed is...", data);
+            console.log('File uploaded successfully!');
         });
     });
 }
 
-downloadFromS3 = (req,res) => {
-    console.log("inside download from s3 method ...")
-        let s3bucket = new AWS.S3({
-            accessKeyId: AWS_CREDS.IAM_USER_KEY,
-            secretAccessKey: AWS_CREDS.IAM_USER_SECRET,
-            Bucket: AWS_CREDS.BUCKET_NAME,
-        });
-        s3bucket.createBucket( async function (){
-            var params = {
-                Bucket: AWS_CREDS.BUCKET_NAME,
-                Key: "Resumes/ranjith@g.com.pdf",
-            };
+downloadFromS3 = (email, fileType, res) => {
+    console.log("downloading file from S3 bucket...")
+    console.log("Only jpg images are handled for now...")
 
-            await s3bucket.getObject(params, function (err, data) {
-                if (err) {
-                    console.log('error in callback');
-                    console.log(err);
-                }
-                console.log('data retrieval from AWS success...');
-                console.log(data);
-                //res.setHeader('Content-disposition', 'attachment; filename=abcd1@gmail.com.jpg')
-                //res.setHeader('Content-length', data.ContentLength);    
-                res.end(new Buffer(data.Body.toString('base64')));
-            })
-        });
+    let filePathInAws;
+    switch (fileType) {
+        case "resume": filePathInAws = "Resumes/" + email + '.pdf'; break; //  Resumes/email@gmail.com.pdf
+        case "profilePic": filePathInAws = "profilePics/" + email + '.jpg'; break;
+        case "coverPic": filePathInAws = "coverPics/" + email + '.jpg'; break;
+        case "logo": filePathInAws = "logos/" + email + '.jpg'; break;
+    }
+    console.log(filePathInAws);
+
+    let s3bucket = new AWS.S3({
+        accessKeyId: AWS_CREDS.IAM_USER_KEY,
+        secretAccessKey: AWS_CREDS.IAM_USER_SECRET,
+        Bucket: AWS_CREDS.BUCKET_NAME,
+    });
+    s3bucket.createBucket(async function () {
+        var params = {
+            Bucket: AWS_CREDS.BUCKET_NAME,
+            Key: filePathInAws,
+        };
+
+        await s3bucket.getObject(params, function (err, data) {
+            if (err) {
+                console.log('error in callback');
+                console.log(err);
+            }
+            console.log('data retrieval from AWS success...');
+            console.log(data);
+            //res.setHeader('Content-disposition', 'attachment; filename=abcd1@gmail.com.jpg')
+            //res.setHeader('Content-length', data.ContentLength);    
+            res.end(new Buffer(data.Body.toString('base64')));
+        })
+    });
 }
 
 module.exports = router;

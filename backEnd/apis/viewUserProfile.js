@@ -54,8 +54,16 @@ router.get('/userProfile', (req, res) => {
 
 router.get('/userProfile/getProfilePic', (req, res) => {
     console.log("Inside get profile pic");
-    AWS_operations.downloadFromS3(req,res);
+    let email = req.query.email;
+    let fileType = "profilePic";
+    AWS_operations.downloadFromS3(email, fileType, res);
 })
 
+router.get('/userProfile/getResume', (req, res) => {
+    console.log("Inside get get Resume");
+    let email = req.query.email;
+    let fileType = "resume";
+    AWS_operations.downloadFromS3(email, fileType, res);
+})
 
 module.exports = router;
