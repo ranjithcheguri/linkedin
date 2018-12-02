@@ -106,6 +106,7 @@ var getConnections = require('./apis/getConnections');
 // var changeMessageStatus = require('./apis/changeMessageStatus')
 var changeMessageStatus = require('./apis/changeMessageStatus')
 var getAllPostedJobs = require('./apis/getAllPostedJobs')
+var authRecruiter = require('./apis/authRecruiter')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -146,6 +147,8 @@ app.use('/',getConnections)
 app.use('/',changeMessageStatus)
 //this route is used to get all the jobs posted by a particular recruiter
 app.use('/',getAllPostedJobs)
+//this route is used to authenticate the recruiter before posting the job
+app.use('/',authRecruiter)
 
 
 
