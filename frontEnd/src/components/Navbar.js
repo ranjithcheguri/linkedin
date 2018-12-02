@@ -4,6 +4,7 @@ import '../fontawesome/css/all.css';
 import { Badge } from 'antd';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 class Navbar extends Component {
     constructor() {
@@ -61,7 +62,7 @@ class Navbar extends Component {
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fal fa-suitcase fa-lg iconColour"></i><br />
-                                            <span class="nav-icon-text">Jobs</span></a>
+                                            <Link to="/jobdisplay" class="nav-icon-text">Jobs</Link></a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fal fa-envelope fa-lg iconColour"></i><br />

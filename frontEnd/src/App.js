@@ -5,6 +5,7 @@ import Menu from './components/Menu';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
+
 /* REDUX STORE */
 import { Provider } from 'react-redux';
 import { store } from './store';
