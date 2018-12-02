@@ -39,6 +39,7 @@ class PostAJob extends Component {
                 console.log("The response received after recruiter authentication before posting the job")
                 if(response.data.status === 200){
                     console.log("Recruiter successfully authenticated.")
+                    this.props.history.push('/postjob');
                     //Here redirect to Aditis page for job posting.
                 }else if(response.data.status === 401){
                     this.setState({

@@ -4,6 +4,7 @@ import axios from "axios";
 import {Link} from 'react-router-dom';
 import { IP_NODE_PORT, IP_backEnd } from '../config/config.js'
 import Navbar from './RecHomeNavbar'
+import RecruiterPostJobReducer  from './RecruiterPostJob'
 class RecruiterPostJob extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +19,9 @@ class RecruiterPostJob extends Component {
             jobdescribe:"",
             companyurl:"",
             typeofapply:"",
-            companylogo:""
+            companylogo:"",
+            recruiter_email:window.localStorage.getItem('userEmail')
+            
          }
          this.handleEvent=this.handleEvent.bind(this);
         this.handleRadio=this.handleRadio.bind(this);
@@ -74,7 +77,11 @@ class RecruiterPostJob extends Component {
     }
 
     submitJobPost(){
+        if(this.state.company===""||this.state.location===""||this.state.title===""||this.state.jobfunction===""||this.state.industry===""||this.state.employementtype===""||this.state.seniorlevel===""||this.state.jobdescribe===""||this.state.typeofapply)
+         {window.alert("Enter all the fields:")}
+        else{
         const data={
+            recruiter_email:window.localStorage.getItem('userEmail'),
             company:this.state.company,
             location:this.state.location,
             title:this.state.title,
@@ -84,14 +91,18 @@ class RecruiterPostJob extends Component {
             seniorlevel:this.state.seniorlevel,
             jobdescribe:this.state.jobdescribe,
             companyurl:this.state.companyurl,
-            typeofapply:this.state.typeofapply
+            typeofapply:this.state.typeofapply,
+           
         }
         this.props.submitJobPost(data)
     }
+}
 
     render() { 
-        
-
+        console.log("inside render")
+        console.log(this.props.postjobstatus)
+        if(this.props.postjobstatus===true)
+            window.alert("Job Posted successfully!")
         return ( <div >
             <Navbar />
              <div className="row bg-light">
@@ -205,7 +216,8 @@ class RecruiterPostJob extends Component {
 const mapStateToProps = state =>{
     return {
         authFlag : state.authFlag,
-        newproperty:state.newproperty
+        newproperty:state.newproperty,
+        postjobstatus:state.postjobstatus
     };
 }
 
@@ -215,6 +227,10 @@ const mapDispatchStateToProps = dispatch => {
             axios.post(IP_backEnd+'/postJob', data)
                 .then((response) => {
                     console.log("After post job request")
+                    if(response.status===200) window.alert("Successfully posted")
+                    else{
+                        window.alert("There was some error")
+                    }
                     dispatch({type: 'JOB_POST',payload : response.data,statusCode : response.status})
             });
         },
