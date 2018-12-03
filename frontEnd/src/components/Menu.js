@@ -16,7 +16,7 @@ import PostAJob from './PostAJob'
 
 
 
-//import JobDisplay from './JobDisplay';
+import JobDisplay from './JobDisplay';
 import RecruiterPostJob from './RecruiterPostJob';
 import Dashboard from './AdminDashboard';
 import LogSaveJob from './logSavedJob';

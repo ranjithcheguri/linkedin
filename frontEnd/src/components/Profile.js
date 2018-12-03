@@ -5,14 +5,19 @@ import Loading from './Loading';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
 import PDF from 'react-pdf-js';
-
+/* REDUX IMPORTS BEGIN */
+import { connect } from 'react-redux';
+import { getProfileDataAction } from '../actions/profileActions';
+/* REDUX IMPORTS END */
 
 class Profile extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            email: "abcd1@gmail.com",
+            email: 'abcd1@gmail.com',
+            //email: localStorage.getItem('searchUser'),
+            //email: localStorage.getItem('searchUser'),
             personalProfile: {
                 firstName: "username",
                 lastName: "lastname",
@@ -43,23 +48,28 @@ class Profile extends Component {
             isLoading: true,
             profilePic: "",
             resume: '',
-            tempResume:'',
+            tempResume: '',
             isNewResumeUploading: false,
+            check: true
         }
     }
 
     componentDidMount = async () => {
+        console.log("logged In user email is ...", this.state.email);
         console.log("Skills details in component did mount", this.state.skills)
-        await this.getProfileData();
         this.getProfilePic();
+        await this.getProfileData();
         //this.getResume();
         // this.setState({
-        //     isLoading:false
+        //     isLoading: false
         // })
         setTimeout(() => this.setState({ isLoading: false }), 1000);
     }
 
     getProfilePic = async () => {
+
+        //this.props.getProfilePic(this.state.email);
+
         console.log("fetching user profile pic...");
         await axios.get(IP_backEnd + '/userProfile/getProfilePic/?email=' + this.state.email)
             .then((res) => {
@@ -71,17 +81,19 @@ class Profile extends Component {
             })
     }
 
-    onResumeClose=()=>{
+    onResumeClose = () => {
         this.setState({
-            resume:""
+            resume: ""
         })
     }
 
     onProfileClick = () => {
-        //console.log("inside profile click...")
+        //this.props.getProfileDataAction(this.state.email);
     }
 
     getProfileData = async () => {
+        console.log("STORE DATA IN REDUX");
+        console.log("get profile data action triggered");
         await axios.get(IP_backEnd + '/userProfile/?email=' + this.state.email)
             .then(response => {
                 console.log("profile details retrieved", response.data[0]);
@@ -89,17 +101,23 @@ class Profile extends Component {
                     ...response.data[0]
                 })
             })
+        this.props.getProfileDataAction(this.state.email);
     }
 
     getResume = async () => {
         console.log("fetching user resume");
         await axios.get(IP_backEnd + '/userProfile/getResume/?email=' + this.state.email)
             .then((res) => {
-                console.log("base64 Resume received");
-                //console.log("Resume from AWS S3 bucket... ", res.data);
-                this.setState({
-                    resume: res.data
-                })
+                if (res.data !== "OK") {
+                    //console.log("base64 Resume received",res.data);
+                    //console.log("Resume from AWS S3 bucket... ", res.data);
+                    this.setState({
+                        resume: res.data
+                    })
+                } else {
+                    console.log("empty resume base64 value ", res.data);
+                }
+
             })
     }
 
@@ -198,8 +216,8 @@ class Profile extends Component {
     submitPersonalProfile = async () => {
         console.log("personal profile data : ", this.state);
         this.setState({
-            tempResume:"",
-            resume:"",
+            tempResume: "",
+            resume: "",
         })
         await axios.put(IP_backEnd + '/applicant/updateProfile', this.state)
             .then(response => {
@@ -251,7 +269,7 @@ class Profile extends Component {
         }
 
         var resumeDiv;
-        console.log("state before redering resume...",this.state);
+        console.log("state before redering resume...", this.state);
         if (this.state.resume && !this.state.isNewResumeUploading) {
             var pdf = `data:application/pdf;base64,${this.state.resume}`;
             resumeDiv = (
@@ -267,6 +285,21 @@ class Profile extends Component {
             );
         }
 
+        var otherButtons;
+        if (this.state.email != 'abcd1@gmail.com') {
+            otherButtons = (
+                <div className="mr-auto  borderMe">
+                    <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
+                    <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.addConnection}>connect</button>
+                </div>
+            )
+        } else {
+            otherButtons = (
+                <div className="mr-auto  borderMe">
+                    <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
+                </div>
+            )
+        }
 
         var skillsList = this.state.skills;
         skillsList = skillsList.toString().split(',');
@@ -327,10 +360,8 @@ class Profile extends Component {
                                                 <a className="dropdown-item" href="#">Link 3</a>
                                             </div>
                                         </div>
-                                        <div className="mr-auto  borderMe">
-                                            <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
-                                            <button className="btn btn-outline-dark linkedInBtn marginLeft"> more...</button>
-                                        </div>
+
+                                        {otherButtons}
                                     </div>
                                 </div>
                                 {/* <div className="col-md-12 dashboardCard">
@@ -738,4 +769,14 @@ class Profile extends Component {
 
     }
 }
-export default Profile;
+
+//subscribe to Redux store updates.
+const mapStateToProps = (state) => ({
+    // variables below are subscribed to changes in loginState variables (redirectVar,Response) and can be used with props.
+    profilePic: state.profileState.profilePic,
+    profileData: state.profileState.profileData,
+    //response: state.loginState.response
+})
+
+export default connect(mapStateToProps, { getProfileDataAction })(Profile);
+//export default Profile;
