@@ -5,6 +5,8 @@ import Profile from './Profile';
 import connections from './connections'
 import ViewAllApplicants from './ViewAllApplicants';
 import ViewAllMessages from './Messages/ViewAllMessages';
+import Apply from './Apply';
+import EasyApply from './EasyApply';
 //import PostAJob from './PostAJob';
 //import RecHome from './RecHome';
 import newsFeed from './newsFeed';
@@ -16,7 +18,7 @@ import PostAJob from './PostAJob'
 
 
 
-//import JobDisplay from './JobDisplay';
+import JobDisplay from './JobDisplay';
 import RecruiterPostJob from './RecruiterPostJob';
 import Dashboard from './AdminDashboard';
 import LogSaveJob from './logSavedJob';
@@ -46,6 +48,8 @@ class Menu extends Component {
                 <Route path='/recHome' component={RecHome} />
                 <Route path='/postAJob' component={PostAJob} />
                 <Route path='/reactPDF' component={ReactPDF} />
+                <Route path='/apply' component={Apply} />
+                <Route path='/easyApply' component={EasyApply} />
             </div>
         );
     }
