@@ -41,7 +41,7 @@ class RecHome extends Component {
         console.log("Inside componentDidMount of recruiter Home")
         axios.get("http://localhost:3002/recruiter/getPostedJobs",{
             params: {
-            email : "nayak11@infy.com"
+            email : window.localStorage.getItem("userEmail")
             }
         })
         .then(response => {
@@ -199,7 +199,7 @@ class RecHome extends Component {
                                         </CardText>
                                         <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.jobID)}>Details</button>
                                         &nbsp;&nbsp;&nbsp;
-                                        <button class="btn btn-primary">Edit</button>
+                                        <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.jobID)}>Edit</button>
                                         </CardImgOverlay>
                                     </Card>
                                     <hr></hr>

@@ -6,6 +6,7 @@ import jobDisplayReducer from './JobDisplayReducer';
 import applicationReducer from './applicationReducer';
 import messagesReducer from './messagesReducer';
 import RecruiterPostJobReducer from './RecruiterPostJob';
+import connectionsReducer from './connectionsReducer';
 
 import profileReducer from './profileReducer';
 
@@ -16,5 +17,6 @@ export default combineReducers({
     jobPost: RecruiterPostJobReducer,
     applicationState: applicationReducer,
     messagesState: messagesReducer,
-    profileState: profileReducer
+    profileState: profileReducer,
+    connectionsState:connectionsReducer
 });

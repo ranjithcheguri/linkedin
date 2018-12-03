@@ -21,21 +21,23 @@ router.post('/searchjob', function (req, res) {
     var a=req.body.experience_level
     var type_of_apply=req.body.type_of_apply
     var company="%"+req.body.company+"%"
+    var timelapse=req.body.timelapse
         if(req.body.type_of_apply==='any'){
             type_of_apply="easyapply,apply"
             type_of_apply=type_of_apply.split(",")  
         }
-    if(a===null || a===""){
-                experience_level="internship,director,entrylevel,midseniorlevel,associate,"
+            if(a===null || a===""){
+                experience_level="internship,director,entrylevel,midseniorlevel,associate,executive"
                 experience_level=experience_level.split(",")
             }
             else{
                 experience_level=req.body.experience_level.split(",")
                 console.log(req.body.experience_level.split(","))
             }     
-    
+            
+            // "OR company like"+mysql.escape(company) + 
         var sql = "SELECT * from `job` WHERE title like "
-            + mysql.escape(searchjob) + "OR company like"+mysql.escape(company) + "AND location like "+ mysql.escape(searchlocation) + "AND experience_level IN ("+mysql.escape(experience_level)+") AND type_of_apply IN("+ mysql.escape(type_of_apply) +");"
+            + mysql.escape(searchjob) +"and company like"+ mysql.escape(company)+  "AND location like "+ mysql.escape(searchlocation) + "AND experience_level IN ("+mysql.escape(experience_level)+") AND type_of_apply IN("+ mysql.escape(type_of_apply) +") and DATEDIFF(CURRENT_TIMESTAMP,posted_date_time)>0 && DATEDIFF(CURRENT_TIMESTAMP,posted_date_time)<"+mysql.escape(timelapse)+";"
     }
     else {
         var sql = "SELECT * from `job` limit 3;"

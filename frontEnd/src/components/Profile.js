@@ -55,9 +55,9 @@ class Profile extends Component {
     }
 
     componentDidMount = async () => {
+        this.getProfilePic();
         console.log("logged In user email is ...", this.state.email);
         console.log("Skills details in component did mount", this.state.skills)
-        this.getProfilePic();
         await this.getProfileData();
         //this.getResume();
         // this.setState({
@@ -67,9 +67,6 @@ class Profile extends Component {
     }
 
     getProfilePic = async () => {
-
-        //this.props.getProfilePic(this.state.email);
-
         console.log("fetching user profile pic...");
         await axios.get(IP_backEnd + '/userProfile/getProfilePic/?email=' + this.state.email)
             .then((res) => {
@@ -88,11 +85,11 @@ class Profile extends Component {
     }
 
     onProfileClick = () => {
-        //this.props.getProfileDataAction(this.state.email);
+        //console.log("inside profile click...")
     }
 
     getProfileData = async () => {
-        console.log("STORE DATA IN REDUX");
+        console.log("get profile data action triggeredccc");
         console.log("get profile data action triggered");
         await axios.get(IP_backEnd + '/userProfile/?email=' + this.state.email)
             .then(response => {
@@ -101,7 +98,8 @@ class Profile extends Component {
                     ...response.data[0]
                 })
             })
-        this.props.getProfileDataAction(this.state.email);
+            this.props.getProfileDataAction(this.state.email);
+
     }
 
     getResume = async () => {
@@ -773,7 +771,6 @@ class Profile extends Component {
 //subscribe to Redux store updates.
 const mapStateToProps = (state) => ({
     // variables below are subscribed to changes in loginState variables (redirectVar,Response) and can be used with props.
-    profilePic: state.profileState.profilePic,
     profileData: state.profileState.profileData,
     //response: state.loginState.response
 })
