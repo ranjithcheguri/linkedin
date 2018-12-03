@@ -55,7 +55,7 @@ router.put('/recruiter/logData', function (req, res) {
               var i=0,flag=1
              
                     logDetails.findOneAndUpdate({job_id:req.body.job_id,city:req.body.city},
-                        { $inc: { half_filled: req.body.half_filled,full_filled:req.body.full_filled } })
+                        { $inc: { half_filled: req.body.half_filled,full_filled:req.body.full_filled,clicks:req.body.clicks } })
                         .then((result)=>{
                             if(result==null){
                                 console.log(result)

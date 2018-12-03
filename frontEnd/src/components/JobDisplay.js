@@ -111,10 +111,13 @@ class JobDisplay extends Component {
         const data={
             clicks:1,
             job_id:operation,
-            recruiter_email:email,
+            recruiter_email:"aditi12395@gmail.com",
+            city:"SF",
+            // city:window.localStorage.getItem('city'),
             half_filled:0,
             full_filled:0
         }
+        this.props.logData(data)
          console.log("Inside handleNew")
         
        
@@ -140,7 +143,7 @@ class JobDisplay extends Component {
         }
         else{
                 // Displaying whole list
-                <h6>Showing {this.props.jobdetails.length} results</h6>
+                // <h6>Showing {this.props.jobdetails.length} results</h6>
                     details=
                    
                      this.props.jobdetails.map(job => {
@@ -170,8 +173,8 @@ class JobDisplay extends Component {
                      
                         <div className="col-lg-4 mt-2"> <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} /></div>
                         <div className="col-lg-7 mt-2 ml-2">
-                        <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={()=>this.handleNew(job.job_id,job.recruiter_email)}><h5>{job.title}</h5></button>
-                        <h6 className="text-capitalize m-0 p-0">{job.company}</h6>
+                        <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={()=>this.handleNew(job.job_id,job.job_id)}><h5>{job.title}</h5></button>
+                        <h6 className="text-capitalize m-0 p-0">{job.company}{job.recruiter_email}</h6>
                         <div className="text-muted text-capitalize">{job.location}</div>
                         <div className="jobdescribe"><small>{job.description}</small></div>
                         <div className="text-muted">
@@ -188,7 +191,7 @@ class JobDisplay extends Component {
         }
         else{
            
-                <h6>Showing {this.props.jobdetails.length} results</h6>
+                // <h6>Showing {this.props.jobdetails.length} results</h6>
                 // Displaying particular job display
                     fulldetails=
                    
@@ -228,70 +231,70 @@ class JobDisplay extends Component {
                             <button className="btn btn-primary text-white p-2 "><strong>Save</strong></button> 
                             {al}
                                
-                            </div>                  
-                            </div>
-                        </div>
+                             </div>                  
+                             </div>
+                         </div>
                         
-                        <div className="row mt-3">
-                            <div className="col-lg-4 mt-2 border-top border-bottom">
-                            <strong>Job</strong>
-                            <li>{job.no_of_applicants} Applicants</li>
-                            </div>
-                            <div className="col-lg-4 mt-2 border"> 
-                            <strong>Company</strong>
-                            <div className="mt-2"><small>Company page not claimed</small></div>
-                            <div><small className="text-primary "><strong><a href="#">This is my company </a></strong></small></div>
-                            </div>
-                            <div className="col-lg-4 mt-2 border-top border-bottom"> 
-                            <strong>Connections</strong></div>
-                        </div>
+                         <div className="row mt-3">
+                             <div className="col-lg-4 mt-2 border-top border-bottom">
+                             <strong>Job</strong>
+                             <li>{job.no_of_applicants} Applicants</li>
+                             </div>
+                             <div className="col-lg-4 mt-2 border"> 
+                             <strong>Company</strong>
+                             <div className="mt-2"><small>Company page not claimed</small></div>
+                             <div><small className="text-primary "><strong><a href="#">This is my company </a></strong></small></div>
+                             </div>
+                             <div className="col-lg-4 mt-2 border-top border-bottom"> 
+                             <strong>Connections</strong></div>
+                         </div>
 
-                        <h6 className="mt-2">Job Description</h6>
-                        <div className="ml-1"><small>{job.description}</small></div>
+                         <h6 className="mt-2">Job Description</h6>
+                         <div className="ml-1"><small>{job.description}</small></div>
 
-                        <div className="row mt-3">
-                             {/* <div className="col-lg-3 mt-2 border-top border-bottom">
-                            <strong>Seniority Level</strong>
-                            <div>Entry Level</div>
-                            </div> */}
-                            <div className="col-lg-4 mt-2 border-top border-bottom ">
-                            <strong>Industry</strong>
-                            <div className="mt-2">{job.industry}</div>
-                            </div>
-                            <div className="col-lg-4 mt-2 border"> 
-                            <strong>Employement Type</strong>
-                            <div className="mt-2">{job.employment_type}</div>
-                            </div>
-                            <div className="col-lg-4 mt-2 border-top border-bottom"> <strong>Job Functions</strong>
-                            <div className="mt-2">{job.job_function}</div>
-                            </div>
-                        </div>
+                         <div className="row mt-3">
+                              {/* <div className="col-lg-3 mt-2 border-top border-bottom">
+                             <strong>Seniority Level</strong>
+                             <div>Entry Level</div>
+                             </div> */}
+                             <div className="col-lg-4 mt-2 border-top border-bottom ">
+                             <strong>Industry</strong>
+                             <div className="mt-2">{job.industry}</div>
+                             </div>
+                             <div className="col-lg-4 mt-2 border"> 
+                             <strong>Employement Type</strong>
+                             <div className="mt-2">{job.employment_type}</div>
+                             </div>
+                             <div className="col-lg-4 mt-2 border-top border-bottom"> <strong>Job Functions</strong>
+                             <div className="mt-2">{job.job_function}</div>
+                             </div>
+                         </div>
 
-                        <div className="ml-3 mr-3 mt-2">
-                        <q><i><small>Any unsolicited resumes/candidate profiles submitted through our website or to personal email accounts of employees of {job.company} and any subsidiaries of {job.company} are considered property of {job.company} and any subsidiaries of {job.company} and are not subject to payment of agency fees.</small></i></q>
-                        </div>
-                        </div>)
-                    })
-        }
+                         <div className="ml-3 mr-3 mt-2">
+                         <q><i><small>Any unsolicited resumes/candidate profiles submitted through our website or to personal email accounts of employees of {job.company} and any subsidiaries of {job.company} are considered property of {job.company} and any subsidiaries of {job.company} and are not subject to payment of agency fees.</small></i></q>
+                         </div>
+                         </div>)
+                     })
+         }
 
 
-        return ( 
-            <div>
-              <div>
-              <Navbar />
-            </div>
+         return ( 
+             <div>
+               <div>
+               {/* <Navbar /> */}
+             </div>
            
-            <div className="row bg-dark p-3">
-             <div className="form-inline my-2 my-lg-0 ml-5 col-lg-5">
-                            <input type="text" className="form-control mr-sm-2 fontAwesome bg-white iconColour w-100" type="search" placeholder="&#xF002; Search Jobs" aria-label="Search" name="searchjob" onChange={this.handleEvent} />
+             <div className="row bg-dark p-3">
+              <div className="form-inline my-2 my-lg-0 ml-5 col-lg-5">
+                             <input type="text" className="form-control mr-sm-2 fontAwesome bg-white iconColour w-100" type="search" placeholder="&#xF002; Search Jobs" aria-label="Search" name="searchjob" onChange={this.handleEvent} />
                            
-            </div>
-            <div className="form-inline my-2 my-lg-0 col-lg-6 ml-0">
-                            <input className="form-control mr-sm-2 w-75 fontAwesome iconColour bg-white " type="location" placeholder="&#xF002; Search location" aria-label="location" 
-                            name="searchlocation" onChange={this.handleEvent}/>
-                            <button className="btn btn-outline-light my-2 my-sm-0 ml-2 iconColour" type="submit" onClick={this.submitJobCriteria}>Search</button>
-            </div>
-            </div>
+             </div>
+             <div className="form-inline my-2 my-lg-0 col-lg-6 ml-0">
+                             <input className="form-control mr-sm-2 w-75 fontAwesome iconColour bg-white " type="location" placeholder="&#xF002; Search location" aria-label="location" 
+                             name="searchlocation" onChange={this.handleEvent}/>
+                             <button className="btn btn-outline-light my-2 my-sm-0 ml-2 iconColour" type="submit" onClick={this.submitJobCriteria}>Search</button>
+             </div>
+             </div>
 
            
             
@@ -329,7 +332,7 @@ class JobDisplay extends Component {
                 
                 </div>
                 
-            </li>
+             </li>
       
         {/* LinkedIn Features */}
       <li className="nav-item dropdown ml-0 navbar-left">
@@ -361,18 +364,18 @@ class JobDisplay extends Component {
                 <button className="btn btn-primary ml-1" type="reset" id="resetcompany" onClick={this.submitAdvanceJobCriteria}>Cancel</button>
                 <button className="btn btn-primary ml-1" type="submit" onClick={this.submitAdvanceJobCriteria}>Apply</button>
                 
-                </div>
-            </li>
+                 </div>
+             </li>
 
-        {/* Experience leval */}
-        <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" className="border border-dark p-2 text-muted nav-link">
-                <strong>Experience Level <i className="fa fa-caret-down"></i></strong></a>
-                <div className="dropdown-menu w-100">
-                <div className="dropdown-item ml-1 mr-2 text-muted">
-                  <input type="checkbox" onClick={this.handleArray} id="internship" name="feature" value="internship"  />
-                    <label for="internship" className="ml-2">Internship</label>
-                </div>
+         {/* Experience leval */}
+         <li className="nav-item dropdown">
+                 <a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" className="border border-dark p-2 text-muted nav-link">
+                 <strong>Experience Level <i className="fa fa-caret-down"></i></strong></a>
+                 <div className="dropdown-menu w-100">
+                 <div className="dropdown-item ml-1 mr-2 text-muted">
+                   <input type="checkbox" onClick={this.handleArray} id="internship" name="feature" value="internship"  />
+                     <label for="internship" className="ml-2">Internship</label>
+                 </div>
 
                 <div className=" dropdown-item ml-1 mr-2 text-muted">
                                 <input type="checkbox" onClick={this.handleArray} id="entrylevel" name="feature" value="entrylevel"  />
@@ -447,16 +450,16 @@ const mapDispatchStateToProps = dispatch => {
                     console.log("After search job request")
                     dispatch({type: 'JOB_DISPLAY',payload : response.data,statusCode : response.status})
             });
-        }
+        },
 
-        // onSubmitId:(data) => {
-        //     axios.post(IP_backEnd+'/fulldisplay', data)
-        //     .then((response) => {
-        //         dispatch({type: 'FULLDETAILS',payload : response.data,statusCode : response.status})
-        // });
-        // },
+        logData:(data) => {
+            axios.put(IP_backEnd+'/recruiter/logData', data)
+            .then((response) => {
+                dispatch({type: 'FULLDETAILS',payload : response.data,statusCode : response.status})
+        });
+        },
         
     }
 }
 
-export default connect(mapStateToProps, mapDispatchStateToProps)(JobDisplay);    
+export default connect(mapStateToProps, mapDispatchStateToProps)(JobDisplay);

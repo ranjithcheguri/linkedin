@@ -34,6 +34,21 @@ class ViewConversation extends Component {
 
     sendMessage = (e) => {
         console.log(this.state.Reply);
+        let data={
+            participants : ["Suhas", "Kevin"],
+            messages : {
+                from : "Suhas",
+                msg : this.state.Reply,
+            }
+        }
+        axios.post(IP_backEnd+"/messages", data)
+            .then(response => {
+                alert("Message sent successfully");
+            })
+            .catch(error => {
+                alert("Error sending message");
+                console.log(error);
+            })
     }
 
   render() {
@@ -50,7 +65,7 @@ class ViewConversation extends Component {
       <div>
         <Navbar/>
         <div class="container">
-            <h3>Suhas</h3>
+            <h3>{this.props.messagesState.participant}</h3>
             <table class="table">
                 <thead>
                     <th>From</th>

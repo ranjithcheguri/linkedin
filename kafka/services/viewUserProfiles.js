@@ -27,7 +27,7 @@ function handle_request(msg, callback) {
         if (value) {
             console.log("Type of value :", typeof (value));
             result = JSON.parse(value);
-            //client.expire(getProfile, 5);
+            client.expire(getProfile, 5);
             callback(null, result)
         }
         else {
