@@ -18,7 +18,7 @@ class ViewAllMessages extends Component {
   }
 
   componentDidMount(){
-    axios.get(IP_backEnd+'/messages?participantID=Kevin')
+    axios.get(IP_backEnd+'/messages?participantID='+window.localStorage.getItem('userEmail'))
       .then(response => {
         this.setState({
           Messages : this.state.Messages.concat(response.data),
@@ -38,8 +38,9 @@ class ViewAllMessages extends Component {
       if (!message || this.state.Messages.length == 0) {
         return (<tr>No messages found</tr>)
       } else {
+        let participant = (window.localStorage.getItem('userEmail')==message.participants[0])?message.participants[1]:message.participants[0];
         return (
-          <tr onClick={(e)=>this.viewConversation(e,message.messages[0].from)}>
+          <tr onClick={(e)=>this.viewConversation(e,participant)}>
             <td>{message.messages[0].from}</td>
             <td>{message.messages[0].msg}</td>
             <td>

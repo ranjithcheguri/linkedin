@@ -17,7 +17,7 @@ class ViewConversation extends Component {
     }
 
     componentDidMount(){
-        axios.get(IP_backEnd+"/messages/user?participant1="+this.props.messagesState.participant+"&&participant2=Kevin")
+        axios.get(IP_backEnd+"/messages/user?participant1="+this.props.messagesState.participant+"&&participant2="+window.localStorage.getItem('userEmail'))
             .then(response => {
                 console.log(response.data);
                 this.setState({
@@ -35,9 +35,9 @@ class ViewConversation extends Component {
     sendMessage = (e) => {
         console.log(this.state.Reply);
         let data={
-            participants : ["Suhas", "Kevin"],
+            participants : [window.localStorage.getItem('userEmail'), this.props.messagesState.participant],
             messages : {
-                from : "Suhas",
+                from: window.localStorage.getItem('userEmail'),
                 msg : this.state.Reply,
             }
         }
