@@ -15,7 +15,7 @@ class Navbar extends Component {
     }
     async componentWillMount() {
         let data = {
-            email: "vinay@gmail.com"
+            email: localStorage.getItem('userEmail')
         }
         let acceptedConnections=[];
         await axios.post(IP_backEnd + `/getConnections`, data)
@@ -57,7 +57,10 @@ class Navbar extends Component {
                                             <span class="nav-icon-text">Home</span><span class="sr-only">(current)</span></a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/connections"><i class="fal fa-users fa-lg iconColour"></i><br />
+                                        <a className="nav-link" href="/connections"><i class="fal fa-users fa-lg iconColour">
+                                        <Badge count={this.state.acceptedConnections.length} showZero>
+                                                <a href="/connections" className="head-example" />
+                                            </Badge></i><br />
                                             <span class="nav-icon-text">My Network</span></a>
                                     </li>
                                     <li className="nav-item">
