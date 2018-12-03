@@ -8,16 +8,25 @@ import PDF from 'react-pdf-js';
 /* REDUX IMPORTS BEGIN */
 import { connect } from 'react-redux';
 import { getProfileDataAction } from '../actions/profileActions';
+import { submitLogin } from '../actions/loginActions';
+import { searchUserInfo } from '../actions/connectionActions';
 /* REDUX IMPORTS END */
 
 class Profile extends Component {
     constructor(props) {
         super(props);
+        console.log("searched user", this.props);
+        console.log("logged in user", localStorage.getItem('userEmail'));
+
+        var emailID; // if user is searched, display searched user profile else logged user profile
+        if (this.props.location.state) {
+            emailID = this.props.location.state;
+        } else {
+            emailID = localStorage.getItem('userEmail');
+        }
 
         this.state = {
-            email: 'abcd1@gmail.com',
-            //email: localStorage.getItem('searchUser'),
-            //email: localStorage.getItem('searchUser'),
+            email: emailID,
             personalProfile: {
                 firstName: "username",
                 lastName: "lastname",
@@ -50,9 +59,14 @@ class Profile extends Component {
             resume: '',
             tempResume: '',
             isNewResumeUploading: false,
+            isConnected: 2,
             check: true
         }
     }
+    // 0-->pending
+    // 1-->Connected
+    // 2--> Display connect button
+
 
     componentDidMount = async () => {
         this.getProfilePic();
@@ -64,6 +78,50 @@ class Profile extends Component {
         //     isLoading: false
         // })
         setTimeout(() => this.setState({ isLoading: false }), 1000);
+        this.checkConnectionStatus();
+    }
+
+    checkConnectionStatus = () => {
+        if (this.state.email != localStorage.getItem('userEmail')) {
+            const data = {
+                from: localStorage.getItem('userEmail'),
+                to: this.state.email
+            }
+            axios.post(IP_backEnd + '/checkConnection', data)
+                .then((res) => {
+                    //alert(res.data.status);
+                    if (res.data.status == 0) {
+                        this.setState({
+                            isConnected: 0
+                        })
+                    }
+                    else if (res.data.status == 1) {
+                        this.setState({
+                            isConnected: 1
+                        })
+                    }
+                })
+                .catch((e) => {
+
+                })
+        }
+    }
+
+    addConnection = () => {
+        const data = {
+            from: localStorage.getItem('userEmail'),
+            to: this.state.email
+        }
+        axios.post(IP_backEnd + '/requestConnection', data)
+            .then((res) => {
+                console.log(res);
+                this.setState({
+                    isConnected: 0
+                })
+            })
+            .catch((e) => {
+
+            });
     }
 
     getProfilePic = async () => {
@@ -98,7 +156,7 @@ class Profile extends Component {
                     ...response.data[0]
                 })
             })
-            this.props.getProfileDataAction(this.state.email);
+        this.props.getProfileDataAction(this.state.email);
 
     }
 
@@ -284,13 +342,29 @@ class Profile extends Component {
         }
 
         var otherButtons;
-        if (this.state.email != 'abcd1@gmail.com') {
-            otherButtons = (
-                <div className="mr-auto  borderMe">
-                    <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
-                    <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.addConnection}>connect</button>
-                </div>
-            )
+        if (this.state.email != localStorage.getItem('userEmail')) {
+            if (this.state.isConnected === 1) {
+                otherButtons = (
+                    <div className="mr-auto  borderMe">
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
+                        <button className="btn btn-success linkedInBtn marginLeft disabled">Connected</button>
+                    </div>
+                )
+            } else if (this.state.isConnected === 0) {
+                otherButtons = (
+                    <div className="mr-auto  borderMe">
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
+                        <button className="btn btn-warning linkedInBtn marginLeft" onClick={this.addConnection}>Pending...</button>
+                    </div>)
+            }
+            else {
+                otherButtons = (
+                    <div className="mr-auto  borderMe">
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.addConnection}>Connect</button>
+                    </div>)
+            }
+
         } else {
             otherButtons = (
                 <div className="mr-auto  borderMe">
@@ -314,7 +388,6 @@ class Profile extends Component {
             generateSkills = (<div>updating skills...</div>)
         }
 
-
         if (this.state.isLoading) {
             return (
                 <div>
@@ -333,9 +406,9 @@ class Profile extends Component {
                                     </div>
                                     <div className="row borderMe">
                                         {profilePicDiv}
-                                        <div className="ml-auto paddingTop zoomMe">
+                                        {(this.state.email === localStorage.getItem('userEmail')) ? <div className="ml-auto paddingTop zoomMe">
                                             <i className="fal fa-pen editIcon marginRight2  broderRed" data-toggle="modal" data-target="#profileSummaryModal" ></i>
-                                        </div>
+                                        </div> : <div></div>}
                                     </div>
                                     <div className="row insideCard" style={{ "marginTop": 10 + 'px' }}>
                                         <div className="col-md-8 borderMe">
@@ -384,9 +457,11 @@ class Profile extends Component {
                                     <div className="col-md-12 row insideCard">
                                         <div className="row col-md-12">
                                             <h4>Experience</h4>
-                                            <div className="zoomMe  ml-auto">
+                                            {(this.state.email === localStorage.getItem('userEmail')) ? <div className="zoomMe  ml-auto">
                                                 <i className="fal fa-pencil editIcon" data-toggle="modal" data-target="#experienceModal"></i>
-                                            </div>
+                                            </div> : <div></div>}
+
+
                                         </div>
                                         <div className="row col-md-12 paddingTop">
                                             <img className="expImg " src={require('../images/employement.jpg')}></img>
@@ -403,9 +478,11 @@ class Profile extends Component {
                                     <div className="col-md-12 row insideCard">
                                         <div className="row col-md-12">
                                             <h4>Education</h4>
-                                            <div className="zoomMe ml-auto">
+                                            {(this.state.email === localStorage.getItem('userEmail')) ? <div className="zoomMe ml-auto">
                                                 <i className="fal fa-pencil editIcon " data-toggle="modal" data-target="#educationModal" ></i>
-                                            </div>
+                                            </div> : <div></div>}
+
+
                                         </div>
                                         <div className="row col-md-12 paddingTop">
                                             <img className="expImg " src={require('../images/education.png')}></img>
@@ -422,9 +499,10 @@ class Profile extends Component {
                                     <div className="col-md-12 row insideCard">
                                         <div className="row col-md-12">
                                             <h4>Skills and Endorsements</h4>
-                                            <div className="zoomMe ml-auto">
-                                                <i className="fal fa-pencil editIcon " data-toggle="modal" data-target="#skillsModal"></i>
-                                            </div>
+                                            {(this.state.email === localStorage.getItem('userEmail')) ?
+                                                <div className="zoomMe ml-auto">
+                                                    <i className="fal fa-pencil editIcon " data-toggle="modal" data-target="#skillsModal"></i>
+                                                </div> : <div></div>}
                                         </div>
                                         <div className="row col-md-12 paddingTop">
                                             {generateSkills}
@@ -772,8 +850,9 @@ class Profile extends Component {
 const mapStateToProps = (state) => ({
     // variables below are subscribed to changes in loginState variables (redirectVar,Response) and can be used with props.
     profileData: state.profileState.profileData,
-    //response: state.loginState.response
+    userEmail: state.loginState.userEmail,
+    searchEmail: state.connectionsState.serachUser
 })
 
-export default connect(mapStateToProps, { getProfileDataAction })(Profile);
+export default connect(mapStateToProps, { submitLogin, searchUserInfo, getProfileDataAction })(Profile);
 //export default Profile;

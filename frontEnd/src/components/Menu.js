@@ -23,6 +23,7 @@ import RecruiterPostJob from './RecruiterPostJob';
 import Dashboard from './AdminDashboard';
 import LogSaveJob from './logSavedJob';
 import ReactPDF from './ReactPDF';
+import savedJobs from './savedJobs';
 
 import ViewConversation from './Messages/ViewConversation';
 class Menu extends Component {
@@ -34,7 +35,7 @@ class Menu extends Component {
         return (
             <div>
                 <Route exact path="/" component={Home} />
-                <Route path="/home" component={Home} />
+                <Route path="/" component={Navbar} />
                 <Route path="/jobdisplay" component={JobDisplay} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/postJob" component={RecruiterPostJob} />
@@ -50,6 +51,7 @@ class Menu extends Component {
                 <Route path='/reactPDF' component={ReactPDF} />
                 <Route path='/apply' component={Apply} />
                 <Route path='/easyApply' component={EasyApply} />
+                <Route path='/savedJobs' component={savedJobs} />
             </div>
         );
     }
