@@ -77,6 +77,12 @@ class RecHome extends Component {
         this.props.history.push('/viewApplicants');
     }
 
+    editClickHandler = (e, jobID) => {
+        e.preventDefault();
+        this.props.setCurrentJob(jobID);
+        this.props.history.push('/postjob');
+    }
+
     searchFilterChangeHandler=(e)=>{
         e.preventDefault();
         this.setState({
@@ -197,9 +203,9 @@ class RecHome extends Component {
                                             <small className="text-muted">Number of Applicants: {job.no_of_applicants}<br/>
                                             &emsp;&emsp;Number of Views:&nbsp;{job.no_of_views}</small>
                                         </CardText>
-                                        <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.jobID)}>Details</button>
+                                        <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.job_id)}>Details</button>
                                         &nbsp;&nbsp;&nbsp;
-                                        <button class="btn btn-primary">Edit</button>
+                                        <button class="btn btn-primary" onClick={(e)=>this.editClickHandler(e,job.job_id)}>Edit</button>
                                         </CardImgOverlay>
                                     </Card>
                                     <hr></hr>
