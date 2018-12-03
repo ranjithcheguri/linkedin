@@ -12,11 +12,12 @@ import newsFeed from './newsFeed';
 
 import RecHome from './RecHome'
 import Home from './Home';
-import PostAJob from './PostAJob'
+import PostAJob from './PostAJob';
+import ApplicantDashboard from './ApplicantDashboard';
 
 
 
-//import JobDisplay from './JobDisplay';
+import JobDisplay from './JobDisplay';
 import RecruiterPostJob from './RecruiterPostJob';
 import Dashboard from './AdminDashboard';
 import LogSaveJob from './logSavedJob';
@@ -31,7 +32,7 @@ class Menu extends Component {
     render() {
         return (
             <div>
-                <Route path="/" component={Navbar} />
+                <Route exact path="/" component={Home} />
                 <Route path="/home" component={Home} />
                 <Route path="/jobdisplay" component={JobDisplay} />
                 <Route path="/dashboard" component={Dashboard} />
@@ -46,6 +47,7 @@ class Menu extends Component {
                 <Route path='/recHome' component={RecHome} />
                 <Route path='/postAJob' component={PostAJob} />
                 <Route path='/reactPDF' component={ReactPDF} />
+                <Route path='/applicantDashboard' component={ApplicantDashboard}/>
             </div>
         );
     }
