@@ -9,7 +9,7 @@ router.post('/getConnections', function (req, res) {
 
     console.log(req.body);
     connections.find({
-        from:req.body.email,
+        to:req.body.email,
     }, (err, results) => {
         if(err){
             console.log("Error occured")
@@ -24,6 +24,9 @@ router.post('/getConnections', function (req, res) {
         }
     })    
 
+    //status:1--> connected
+//status:0--> In progress
+//status:2--> Not accepted
 
     // kafka.make_request('getConnections', req.body, (err, results) => {
     //     console.log("In node kf --> Post Message Handler")

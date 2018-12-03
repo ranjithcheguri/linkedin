@@ -37,7 +37,7 @@ class connections extends Component {
                             let data = {
                                 email: response.data[i].to
                             }
-                            await axios.get(IP_backEnd + `/userProfile?email=${response.data[i].to}`)
+                            await axios.get(IP_backEnd + `/userProfile?email=${response.data[i].from}`)
                                 .then((response) => {
                                     console.log("Inside user Profiles: ")
                                     console.log("Status Code: ", response.data);
@@ -54,7 +54,7 @@ class connections extends Component {
                         }
                         else if (response.data[i].status == 0) {
                             pendingConnections.push(response.data[i])
-                            await axios.get(IP_backEnd + `/userProfile?email=${response.data[i].to}`)
+                            await axios.get(IP_backEnd + `/userProfile?email=${response.data[i].from}`)
                                 .then((response) => {
                                     console.log("Inside user Profiles: ")
                                     console.log("Status Code: ", response.data);
