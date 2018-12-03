@@ -123,6 +123,7 @@ var getConnections = require('./apis/getConnections');
 var changeMessageStatus = require('./apis/changeMessageStatus')
 var getAllPostedJobs = require('./apis/getAllPostedJobs')
 var authRecruiter = require('./apis/authRecruiter')
+var bottomTop5 = require('./apis/bottomTop5')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -165,6 +166,9 @@ app.use('/',changeMessageStatus)
 app.use('/',getAllPostedJobs)
 //this route is used to authenticate the recruiter before posting the job
 app.use('/',authRecruiter)
+//this route will return top 5 job posting with less number of applications
+app.use('/',bottomTop5)
+
 
 
 
