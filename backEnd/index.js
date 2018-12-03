@@ -24,7 +24,7 @@ var viewJobApplications = require('./apis/viewJobApplications');
 var searchJob = require('./apis/searchjob');
 var logData =require('./apis/logData')
 var logSavedJob=require('./apis/logSavedJob')
-
+var getOneJob = require('./apis/getOneJob');
 
 //Only for AWS
 const busboy = require('connect-busboy');
@@ -96,7 +96,6 @@ app.use('/',logData)
 app.use('/',logSavedJob)
 app.use('/',userLogin);
 
-
 //Route imports
 var viewUserProfile = require('./apis/viewUserProfile');
 var deleteUserProfile = require('./apis/deleteUserProfile');
@@ -165,7 +164,8 @@ app.use('/',changeMessageStatus)
 app.use('/',getAllPostedJobs)
 //this route is used to authenticate the recruiter before posting the job
 app.use('/',authRecruiter)
-
+//get one job at a time, used in displaying saved jobs.
+app.use('/',getOneJob)
 
 
 
