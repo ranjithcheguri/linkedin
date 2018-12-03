@@ -26,7 +26,7 @@ class Home extends Component {
     }
 
     componentDidMount = () => {
-        setTimeout(()=> {
+        setTimeout(() => {
             this.setState({
                 isLoading: false
             })
@@ -44,6 +44,7 @@ class Home extends Component {
     handleClick(e) {
         console.log("I am here inside form submit")
         e.preventDefault();
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         console.log(this.state);
         const data = this.state;
         var ackmessage;
@@ -63,13 +64,17 @@ class Home extends Component {
         } else if (this.state.password.length < 6) {
             ackmessage = "Password must be 6 characters or more:"
             this.setState({ flag: 1 })
+        } else if (!re.test(this.state.email)) {
+            ackmessage = "Email not in correct format"
+            this.setState({ flag: 1 })
         }
         else {
+            this.setState({ flag: 0 })
             axios.post(IP_backEnd + '/signup', data)
                 .then(response => {
                     if (response.status === 200) {
                         alert("sign up successfull !");
-                        ackmessage = "sucess"
+                        ackmessage = "success"
                         this.setState({ flag: 0 })
                         console.log("sign up successful, data inserted");
                         // this.props.history.push('/Login');
@@ -87,22 +92,30 @@ class Home extends Component {
         e.preventDefault();
         console.log("Hello I am here")
         let { email, password } = this.state;
-        const data = {
-            email: email,
-            password: password
-        }
-        console.log(data)
-        if (this.state.email == "" || this.state.password == "")
-            alert("Fill all the information for Login");
-        else {
-            this.props.submitLogin(email, password)
-        }
-        // if(this.props.response === 400) alert(this.props.errormessage)
-        // setTimeout(() => {
-        //     if (this.props.response === 400) alert(this.props.errormessage);
-        // }, 500);
-        // this.renderRedirect();
-
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (re.test(email)) {
+            const data = {
+                email: email,
+                password: password
+            }
+            console.log(data)
+            if (this.state.email == "" || this.state.password == "")
+                alert("Fill all the information for Login");
+            else {
+                this.props.submitLogin(email, password)
+            }
+            // if(this.props.response === 400) alert(this.props.errormessage)
+            setTimeout(() => {
+                if (this.props.response === 400) {
+                    alert(this.props.errormessage);
+                }
+                else if (this.props.response === 200) {
+                    //localStorage.setItem('userEmail',email);
+                    this.props.history.push('/profile',email);
+                }
+            }, 1000);
+        } else { alert("Wrong email format") }
+        this.renderRedirect();
     }
 
     renderRedirect = () => {
@@ -133,31 +146,46 @@ class Home extends Component {
 
         //  if(this.props.response === 400 && this.props.errormessage!="") alert(this.props.errormessage)
 
-        if(this.state.isLoading){
-            return(
+        if (this.state.isLoading) {
+            return (
                 <div>
-                    <Loading/>
+                    <Loading />
                 </div>
             )
-        }else{
+        } else {
             return (
-                <div class="">
-                    <nav className="navbar navbar-light bg-faded test" >
-                        <NavLink to="/" className="mb-0 py-0 ml-5" ><img src={require('../images/logo.JPG')} /></NavLink>
-                        <div className="navbar">
-                            <input type="text" placeholder="Email" name="email" className="text-muted p-1" onChange={this.handleChange}></input>
-                            <input type="password" placeholder="Password" name="password" className="text-muted ml-2 p-1" onChange={this.handleChange}></input>
-                            <button className="ml-1 p-1 pl-3 pr-3 btn-link text-white" type="submit" onClick={this.handleLogin.bind(this)}>Sign in</button>
-                            <div className="mr-5 ml-2"><small className="text-white">Forget Password?</small></div>
-                            <div className="mr-5"></div>
+                <div>
+
+                    <nav className="navbar navbar-light bg-faded" >
+                        <div className="row w-100">
+                            <div className="col-lg-2">
+                                <NavLink to="/" className="mb-0 py-0" ><img src={require('../images/logo.JPG')} /></NavLink>
+                            </div>
+                            <div className="col-lg-3 w-100"></div>
+                            <div className="col-lg-2 ml-2 ">
+                                <input type="text" placeholder="Email" name="email" className="text-muted  mr-2 p-1 w-100" onChange={this.handleChange}></input></div>
+
+
+
+                            <div className="col-lg-2 ">
+                                <input type="password" placeholder="Password" name="password" className="text-muted ml-2 p-1 w-100" onChange={this.handleChange}></input>
+                            </div>
+
+                            <div className="col-lg-2">
+                                <button className="ml-1 p-1 pl-3 pr-3 mr-0 btn-link text-white" type="submit" onClick={this.handleLogin.bind(this)}>Sign in</button></div>
+
+                            {/* <div className="mr-5 ml-2"><small className="text-white">Forget Password?</small></div> */}
+
+                            {/* <div className="mr-5"></div> */}
                         </div>
                     </nav>
+
                     {/* <nav className="#212529"></nav> */}
                     <div className="ma">
                         <img className="img-fluid  im" src={require('../images/1.jpg')} />
-    
+
                         <div className="container-fluid mt-3 bg-light topl col-lg-4 col-lg-offset-3 col-md-5 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12 border border-secondary shadow-lg rounded ">
-    
+
                             <div className="row-entry">
                                 <div className="text-center mb-3 " >
                                     <h4 className="title mt-2">Be great at what you do</h4>
@@ -180,7 +208,7 @@ class Home extends Component {
                                                 <label for="email">Email</label>
                                                 <div><input type="email" id="email" name="email" className="panel-input w-100" onChange={this.handleChange} required /></div>
                                             </div>
-    
+
                                             <div className="mt-3">
                                                 <label for="password">Password(6 or more characters)</label><br></br>
                                                 <input type="password" id="password" name="password" className="panel-input w-100" onChange={this.handleChange} required />
@@ -188,20 +216,20 @@ class Home extends Component {
                                             <div class="text-center mt-2 text-muted" >
                                                 <small>  By clicking Join now, you agree to the LinkedIn User Agreement, Privacy Policy, and Cookie Policy.</small>
                                             </div>
-    
+
                                             <button type="submit" className="btn mt-2 mb-3 w-100 text-white btn-primary" onClick={this.handleClick}><strong>Join now</strong></button>
-    
+
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-    
-    
+
+
                     </div>
                 </div>);
         }
-        
+
     }
 }
 

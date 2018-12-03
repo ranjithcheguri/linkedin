@@ -41,7 +41,7 @@ class RecHome extends Component {
         console.log("Inside componentDidMount of recruiter Home")
         axios.get("http://localhost:3002/recruiter/getPostedJobs",{
             params: {
-            email : "nayak11@infy.com"
+            email : window.localStorage.getItem("userEmail")
             }
         })
         .then(response => {

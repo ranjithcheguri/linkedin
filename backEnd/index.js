@@ -23,7 +23,8 @@ var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
 var searchJob = require('./apis/searchjob');
 var logData =require('./apis/logData')
-var logSavedJob=require('./apis/logSavedJob')
+var logSavedJob=require('./apis/logSavedJob');
+var cityWiseApplications = require('./apis/cityWiseApplications');
 
 
 //Only for AWS
@@ -168,6 +169,8 @@ app.use('/',changeMessageStatus)
 app.use('/',getAllPostedJobs)
 //this route is used to authenticate the recruiter before posting the job
 app.use('/',authRecruiter)
+
+app.use('/', cityWiseApplications);
 
 
 

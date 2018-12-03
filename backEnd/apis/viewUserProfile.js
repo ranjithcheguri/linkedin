@@ -28,15 +28,31 @@ router.get('/userProfile', (req, res) => {
 router.get('/userProfile/getProfilePic', (req, res) => {
     console.log("Inside get profile pic");
     let email = req.query.email;
-    let fileType = "profilePic";
-    AWS_operations.downloadFromS3(email, fileType, res);
+    console.log(email);
+    if (email !== null) {
+        console.log("sending request to AWS S3 operations");
+        let fileType = "profilePic";
+        AWS_operations.downloadFromS3(email, fileType, res);
+    } else {
+        res.sendStatus(400).end("empty email");
+    }
 })
 
 router.get('/userProfile/getResume', (req, res) => {
-    console.log("Inside get get Resume");
+    console.log("Inside get Resume");
     let email = req.query.email;
-    let fileType = "resume";
-    AWS_operations.downloadFromS3(email, fileType, res);
+    console.log(email);
+    if (email !== null) {
+        console.log("sending request to AWS S3 operations");
+        let fileType = "resume";
+        try {
+            AWS_operations.downloadFromS3(email, fileType, res);
+        } catch (e) {
+            console.log("fetching from AWS failed");
+        }
+    } else {
+        res.sendStatus(400).end("empty email");
+    }
 })
 
 module.exports = router;

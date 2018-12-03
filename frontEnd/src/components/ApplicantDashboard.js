@@ -14,7 +14,7 @@ class ApplicantDashboard extends Component {
     }
 
     componentDidMount(){
-        axios.get(IP_backEnd+'/applicant/applications?applicantEmail=k@gmail.com')
+        axios.get(IP_backEnd+'/applicant/applications?applicantEmail='+window.localStorage.getItem('userEmail'))
             .then(response => {
                 this.setState({
                     Applications : this.state.Applications.concat(response.data)
@@ -38,7 +38,7 @@ class ApplicantDashboard extends Component {
       })
     return (
       <div class="container">
-      <Navbar/>
+      {/* <Navbar/> */}
         <table class="table">
             <thead>
                 <th>Company</th>

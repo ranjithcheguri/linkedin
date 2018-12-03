@@ -13,6 +13,18 @@ background-size: cover;
     padding-left:20px;
 }
 
+.profilePic-easyApply img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; 
+    background-image: url('../images/user.png');
+    /*background-position: center center;*/
+    background-size: cover;
+    border: 5px solid white;
+    margin-top: 20px;
+    margin-left: 40px;
+    }   
+
 .profilePic img{
 width: 160px;
 height: 160px;
@@ -60,6 +72,21 @@ margin-left: 40px;
     color: #636161;
     font-size: 18px;
 }
+
+
+
+    .paddingTop-easyApply{
+        padding-top:30px;
+        }
+        
+        .paddingRight-easyApply{
+            padding-right: 30px;
+        }
+        
+        .paddingLeft-easyApply{
+            padding-left:30px;
+        }
+    
 
 .profileCard{
     background-color: #ffffff;

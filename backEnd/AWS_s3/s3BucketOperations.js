@@ -43,11 +43,14 @@ uploadToS3 = (file, email, fileType) => {
         //Inbuilt access moethod to upload a file to s3
         await s3bucket.upload(params, function (err, data) {
             if (err) {
-                console.log('error in callback');
+                console.log('UPLOADING TO S3 ERROR');
                 console.log(err);
+                res.sendStatus(400).end('Upload unsuccessful to S3 bucket');
+            } else {
+                console.log("File pushed is...", data);
+                console.log('File uploaded successfully!');
             }
-            console.log("File pushed is...", data);
-            console.log('File uploaded successfully!');
+
         });
     });
 }
@@ -78,14 +81,16 @@ downloadFromS3 = (email, fileType, res) => {
 
         await s3bucket.getObject(params, function (err, data) {
             if (err) {
-                console.log('error in callback');
-                console.log(err);
+                console.log('NO DATA FOR FOUND FOR THIS USER');
+                //console.log(err);
+                res.sendStatus(400).end('Download unsuccessful from S3 bucket');
+            } else {
+                console.log('data retrieval from AWS success...');
+                console.log(data);
+                //res.setHeader('Content-disposition', 'attachment; filename=abcd1@gmail.com.jpg')
+                //res.setHeader('Content-length', data.ContentLength);    
+                res.end(new Buffer(data.Body.toString('base64')));
             }
-            console.log('data retrieval from AWS success...');
-            console.log(data);
-            //res.setHeader('Content-disposition', 'attachment; filename=abcd1@gmail.com.jpg')
-            //res.setHeader('Content-length', data.ContentLength);    
-            res.end(new Buffer(data.Body.toString('base64')));
         })
     });
 }
