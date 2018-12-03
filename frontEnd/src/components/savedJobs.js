@@ -46,27 +46,39 @@ class savedJobs extends Component {
             });
     }
 
+
+    displayJob = () => {
+        //this.props.history.push("/jobDisplay")
+    }
+
     render() {
         console.log(this.state.savedJobsDetails);
-        if(this.state.savedJobsDetails){
+        if (this.state.savedJobsDetails) {
             var jobsList = this.state.savedJobsDetails.map(job => {
-                return (<div>
-                    {job.title}
+                return (<div className="row col-md-12 paddingTop ">
+                    <div className="col-md-2"><img></img></div>
+                    <div className="col-md-10  skills">
+                        <a onClick={this.displayJob()}>
+                            <div className="col-md-12"><h5>{job.title}</h5></div>
+                            <div className="col-md-12">{job.company}</div>
+                            <div className="col-md-12">{job.location}</div>
+                        </a>
+                    </div>
                 </div>);
             })
-        }else{
-            var jobsList=(<div>Loading...</div>)
+        } else {
+            var jobsList = (<div>Loading...</div>)
         }
-        
-        return (<div>
+
+        return (<div className="container">
             <div className="free-space"></div>
-            <div className="row">
-                <div className="col-md-8">
+            <div className="row container">
+                <div className="col-md-10">
                     <div className="col-md-12 profileCard shadow-lg ml-3">
                         <div className="pt-4 pl-3">
-                            <h5> Saved Jobs List</h5>
+                            <h2> Saved Jobs List</h2>
                         </div>
-                        <div className="pt-4 pl-3">
+                        <div className="pt-2 pl-3">
                             {jobsList}
                         </div>
                     </div>

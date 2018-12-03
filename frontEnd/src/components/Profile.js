@@ -36,7 +36,6 @@ class Profile extends Component {
                 zipcode: "",
                 contactInfo: "contactInfo",
                 summary: "summary comes here",
-                views: 0
             },
             experience: {
                 designation: "Please Enter your experience details",
@@ -60,7 +59,8 @@ class Profile extends Component {
             tempResume: '',
             isNewResumeUploading: false,
             isConnected: 2,
-            check: true
+            check: true,
+            displayView:0
         }
     }
     // 0-->pending
@@ -79,6 +79,21 @@ class Profile extends Component {
         // })
         setTimeout(() => this.setState({ isLoading: false }), 1000);
         this.checkConnectionStatus();
+        this.updateViews();
+    }
+
+    updateViews=()=>{
+        //alert("views")
+        console.log("updating views")
+        if(this.state.email!=localStorage.getItem('userEmail')){
+            const data = {
+                email : this.state.email,
+            }
+            axios.put(IP_backEnd+'/applicant/updateProfile/updateViews',data)
+            .then((res)=>{
+                console.log("view incremented");
+            })
+        }
     }
 
     checkConnectionStatus = () => {
@@ -449,7 +464,7 @@ class Profile extends Component {
                                     <div className="column insideCard paddingLeft">
                                         <h4>Your Dashboard</h4>
                                         <p><i>private to you</i></p>
-                                        <p className=""><i>{this.state.personalProfile.views}</i></p>
+                                        <p className=""><i className="far fa-eye fa-2x">&nbsp;{this.state.personalProfile.views}</i></p>
                                         <p>Who viewed your profile</p>
                                     </div>
                                 </div>
