@@ -174,7 +174,7 @@ class JobDisplay extends Component {
                         <div className="col-lg-4 mt-2"> <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} /></div>
                         <div className="col-lg-7 mt-2 ml-2">
                         <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={()=>this.handleNew(job.job_id,job.job_id)}><h5>{job.title}</h5></button>
-                        <h6 className="text-capitalize m-0 p-0">{job.company}{job.recruiter_email}</h6>
+                        <h6 className="text-capitalize m-0 p-0">{job.company}</h6>
                         <div className="text-muted text-capitalize">{job.location}</div>
                         <div className="jobdescribe"><small>{job.description}</small></div>
                         <div className="text-muted">
@@ -281,7 +281,7 @@ class JobDisplay extends Component {
          return ( 
              <div>
                <div>
-               {/* <Navbar /> */}
+               <Navbar />
              </div>
            
              <div className="row bg-dark p-3">
