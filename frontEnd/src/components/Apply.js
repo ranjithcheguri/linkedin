@@ -159,9 +159,10 @@ class Apply extends Component {
 
             {/* try to add the logo and name of the company */}
 
-            <h3>Engineering Intern (Summer 2019)</h3>
+            <h3>{localStorage.getItem('applytitle')}</h3>
             <br></br>
-            <h4>SAN FRANCISCO, CA UNIVERSITY (INTERNSHIPS) – ENGINEERING INTERN</h4>
+            <h4>{localStorage.getItem('applycompany')}</h4>
+            {/* <h5>{localStorage.getItem('applylocation')}</h5> */}
             <br></br>
                 <div >
                     <form onSubmit={this.submitEvent}>
