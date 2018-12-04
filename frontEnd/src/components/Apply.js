@@ -17,7 +17,7 @@ class Apply extends Component {
         super(props);
 
         this.state = {
-            
+                jobID:localStorage.getItem('jobapplyid'),
                 resume: "",
                 email: localStorage.getItem('userEmail'),
                 cover: "",
@@ -33,8 +33,12 @@ class Apply extends Component {
                 isNewResumeUploading: false,     
         }
         this.handleJobApplicationChange=this.handleJobApplicationChange.bind(this);
-    this.submitJobApplication=this.submitJobApplication.bind(this);
+        this.submitJobApplication=this.submitJobApplication.bind(this);
 
+    }
+
+    componentDidMount(){
+            this.setState({jobID:this.props.applyid})
     }
 
     onResumeClose=()=>{
@@ -92,7 +96,7 @@ class Apply extends Component {
         // const data = this.state;
         const data={
             email:window.localStorage.getItem('userEmail'),
-            
+            jobID:localStorage.getItem('jobapplyid'),
                 //cover: " bnvc",
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
@@ -101,7 +105,6 @@ class Apply extends Component {
                 hear: this.state.hear,
                 sponsorship: this.state.sponsorship,
                 disability: this.state.disability,
-                
                 tempResume:this.state.tempResume,
             //pull all the field details this.state....
         }
@@ -121,12 +124,22 @@ class Apply extends Component {
                 // this.props.history.push('/Login');
             }
         })
-        // .catch((error) => {
-        //     alert("Data invalid");
-        //     console.log("Response status : ", error.response.status, "Response : ", error.response.data);
-        // })
+
     }
     this.setState({message:ackmessage})
+
+    // const data={
+    //     clicks:0,
+    //     job_id:localStorage.getItem('jobapplyid'),
+    //     recruiter_email:"aditi12395@gmail.com",
+    //     city:"SF",
+    //     // city:window.localStorage.getItem('city'),
+    //     half_filled:0,
+    //     full_filled:1
+    // }
+    // this.props.logData(data)
+    //  console.log("Inside handleNew")
+    
     }
 
     renderRedirect = () => {
@@ -138,6 +151,7 @@ class Apply extends Component {
     }
 
     render(){
+        console.log("render of apply"+this.props.jobDisplay.applyid)
         return(
             <div className="section page-centered">
           <div className="profilePageBody">
@@ -179,7 +193,7 @@ class Apply extends Component {
                         <div className="mt-3">
                             <label for="email">Email</label>
                                 <div>
-                                    <input type="email" id="email" name="email" className="panel-input w-100" onChange={this.handleJobApplicationChange} required/>
+                                    <input type="email" id="email" name="email" className="panel-input w-100"  required/>
                                 </div>
                         </div>
                         <div className="mt-3">
@@ -455,11 +469,23 @@ class Apply extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    redirectVar: state.loginState.redirectVar,
-    response: state.loginState.response,
-    errormessage:state.loginState.errormessage
+    
 })
-export default Apply;
+
+const mapDispatchStateToProps = dispatch => {
+    return {
+    logData:(data) => {
+        axios.put(IP_backEnd+'/recruiter/logData', data)
+        .then((response) => {
+            dispatch({type: 'FULLDETAILS',payload : response.data,statusCode : response.status})
+    });
+    }
+}
+}
+
+
+export default connect(mapStateToProps, mapDispatchStateToProps)(Apply);
+
 
 
 

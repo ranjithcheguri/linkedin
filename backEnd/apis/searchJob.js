@@ -37,10 +37,10 @@ router.post('/searchjob', function (req, res) {
             
             // "OR company like"+mysql.escape(company) + 
         var sql = "SELECT * from `job` WHERE title like "
-            + mysql.escape(searchjob) +"and company like"+ mysql.escape(company)+  "AND location like "+ mysql.escape(searchlocation) + "AND experience_level IN ("+mysql.escape(experience_level)+") AND type_of_apply IN("+ mysql.escape(type_of_apply) +") and DATEDIFF(CURRENT_TIMESTAMP,posted_date_time)>0 && DATEDIFF(CURRENT_TIMESTAMP,posted_date_time)<"+mysql.escape(timelapse)+";"
+            + mysql.escape(searchjob) +"and company like"+ mysql.escape(company)+  "AND location like "+ mysql.escape(searchlocation) + "AND experience_level IN ("+mysql.escape(experience_level)+") AND type_of_apply IN("+ mysql.escape(type_of_apply) +") and DATEDIFF(CURRENT_TIMESTAMP,posted_date_time)>=0 && DATEDIFF(CURRENT_TIMESTAMP,posted_date_time)<"+mysql.escape(timelapse)+";"
     }
     else {
-        var sql = "SELECT * from `job` limit 3;"
+        var sql = "SELECT * from `job` limit 5;"
     }
 
     console.log(sql);
