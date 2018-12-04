@@ -5,6 +5,7 @@ import Loading from './Loading';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
 import PDF from 'react-pdf-js';
+import {Link} from 'react-router-dom';
 /* REDUX IMPORTS BEGIN */
 import { connect } from 'react-redux';
 import { getProfileDataAction } from '../actions/profileActions';
@@ -523,6 +524,7 @@ class Profile extends Component {
                                     <div className="row borderMe">
                                         {profilePicDiv}
                                         {(this.state.email === localStorage.getItem('userEmail')) ? <div className="ml-auto paddingTop zoomMe">
+                                            <Link to='/view'> <i className="fa fa-bar-chart editIcon  broderRed" ></i>    </Link>
                                             <i className="fal fa-pen editIcon marginRight2  broderRed" data-toggle="modal" data-target="#profileSummaryModal" ></i>
                                         </div> : <div></div>}
                                     </div>
