@@ -1,6 +1,6 @@
 const router = require('express').Router();
 var {jobApplications} = require('../models/jobApplication');
-//var _ = require('lodash-node');
+var _ = require('lodash-node');
 
 router.get('/dashboard/city', (req,res) => {
     var jobID = req.query.jobID;

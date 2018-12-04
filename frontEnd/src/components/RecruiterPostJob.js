@@ -20,13 +20,49 @@ class RecruiterPostJob extends Component {
             companyurl:"",
             typeofapply:"",
             companylogo:"",
-            recruiter_email:window.localStorage.getItem('userEmail')
-            
+            recruiter_email:window.localStorage.getItem('userEmail'),
+            flag:false
          }
          this.handleEvent=this.handleEvent.bind(this);
         this.handleRadio=this.handleRadio.bind(this);
         this.submitJobPost=this.submitJobPost.bind(this);
     }
+
+    componentDidMount(){
+        console.log("inside component did mount recruiter fetch job details")
+        axios.get("http://localhost:3002/fetchPostedJobDetails",{
+            params: {
+                //email : window.localStorage.getItem("userEmail")
+                //jobID
+                email   :   "aditi12395@gmail.com",
+                jobID   :   1
+            }
+        })
+                .then(response => {
+                    console.log(response);
+                    this.setState({
+                        job :   response.data.jobs
+                    },
+                    ()=>{
+                            let labels=[];
+                            let data=[];
+                            this.state.job.forEach((ele)=>{
+                                labels.push(ele._id);
+                            })
+                            this.state.job.forEach((ele)=>{
+                                data.push(ele.count);
+                            })
+                            this.setState({
+                                labels  : [...labels],
+                                data    : [...data]
+                        },()=>{
+                            console.log("Displaying state",this.state)
+                        })
+                    })
+                }).catch(err=>{
+                    console.log(err);
+                })
+      }
 
     onFileSelect =(e)=>{
         // console.log(files)

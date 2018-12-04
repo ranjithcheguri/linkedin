@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Chart } from "react-charts";
-import {Bar} from 'react-chartjs-2';
+import {Bar, Pie} from 'react-chartjs-2';
 
 class GetTop10 extends Component {
 
