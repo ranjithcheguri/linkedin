@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { getProfileDataAction } from '../actions/profileActions';
 import { submitLogin } from '../actions/loginActions';
 import { searchUserInfo } from '../actions/connectionActions';
+import Navbar from './Navbar';
 /* REDUX IMPORTS END */
 
 var displayError;
@@ -337,26 +338,26 @@ class Profile extends Component {
                 errorMessage: "City Required",
                 fadeModel: "dummy"
             })
-        }else if(!(phonenoRegex.test(this.state.personalProfile.contactInfo))){
+        } else if (!(phonenoRegex.test(this.state.personalProfile.contactInfo))) {
             alert("invalid phone no");
             this.setState({
                 errorMessage: "Invalid Phone No.",
                 fadeModel: "dummy"
             })
-        } else if(!(zipcodeRegex.test(this.state.personalProfile.zipcode))){
+        } else if (!(zipcodeRegex.test(this.state.personalProfile.zipcode))) {
             alert("invalid zip code");
             this.setState({
                 errorMessage: "Invalid Zip Code",
                 fadeModel: "dummy"
             })
-        }else {
+        } else {
             localStorage.setItem("userCity", this.state.personalProfile.country);
             this.setState({
                 formValidated: true,
                 fadeModel: "modal",
                 errorMessage: ""
             })
-            console.log("state in abcd",this.state);
+            console.log("state in abcd", this.state);
         }
     }
 
@@ -409,6 +410,10 @@ class Profile extends Component {
             .then(response => {
                 console.log(response);
             });
+    }
+
+    messagesBtn = () => {
+    this.props.history.push('/conversation',{participant :this.state.email});
     }
 
     render() {
@@ -498,6 +503,7 @@ class Profile extends Component {
             generateSkills = skillsList.map((item, index) => {
                 //console.log(item);
                 return (<div className="column col-md-12 mr-auto borderRed">
+                  
                     <p className="skills" >{item}</p>
                 </div>);
             })
@@ -508,12 +514,14 @@ class Profile extends Component {
         if (this.state.isLoading) {
             return (
                 <div>
+                <Navbar/>
                     <Loading />
                 </div>
             )
         } else {
             return (
                 <div className="profilePageBody" >
+                <Navbar/>
                     <div className="container">
                         <div className="row">
                             <div className="col-md-8 column paddingBottom">

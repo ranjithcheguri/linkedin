@@ -7,6 +7,7 @@ router.post('/getSavedJobs', (req, res) => {
     console.log(savedJobs);
     console.log(savedJobs.join());
     let sql = `SELECT * FROM job WHERE job_id IN (` + savedJobs.join() + `)`;
+    console.log("SQL QUERY",sql);
     pool.getConnection((err, con) => {
         if (err) {
             console.log("Connection Error");

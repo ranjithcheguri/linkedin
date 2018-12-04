@@ -44,7 +44,7 @@ class Menu extends Component {
         return (
             <div>
                 <Route path="/home" exact component={Home} />
-                <Route path="/" component={Navbar} />
+                <Route path="/" exact component={Navbar} />
                 <Route path="/jobdisplay" component={JobDisplay} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/postJob" component={RecruiterPostJob} />
@@ -62,7 +62,6 @@ class Menu extends Component {
                 <Route path='/apply' component={Apply} />
                 <Route path='/easyApply' component={EasyApply} />
                 <Route path='/savedJobs' component={savedJobs} />
-
                 <Route path='/top5Less' exact component={top5Less} />
                 <Route path='/getTop10' exact component={getTop10} />
 
