@@ -3,6 +3,7 @@ import '../css/connections.css';
 import '../css/Profile.css';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
+import Navbar from './Navbar';
 
 class connections extends Component {
     constructor() {
@@ -173,6 +174,7 @@ class connections extends Component {
         //console.log(details)
         return (
             <div>
+                <Navbar/>
                 <div className="free-space"></div>
                 <div className="row">
                     <div className="col-md-8">

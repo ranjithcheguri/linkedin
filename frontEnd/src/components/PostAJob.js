@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Navbar from './RecHomeNavbar';
-import axios from 'axios'
+import axios from 'axios';
+import {IP_backEnd} from '../config/config';
 
 class PostAJob extends Component {
     constructor(props) {
@@ -29,10 +30,10 @@ class PostAJob extends Component {
 
     authRecruiter=()=>{
         console.log("Inside Authenticate Recruiter",this.state.email,this.state.password)
-        axios.get("http://localhost:3002/authRecruiter",{
+        axios.get(IP_backEnd+"/authRecruiter",{
                 params: {
                     // email       : this.state.email,
-                    email:window.localStorage.getItem('userEmail'),
+                    email       : window.localStorage.getItem('userEmail'),
                     password    : this.state.password
                 }
             })

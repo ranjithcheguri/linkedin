@@ -5,11 +5,13 @@ import Loading from './Loading';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
 import PDF from 'react-pdf-js';
+import {Link} from 'react-router-dom';
 /* REDUX IMPORTS BEGIN */
 import { connect } from 'react-redux';
 import { getProfileDataAction } from '../actions/profileActions';
 import { submitLogin } from '../actions/loginActions';
 import { searchUserInfo } from '../actions/connectionActions';
+import Navbar from './Navbar';
 /* REDUX IMPORTS END */
 
 var displayError;
@@ -501,6 +503,7 @@ class Profile extends Component {
             generateSkills = skillsList.map((item, index) => {
                 //console.log(item);
                 return (<div className="column col-md-12 mr-auto borderRed">
+                  
                     <p className="skills" >{item}</p>
                 </div>);
             })
@@ -511,12 +514,14 @@ class Profile extends Component {
         if (this.state.isLoading) {
             return (
                 <div>
+                <Navbar/>
                     <Loading />
                 </div>
             )
         } else {
             return (
                 <div className="profilePageBody" >
+                <Navbar/>
                     <div className="container">
                         <div className="row">
                             <div className="col-md-8 column paddingBottom">
@@ -527,6 +532,7 @@ class Profile extends Component {
                                     <div className="row borderMe">
                                         {profilePicDiv}
                                         {(this.state.email === localStorage.getItem('userEmail')) ? <div className="ml-auto paddingTop zoomMe">
+                                            <Link to='/view'> <i className="fa fa-bar-chart editIcon  broderRed" ></i>    </Link>
                                             <i className="fal fa-pen editIcon marginRight2  broderRed" data-toggle="modal" data-target="#profileSummaryModal" ></i>
                                         </div> : <div></div>}
                                     </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Navbar from './Navbar';
+import Navbar from './RecHomeNavbar';
 import Footer from './Footer';
 import axios from 'axios';
 import { IP_backEnd } from '../config/config';
@@ -86,7 +86,7 @@ class ViewAllApplicants extends Component {
 
     return (
       <div>
-        {/* <Navbar/> */}
+        <Navbar/> 
         <div class="container">
           <h3>Applications</h3>
           <div class="applications-table">

@@ -32,6 +32,7 @@ import ReactPDF from './ReactPDF';
 import savedJobs from './savedJobs';
 import top5Less from './Top5Less';
 import getTop10 from './GetTop10';
+import ApplicantGraph from './ApplicantGraph';
 
 import ViewConversation from './Messages/ViewConversation';
 class Menu extends Component {
@@ -43,7 +44,7 @@ class Menu extends Component {
         return (
             <div>
                 <Route path="/home" exact component={Home} />
-                <Route path="/" component={Navbar} />
+                <Route path="/" exact component={Navbar} />
                 <Route path="/jobdisplay" component={JobDisplay} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/postJob" component={RecruiterPostJob} />
@@ -65,6 +66,7 @@ class Menu extends Component {
                 <Route path='/getTop10' exact component={getTop10} />
 
                 <Route path='/citywise' component={CityWiseApplications}/>
+                <Route path ='/view' component={ApplicantGraph}/>
 
             </div>
         );

@@ -130,7 +130,8 @@ var getAllPostedJobs = require('./apis/getAllPostedJobs')
 var authRecruiter = require('./apis/authRecruiter')
 
 var bottomTop5 = require('./apis/bottomTop5')
-var getTop10 = require('./apis/getTop10')
+var getTop10 = require('./apis/getTop10');
+var getViewCount = require('./apis/getProfileViewCount');
 
 var particularjobapplication=require('./apis/viewParticularJobApplication')
 var fetchPostedJobDetails=require('./apis/fetchPostedJobDetails')
@@ -180,7 +181,7 @@ app.use('/',getAllPostedJobs)
 //this route is used to authenticate the recruiter before posting the job
 app.use('/',authRecruiter)
 
-
+app.use('/', getViewCount);
 
 //this route will return top 5 job posting with less number of applications
 app.use('/',bottomTop5)
