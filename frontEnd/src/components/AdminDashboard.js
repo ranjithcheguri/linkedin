@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import LogSaveJob from './logSavedJob';
 import {Chart,Pie,Line,Bar} from 'react-chartjs-2'
 import axios from "axios";
-import {Link} from 'react-router-dom';
+import NavBar from './Navbar';
+import CityWiseApplications from './Dashboard/CityWiseApplications';
+import GetTop10 from './GetTop10';
+import Top5Less from './Top5Less';
 import { IP_NODE_PORT, IP_backEnd } from '../config/config.js'
 import Navbar from './RecHomeNavbar'
 import Dashboard1 from './3rdgraph.js';
@@ -191,13 +194,22 @@ class Dashboard extends Component {
               }}
           /> */}
         </div>
-          <div>
+          
           <h6 className="mt-5 text-center">
           <ul>Graph for all jobs posted by you: No of applicants saved the job</ul></h6>
           {/* <LogSaveJob /> */}
           </div>
-          </div></div>
-        </div>);
+          </div>
+        );
+          <h6 className="mt-5 text-center">Top 5 Job Postings with Less number of Applications</h6>
+          <Top5Less/>
+          <h6 className="mt-5 text-center">Top 10 Job Postings with applications/month</h6>
+          <GetTop10/>
+          <h6 className="mt-5 text-center">City wise applications/month</h6>
+          <CityWiseApplications/>
+
+        </div>
+        );
     }
 }
  
