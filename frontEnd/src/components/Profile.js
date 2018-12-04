@@ -33,8 +33,8 @@ class Profile extends Component {
                 firstName: "username",
                 lastName: "lastname",
                 headLine: "headline comes here",
-                city: "SAN JOSE",
-                country: "ujbekistaaaaan",
+                city: "",
+                country: "",
                 zipcode: "",
                 contactInfo: "contactInfo",
                 summary: "summary comes here",
@@ -339,12 +339,13 @@ class Profile extends Component {
                 fadeModel: "dummy"
             })
         }else {
-            localStorage.setItem("userCity", this.state.country);
+            localStorage.setItem("userCity", this.state.personalProfile.country);
             this.setState({
                 formValidated: true,
                 fadeModel: "modal",
                 errorMessage: ""
             })
+            console.log("state in abcd",this.state);
         }
     }
 

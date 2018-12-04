@@ -106,12 +106,13 @@ class Apply extends Component {
                 sponsorship: this.state.sponsorship,
                 disability: this.state.disability,
                 tempResume:this.state.tempResume,
+                month:"December"
             //pull all the field details this.state....
         }
     var ackmessage;
     axios.defaults.withCredentials = true;
     if(this.state.email=="" || this.state.firstName=="" || this.state.lastName==""){
-        ackmessage="One or more required fields are empty. PLease fill the information."
+        alert("One or more required fields are empty. PLease fill the information.")
     }
     else{
         axios.post(IP_backEnd + '/jobApplication/apply', data)
