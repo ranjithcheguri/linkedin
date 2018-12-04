@@ -10,7 +10,7 @@ router.put('/recruiter/logData', function (req, res) {
 
     if(req.body.searchall==true){
     logDetails.aggregate([
-        {"$group" : {_id:{job_id:"$job_id",recruiter_email:"anuskha.singh@gmail.com"}, count:{$sum:"$clicks"}}}
+        {"$group" : {_id:{job_id:"$job_id",recruiter_email:req.body.recruiter_email}, count:{$sum:"$clicks"}}}
     ])  .then((results)=>{ 
         console.log(results)
         res.status(200).json({ success: true, results:results });

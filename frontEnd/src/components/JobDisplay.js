@@ -103,8 +103,8 @@ class JobDisplay extends Component {
         const data={
             clicks:0,
             job_id:localStorage.getItem('easyapplyid'),
-            recruiter_email:localStorage.getItem('userEmail'),
-            city:"SF",
+            recruiter_email:localStorage.getItem('recruiteremail'),
+            city:localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled:0,
             full_filled:1
@@ -118,22 +118,34 @@ class JobDisplay extends Component {
     }
 
     handleSaveJob=(operation,email,title)=>{
-        const data={
-            job_id:operation,
-            recruiter_email:email,
-            title:title
-        }
+      
         const data1={
             saveJob:operation,
             email:localStorage.getItem('userEmail'),
         }
-        alert(data1.saveJob+data1.email)
+        // alert(data1.saveJob+data1.email)
         axios.put(IP_backEnd + '/savejob', data1)
         .then(response => {
             if (response.status === 200) {
                 alert("saved successfull !");
                 
                 
+                console.log("Job Application successful, data inserted");
+                // this.props.history.push('/Login');
+            }
+        })
+
+        const data={
+            job_id:operation,
+            recruiter_email:email,
+            title:title,
+            saved_job:1
+        }
+
+        axios.put(IP_backEnd + '/logSavedJob', data)
+        .then(response => {
+            if (response.status === 200) {
+                alert("saved successfull !"); 
                 console.log("Job Application successful, data inserted");
                 // this.props.history.push('/Login');
             }
@@ -205,6 +217,7 @@ class JobDisplay extends Component {
         window.alert("First enter search criteria")
         else{
         const data={
+            email: localStorage.getItem('userEmail'),
             search:true,
             searchjob:this.state.searchjob,
             searchlocation:this.state.searchlocation,
@@ -235,8 +248,8 @@ class JobDisplay extends Component {
         const data={
             clicks:1,
             job_id:operation,
-            recruiter_email:localStorage.getItem('userEmail'),
-            city:"SF",
+            recruiter_email:email,
+            city:localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled:0,
             full_filled:0
@@ -252,6 +265,7 @@ class JobDisplay extends Component {
         localStorage.setItem('easyapplyid',operation)
 
         this.props.applyWindow(operation)
+        localStorage.setItem('recruiteremail',email)
         localStorage.setItem('easycompany',company)
          localStorage.setItem('easytitle',title)
          localStorage.setItem('easylocation',location)
@@ -260,8 +274,8 @@ class JobDisplay extends Component {
         const data={
             clicks:0,
             job_id:operation,
-            recruiter_email:localStorage.getItem('userEmail'),
-            city:"SF",
+            recruiter_email:email,
+            city:localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled:1,
             full_filled:0
@@ -279,13 +293,14 @@ class JobDisplay extends Component {
          localStorage.setItem('applycompany',company)
          localStorage.setItem('applytitle',title)
          localStorage.setItem('applylocation',location)
+         localStorage.setItem('applyrecruiteremail',email)
          window.open("/apply", "_blank")
         
         const data={
             clicks:0,
             job_id:operation,
-            recruiter_email:localStorage.getItem('userEmail'),
-            city:"SF",
+            recruiter_email:email,
+            city:localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled:1,
             full_filled:0

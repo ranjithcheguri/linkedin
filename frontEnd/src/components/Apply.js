@@ -19,7 +19,7 @@ class Apply extends Component {
         this.state = {
                 jobID:localStorage.getItem('jobapplyid'),
                 resume: "",
-                email: localStorage.getItem('userEmail'),
+                email: localStorage.getItem('applyrecruiteremail'),
                 cover: "",
                 firstName: "",
                 lastName: "",
@@ -129,17 +129,17 @@ class Apply extends Component {
     }
     this.setState({message:ackmessage})
 
-    // const data={
-    //     clicks:0,
-    //     job_id:localStorage.getItem('jobapplyid'),
-    //     recruiter_email:"aditi12395@gmail.com",
-    //     city:"SF",
-    //     // city:window.localStorage.getItem('city'),
-    //     half_filled:0,
-    //     full_filled:1
-    // }
-    // this.props.logData(data)
-    //  console.log("Inside handleNew")
+    const data1={
+        clicks:0,
+        job_id:localStorage.getItem('jobapplyid'),
+        recruiter_email:localStorage.getItem('applyrecruiteremail'),
+        city:localStorage.getItem('userCity'),
+        // city:window.localStorage.getItem('city'),
+        half_filled:0,
+        full_filled:1
+    }
+     this.props.logData(data1)
+     console.log("Inside handleNew")
     
     }
 
@@ -476,8 +476,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchStateToProps = dispatch => {
     return {
-    logData:(data) => {
-        axios.put(IP_backEnd+'/recruiter/logData', data)
+    logData:(data1) => {
+        axios.put(IP_backEnd+'/recruiter/logData', data1)
         .then((response) => {
             dispatch({type: 'FULLDETAILS',payload : response.data,statusCode : response.status})
     });
