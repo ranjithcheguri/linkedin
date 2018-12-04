@@ -24,8 +24,7 @@ class JobDisplay extends Component {
             email: "",
             resume: "",
             headLine: "",
-            contactInfo: "",
-            companyLogoBase64: []
+            contactInfo: ""
         }
         this.handleEvent = this.handleEvent.bind(this)
         this.handleArray = this.handleArray.bind(this)
@@ -69,8 +68,8 @@ class JobDisplay extends Component {
             resume: "",
             email: localStorage.getItem('userEmail'),
             cover: "",
-            firstName: "",
-            lastName: "",
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
             address: "",
             city: localStorage.getItem('userCity'),
             month: "December",
@@ -105,8 +104,8 @@ class JobDisplay extends Component {
             const data = {
                 clicks: 0,
                 job_id: localStorage.getItem('easyapplyid'),
-                recruiter_email: localStorage.getItem('userEmail'),
-                city: "SF",
+                recruiter_email: localStorage.getItem('recruiteremail'),
+                city: localStorage.getItem('userCity'),
                 // city:window.localStorage.getItem('city'),
                 half_filled: 0,
                 full_filled: 1
@@ -120,22 +119,34 @@ class JobDisplay extends Component {
     }
 
     handleSaveJob = (operation, email, title) => {
-        const data = {
-            job_id: operation,
-            recruiter_email: email,
-            title: title
-        }
+
         const data1 = {
             saveJob: operation,
             email: localStorage.getItem('userEmail'),
         }
-        alert(data1.saveJob + data1.email)
+        // alert(data1.saveJob+data1.email)
         axios.put(IP_backEnd + '/savejob', data1)
             .then(response => {
                 if (response.status === 200) {
                     alert("saved successfull !");
 
 
+                    console.log("Job Application successful, data inserted");
+                    // this.props.history.push('/Login');
+                }
+            })
+
+        const data = {
+            job_id: operation,
+            recruiter_email: email,
+            title: title,
+            saved_job: 1
+        }
+
+        axios.put(IP_backEnd + '/logSavedJob', data)
+            .then(response => {
+                if (response.status === 200) {
+                    alert("saved successfull !");
                     console.log("Job Application successful, data inserted");
                     // this.props.history.push('/Login');
                 }
@@ -207,6 +218,7 @@ class JobDisplay extends Component {
             window.alert("First enter search criteria")
         else {
             const data = {
+                email: localStorage.getItem('userEmail'),
                 search: true,
                 searchjob: this.state.searchjob,
                 searchlocation: this.state.searchlocation,
@@ -237,8 +249,8 @@ class JobDisplay extends Component {
         const data = {
             clicks: 1,
             job_id: operation,
-            recruiter_email: localStorage.getItem('userEmail'),
-            city: "SF",
+            recruiter_email: email,
+            city: localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled: 0,
             full_filled: 0
@@ -254,6 +266,7 @@ class JobDisplay extends Component {
         localStorage.setItem('easyapplyid', operation)
 
         this.props.applyWindow(operation)
+        localStorage.setItem('recruiteremail', email)
         localStorage.setItem('easycompany', company)
         localStorage.setItem('easytitle', title)
         localStorage.setItem('easylocation', location)
@@ -262,8 +275,8 @@ class JobDisplay extends Component {
         const data = {
             clicks: 0,
             job_id: operation,
-            recruiter_email: localStorage.getItem('userEmail'),
-            city: "SF",
+            recruiter_email: email,
+            city: localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled: 1,
             full_filled: 0
@@ -281,13 +294,14 @@ class JobDisplay extends Component {
         localStorage.setItem('applycompany', company)
         localStorage.setItem('applytitle', title)
         localStorage.setItem('applylocation', location)
+        localStorage.setItem('applyrecruiteremail', email)
         window.open("/apply", "_blank")
 
         const data = {
             clicks: 0,
             job_id: operation,
-            recruiter_email: localStorage.getItem('userEmail'),
-            city: "SF",
+            recruiter_email: email,
+            city: localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled: 1,
             full_filled: 0
@@ -295,6 +309,7 @@ class JobDisplay extends Component {
         this.props.logData(data)
 
     }
+
     getCompanyLogo = async (email) => {
         //console.log("fetching user profile pic...");
         //alert("inside company logo");
@@ -332,6 +347,7 @@ class JobDisplay extends Component {
         else {
             // Displaying whole list
             // <h6>Showing {this.props.jobdetails.length} results</h6>
+            console.log("******************************************************************************************************************************************************************************************************************************************************************************************************************************************", this.props.jobdetails);
             details =
                 this.props.jobdetails.map((job, index) => {
                     //alert(index)
@@ -343,7 +359,7 @@ class JobDisplay extends Component {
                     var hours = Math.floor(tempDate / hours)
                     var days = Math.floor(tempDate / day);
                     var months = Math.floor(days / 31);
-                    this.getCompanyLogo(job.recruiter_email);
+                    //this.getCompanyLogo(job.recruiter_email);
                     //console.log("hours" + hours)
                     //console.log(days)
                     //console.log(months)
@@ -357,11 +373,12 @@ class JobDisplay extends Component {
                     else
                         al = (<span className="ml-1 text-primary">Apply</span>)
                     return (
-                        <div >
+                        <div>
                             <div className="row smooth-scroll  ">
 
                                 <div className="col-lg-4 mt-2">
-                                    {(this.state.companyLogoBase64[index]) ? <img className="img-fluid ml-2 mr-2" src={'data:image/jpeg;base64,' + this.state.companyLogoBase64[index]} /> : <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} />}
+                                    {/* {(this.state.companyLogoBase64[index]) ? <img className="img-fluid ml-2 mr-2" src={'data:image/jpeg;base64,' + this.state.companyLogoBase64[index]} /> : <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} />} */}
+                                    <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} />
                                 </div>
                                 <div className="col-lg-7 mt-2 ml-2">
                                     <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={() => this.handleNew(job.job_id, job.recruiter_email)}><h5>{job.title}</h5></button>

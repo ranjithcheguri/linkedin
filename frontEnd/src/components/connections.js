@@ -120,8 +120,8 @@ class connections extends Component {
     async declineConnection(email, event) {
         console.log(email)
         var data={
-            from:localStorage.getItem('userEmail'),
-            to:email,
+            from:email,
+            to:localStorage.getItem('userEmail'),
             status:2
         }
         await axios.put(IP_backEnd + `/declineConnection`,data)
@@ -146,7 +146,7 @@ class connections extends Component {
 
                 <div className="column insideCard paddingLeft">
                     <hr></hr>
-                    <h5>{connection.email}</h5>
+                    <a onClick={()=>{this.props.history.push('/profile',connection.email)}}><h5>{connection.email}</h5></a>
                     <p>{connection.address}</p>
                 </div>
 
@@ -157,7 +157,8 @@ class connections extends Component {
 
                 <div className="column insideCard paddingLeft">
                     <hr></hr>
-                    <div className="row"><h5>{connection.email}</h5>
+                    <div className="row">
+                    <a onClick={()=>{this.props.history.push('/profile',connection.email)}}><h5>{connection.email}</h5></a>
                         <div className="row float-right">
                             <input className="ml-5 btn btn-success" type="button" onClick={() => this.acceptConnection(connection.email)} value="Accept"></input>
                             <input className="ml-2 btn btn-danger" type="button" onClick={() => this.declineConnection(connection.email)} value="Decline"></input>

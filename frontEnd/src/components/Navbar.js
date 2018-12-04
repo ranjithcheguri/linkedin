@@ -71,6 +71,31 @@ class Navbar extends Component {
         localStorage.removeItem('searchUser');
         //alert("successfully signed out!")
         this.props.history.push("/");
+        window.location.reload();
+    }
+
+    jobsDisplay=()=>{
+        if(localStorage.getItem('resumeCheck')==='undefined' || localStorage.getItem('userCity')==='undefined'){
+            // alert(localStorage.getItem('resumeCheck'))
+            alert("Please Enter the basic details before applying for the jobs.")
+            this.props.history.push("/Profile");
+        }
+        else{
+            this.props.history.push("/JobDisplay");
+        }
+        
+        // if(!localStorage.getItem('userCity')  || localStorage.getItem('userCity').length==0){
+        //     alert("Fill the basic profile with City and Resume.")
+        //     this.props.history.push("/Profile");
+        // }
+        // else if(!localStorage.getItem('resumeCheck')){
+        //     alert("Resume not given")
+        //     this.props.history.push("/Profile");
+        // }
+        // else if(localStorage.getItem('userCity').length>0 && localStorage.getItem('resumeCheck')){
+            
+        //     this.props.history.push("/JobDisplay");
+        // }
     }
 
     render() {
@@ -101,9 +126,10 @@ class Navbar extends Component {
                                             <span class="nav-icon-text">My Network</span></a>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="/jobdisplay" className="nav-link" href="#"><i class="fal fa-suitcase fa-lg iconColour"></i><br />
-                                            <div class="nav-icon-text">Jobs</div></Link>
+                                        <a className="nav-link" onClick={()=>{this.jobsDisplay()}}><i class="fal fa-suitcase fa-lg iconColour"></i><br />
+                                            <span class="nav-icon-text">Jobs</span></a>
                                     </li>
+                                    
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fal fa-envelope fa-lg iconColour"></i><br />
                                             <span class="nav-icon-text">Messaging</span></a>

@@ -3,6 +3,7 @@ import '../css/Navbar.css';
 import '../fontawesome/css/all.css';
 import { Grid, Row, Col, Image } from 'react-bootstrap';
 
+
 class Navbar extends Component {
     render() {
         return (

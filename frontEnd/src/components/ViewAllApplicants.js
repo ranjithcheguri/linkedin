@@ -21,12 +21,20 @@ class ViewAllApplicants extends Component {
   }
 
   componentDidMount() {
-    axios.get(IP_backEnd + '/jobApplication?jobId=' + this.props.applicationState.jobID)
+    //alert(this.props.location.state)
+    axios.get(IP_backEnd + '/jobApplication?jobId=' + this.props.location.state)
       .then(response => {
+        console.log(response.data)
         this.setState({
           Applications: this.state.Applications.concat(response.data),
         })
       })
+  }
+
+  onResumeClose=()=>{
+    this.setState({
+      resume:""
+    })
   }
 
   getResume = async (email) => {
@@ -67,13 +75,12 @@ class ViewAllApplicants extends Component {
       return (
         <tr>
           <div className="mt-3 ml-4 mr-4 border rounded shadow">
-            <h4 className="ml-2 pl-2 pt-2">Name : {application.fName + " " + application.lName}</h4>
+            <h4 className="ml-2 pl-2 pt-2">Name : {application.firstName + " " + application.lastName}</h4>
             <p className="ml-2 pl-2">Email ID : {application.email}</p>
             <p className="ml-2 pl-2">Address : {application.address}</p>
-            <p className="ml-2 pl-2 pb-1"><a data-toggle="modal" onClick={this.getResume(application.email)} data-target="#viewResume" >Resume</a></p>
+            <p className="ml-2 pl-2 pb-1"><a data-toggle="modal" onClick={()=>{this.getResume(application.email)}} data-target="#viewResume" >Resume</a></p>
           </div>
         </tr>
-
       )
     })
 
@@ -95,7 +102,7 @@ class ViewAllApplicants extends Component {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="viewResumeTitle">Resume</h5>
-                <button type="button" class="close linkedInBtn" data-dismiss="modal" onClick={this.onResumeClose} aria-label="Close">
+                <button type="button" class="close linkedInBtn" data-dismiss="modal" onClick={()=>this.onResumeClose()} aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -108,7 +115,7 @@ class ViewAllApplicants extends Component {
                                         </div> */}
               </div>
               <div class="modal-footer">
-                <button type="button" className="btn btn-primary linkedInBtn" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-primary linkedInBtn" onClick={()=>this.onResumeClose()} data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>

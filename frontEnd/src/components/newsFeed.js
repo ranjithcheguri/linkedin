@@ -52,7 +52,7 @@ class newsFeed extends Component {
                         <img className="Feeds img-fluid shadow" src={require('../images/newsFeed3.JPG')}></img>
                     </div>
                     <div className="col-md-3 container1">
-                        <img className="Feeds img-fluid" src={require('../images/newsFeed.PNG')}></img>
+                        <img className="Feeds img-fluid shadow" src={require('../images/newsFeed.PNG')}></img>
                     </div>
                 </div>
             </div>
