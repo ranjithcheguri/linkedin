@@ -71,7 +71,8 @@ class JobDisplay extends Component {
             firstName: "",
             lastName: "",
             address: "",
-            city: "",
+            city: localStorage.getItem('userCity'),
+            month:"December",
             hear: "",
             sponsorship: "",
             disability: "",
@@ -246,10 +247,14 @@ class JobDisplay extends Component {
        
     }
 
-    handleHalffilled1=(operation,email)=>{
+    handleHalffilled1=(operation,email,company,title,location)=>{
         console.log("I am called for half filled east")
         localStorage.setItem('easyapplyid',operation)
+
         this.props.applyWindow(operation)
+        localStorage.setItem('easycompany',company)
+         localStorage.setItem('easytitle',title)
+         localStorage.setItem('easylocation',location)
         console.log(this.props.applyid)
         
         const data={
@@ -265,13 +270,16 @@ class JobDisplay extends Component {
         
     }
 
-    handleHalffilled=(operation,email)=>{
+    handleHalffilled=(operation,email,company,title,location)=>{
         console.log("I am called for half filled")
         this.props.applyWindow(operation)
         console.log(this.props.applyid)
-       localStorage.setItem('jobapplyid',operation)
-       console.log(localStorage.getItem('jobapplyid'))
-        window.open("/apply", "_blank")
+         localStorage.setItem('jobapplyid',operation)
+         console.log(localStorage.getItem('jobapplyid'))
+         localStorage.setItem('applycompany',company)
+         localStorage.setItem('applytitle',title)
+         localStorage.setItem('applylocation',location)
+         window.open("/apply", "_blank")
         
         const data={
             clicks:0,
@@ -382,12 +390,12 @@ class JobDisplay extends Component {
                         if(job.type_of_apply=="easyapply" )
 
                             al=(<button className="btn btn-primary text-white ml-2 p-2" data-toggle="modal" data-target="#easyApplyModal" 
-                            onClick={()=>this.handleHalffilled1(job.job_id,job.recruiter_email)}>
+                            onClick={()=>this.handleHalffilled1(job.job_id,job.recruiter_email,job.company,job.title,job.location)}>
                         <i className=" fa fa-lg text-white fa-linkedin-square"></i> <strong>Easy Apply</strong></button>)
                         
                         else 
                  
-                            al=(<button className="btn btn-primary text-white ml-2 p-2 " type="submit" onClick={()=>this.handleHalffilled(job.job_id,job.recruiter_email)} > <strong>Apply</strong></button>)
+                            al=(<button className="btn btn-primary text-white ml-2 p-2 " type="submit" onClick={()=>this.handleHalffilled(job.job_id,job.recruiter_email,job.company,job.title,job.location)} > <strong>Apply</strong></button>)
                    
                         
                     
@@ -402,7 +410,9 @@ class JobDisplay extends Component {
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="easyApplyModal">Apply to (company name)</h5>
+                                    <h5 class="modal-title" id="easyApplyModal">Apply to {localStorage.getItem('easycompany')}</h5>
+                                    <h5 class="modal-title" id="easyApplyModal">{localStorage.getItem('easytitle')}</h5>
+                                    <h5 class="modal-title" id="easyApplyModal"> {localStorage.getItem('easylocation')}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>

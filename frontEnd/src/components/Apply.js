@@ -106,12 +106,13 @@ class Apply extends Component {
                 sponsorship: this.state.sponsorship,
                 disability: this.state.disability,
                 tempResume:this.state.tempResume,
+                month:"December"
             //pull all the field details this.state....
         }
     var ackmessage;
     axios.defaults.withCredentials = true;
     if(this.state.email=="" || this.state.firstName=="" || this.state.lastName==""){
-        ackmessage="One or more required fields are empty. PLease fill the information."
+        alert("One or more required fields are empty. PLease fill the information.")
     }
     else{
         axios.post(IP_backEnd + '/jobApplication/apply', data)
@@ -159,9 +160,10 @@ class Apply extends Component {
 
             {/* try to add the logo and name of the company */}
 
-            <h3>Engineering Intern (Summer 2019)</h3>
+            <h3>{localStorage.getItem('applytitle')}</h3>
             <br></br>
-            <h4>SAN FRANCISCO, CA UNIVERSITY (INTERNSHIPS) – ENGINEERING INTERN</h4>
+            <h4>{localStorage.getItem('applycompany')}</h4>
+            {/* <h5>{localStorage.getItem('applylocation')}</h5> */}
             <br></br>
                 <div >
                     <form onSubmit={this.submitEvent}>
