@@ -4,7 +4,7 @@ import '../fontawesome/css/all.css';
 import { Badge } from 'antd';
 import { IP_backEnd } from '../config/config';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { searchUserInfo } from './../actions/connectionActions';
 import { connect } from "react-redux"
 
@@ -14,7 +14,8 @@ class Navbar extends Component {
         this.state = {
             acceptedConnections: [],
             searchString: '',
-            isValidUser: false
+            isValidUser: false,
+            check: false
         }
     }
     async componentWillMount() {
@@ -103,7 +104,9 @@ class Navbar extends Component {
             this.props.history.push("/Profile");
         }
         else {
-            this.props.history.push("/JobDisplay");
+            this.setState({
+                check: true
+            })
         }
 
         // if(!localStorage.getItem('userCity')  || localStorage.getItem('userCity').length==0){
@@ -121,6 +124,10 @@ class Navbar extends Component {
     }
 
     render() {
+        if (this.state.check) {
+            return <Redirect to='/JobDisplay' />
+
+        }
         return (
             <div className="">
                 <nav className="navbar navbar-expand-lg navbar-light">
