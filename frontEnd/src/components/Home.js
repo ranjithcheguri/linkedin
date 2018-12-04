@@ -116,7 +116,7 @@ class Home extends Component {
         else {
             this.setState({ flag: 0 })
 
-            setTimeout(this.pushCodeToMongoDB(),2000); 
+            this.pushCodeToMongoDB(); 
 
             axios.post(IP_backEnd + '/signup', data)
                 .then(response => {
