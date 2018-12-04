@@ -4,31 +4,62 @@ var { logDetails } = require('../models/loggingData');
 router.put('/recruiter/logData', function (req, res) {
     console.log("Inside Logging data for admin dashboard");
     console.log(req.body);
+    console.log(req.body.search)
+    console.log(req.body.search==true)
+    // "$job_id"
 
-    if(req.body.search==true){
-        logDetails.aggregate([
-            {"$group" : {_id:{job_id:"$job_id",recruiter_email:req.body.recruiter_email}, count:{$sum:"$half_filled"}}}
-        ]).then((results)=>{ 
-            console.log(results)
-         }
-        ,(err)=>{
-            console.log("Error inserting details");
-            res.status(400).send("failed")
-        })
-
-        // logDetails.find({job_id:req.body.job_id}).then((results)=>{ 
-        //     res.writeHead(200, {
-        //         'Content-type' : 'application/json'
-        //     })
-        //     res.end(JSON.stringify(results));
-        //  }
-        // ,(err)=>{
-        //     console.log("Error inserting details");
-        //     res.status(400).send("failed")
-        // })
+    if(req.body.searchall==true){
+    logDetails.aggregate([
+        {"$group" : {_id:{job_id:"$job_id",recruiter_email:"anuskha.singh@gmail.com"}, count:{$sum:"$clicks"}}}
+    ])  .then((results)=>{ 
+        console.log(results)
+        res.status(200).json({ success: true, results:results });
+     }
+    ,(err)=>{
+        console.log("Error inserting details"+err);
+        // res.status(400).send("failed")
+    })
     }
 
+else if(req.body.search==true){
+    logDetails.find({job_id:"100"})
+    .then((results)=>{ 
+        console.log(results)
+        res.status(200).json({ success: true, results:results });
+     }
+    ,(err)=>{
+
+        console.log("Error inserting details"+err);
+        res.status(400).send("failed")
+    })
+}
+
+    // if(req.body.search==true){
+    //     logDetails.aggregate([
+    //         {"$group" : {_id:{job_id:100}}}
+    //     ]).then((results)=>{ 
+    //         console.log(results)
+    //      }
+    //     ,(err)=>{
+    //         console.log("Error inserting details");
+    //         res.status(400).send("failed")
+    //     })
+
+    //     // logDetails.find({job_id:req.body.job_id}).then((results)=>{ 
+    //     //     res.writeHead(200, {
+    //     //         'Content-type' : 'application/json'
+    //     //     })
+    //     //     res.end(JSON.stringify(results));
+    //     //  }
+    //     // ,(err)=>{
+    //     //     console.log("Error inserting details");
+    //     //     res.status(400).send("failed")
+    //     // })
+    // }
+
     else{
+console.log("I am hre inide ")
+
     var log  = new logDetails({
         recruiter_email:req.body.recruiter_email,
         city:req.body.city,
@@ -41,6 +72,7 @@ router.put('/recruiter/logData', function (req, res) {
 
 
       logDetails.find({job_id:req.body.job_id}).then((result)=>{
+          console.log("1st result"+result)
           if(result.length==0){
               console.log(result)
             log.save().then((log)=>{

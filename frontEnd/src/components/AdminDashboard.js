@@ -10,7 +10,9 @@ class Dashboard extends Component {
         super(props);
         this.state = { 
           Data:"",
-           
+          Dataall:""
+        }
+      } 
             
               // planetData :{
               //   labels: ['Boston', 'Worcester', 'San Jose', 'New York', 'Seattle', 'Fremont'],
@@ -55,29 +57,35 @@ class Dashboard extends Component {
               //       'rgba(255, 99, 132, 0.6)'
               //       }]
               // }
-         }
-    }
+       
     componentDidMount() {
       console.log("I am here")
       const data={
-          job_id:100,
+          job_id:1,
           search:true
       }
+
+      const dataall={
+        recruiter_email:localStorage.getItem('userEmail'),
+        searchall:true
+    }
+
+
       axios.put(IP_backEnd+'/recruiter/logData',data)
-        .then(res => {
+        .then(response => {
             console.log("response for dashboard")
-            console.log(res)
-          const info = res.data;
-          console.log(res.data)
+            console.log(response.data.results)
+          const info = response.data.results;
+          console.log(response.data.results)
           let city = [];
           let half_filled = [];
           let full_filled = [];
           let clicks = [];
           info.forEach(element => {
             city.push(element.city);
-            half_filled.push(element.half_filled);
+            half_filled.push(element.half_filled-element.full_filled);
             full_filled.push(element.full_filled);
-            clicks.push(element.clicks);
+            clicks.push(element.clicks-element.half_filled-element.full_filled);
           });
           console.log("title"+city)
           console.log(half_filled)
@@ -97,7 +105,7 @@ class Dashboard extends Component {
                   data: full_filled,
                   backgroundColor: 'rgba(75, 192, 192, 0.6)',
                  }, {
-                  label:'Read',                 
+                  label:'Only Read',                 
                   data:clicks,
                   backgroundColor:
                     'rgba(255, 99, 132, 0.6)'
@@ -106,7 +114,56 @@ class Dashboard extends Component {
               ]
            }
            });
-        })
+        }
+        )
+
+
+        axios.put(IP_backEnd+'/recruiter/logData',dataall)
+        .then(response => {
+            console.log("response for dashboard for all jobs")
+            console.log(response.data.results)
+          const info = response.data.results;
+          console.log(response.data.results)
+          let count = [];
+          let job_id = [];
+          let full_filled = [];
+        //   let clicks = [];
+          info.forEach(element => {
+            count.push(element.count);
+            job_id.push(element._id.job_id);
+        //     full_filled.push(element.full_filled);
+        //     clicks.push(element.clicks-element.half_filled-element.full_filled);
+          });
+          console.log("title is "+count)
+          console.log("Job Id "+job_id)
+        //   console.log(full_filled)
+        //   console.log(clicks)
+          this.setState({ 
+            Dataall: {
+              labels: job_id,
+              datasets:[
+                 {
+                    label:'No of Applicants',
+                    data: count,
+                    backgroundColor: 'rgba(255,105,145,0.6)',
+                 }
+        // //          {
+        // //           label:'Full Filled',
+        // //           data: full_filled,
+        // //           backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        // //          }, {
+        // //           label:'Only Read',                 
+        // //           data:clicks,
+        // //           backgroundColor:
+        // //             'rgba(255, 99, 132, 0.6)'
+        // //             }
+
+              ]
+           }
+           });
+        }
+        )
+
     }
     render() { 
         return ( <div className="w-50 h-50">
@@ -117,17 +174,23 @@ class Dashboard extends Component {
         <div className="w-50 h-50">
             <Bar
             	data={this.state.Data}
-              // width={100}
-              // height={50}
               options={{
                 maintainAspectRatio: false
               }}
           />
-          </div>
+    </div>
+    <div>
+           {/* <Bar
+            	data={this.state.Dataall}
+              options={{
+                maintainAspectRatio: false
+              }}
+          /> */}
+        </div>
           <div>
           <h6 className="mt-5 text-center">
           <ul>Graph for all jobs posted by you: No of applicants saved the job</ul></h6>
-          <LogSaveJob />
+          {/* <LogSaveJob /> */}
           </div>
           </div>
         </div>);

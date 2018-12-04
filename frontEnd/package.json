@@ -15,7 +15,6 @@
     "chart.js": "^2.7.3",
     "font-awesome": "^4.7.0",
     "mgr-pdf-viewer-react": "^1.0.1",
-    "node-sass": "^4.10.0",
     "package.json": "^2.0.1",
     "popper.js": "^1.14.4",
     "react": "^16.6.3",
@@ -40,8 +39,7 @@
     "redux-form": "^7.4.2",
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
-    "redux-thunk": "^2.3.0",
-    "sass-loader": "^7.1.0"
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

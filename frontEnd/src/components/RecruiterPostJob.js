@@ -29,27 +29,30 @@ class RecruiterPostJob extends Component {
     }
 
     onFileSelect =(e)=>{
-        const files = e.target.files
-        console.log(files)
-        this.setState({
-            photos:files
-        });
+        // console.log(files)
+        if(this.state.company==""){
+            alert("Enter the company name and choose the file")
+        }
+        else{
+            //alert(this.state.company)
+            this.setState({
+                companylogo:e.target.files[0]
+            });
+        }
+
     }
 
-    onSubmitForm =(e) =>{
+    onSubmitForm =async (e) =>{
         console.log("here in form");
         let formData = new FormData();
-        const files = this.state.photos;
-        console.log(files.originalname)
-        for(var i=0;i<files.length;++i){
-            formData.append("files",files[i]);
-        }
-        this.setState({pid:true})
-        const config= {
-            headers:{
-                'content-type':'multipart/form-data'
-            }
-        }
+        formData.append('email', this.state.recruiter_email+this.state.company);
+        formData.append('companylogo', this.state.companylogo);
+        console.log("Logo before uploading: ", this.state.companylogo);
+        await axios.post(IP_backEnd + '/recruiter/logoUpload', formData)
+            .then((response) => {
+                console.log(response.data);
+            });
+        console.log("After uploading Logo");
     }
 
     handleEvent(e){
@@ -77,7 +80,8 @@ class RecruiterPostJob extends Component {
     }
 
     submitJobPost(){
-        if(this.state.company===""||this.state.location===""||this.state.title===""||this.state.jobfunction===""||this.state.industry===""||this.state.employementtype===""||this.state.seniorlevel===""||this.state.jobdescribe===""||this.state.typeofapply)
+        console.log(this.state.typeofapply)
+        if(this.state.company===""||this.state.location===""||this.state.title===""||this.state.jobfunction===""||this.state.industry===""||this.state.employementtype===""||this.state.seniorlevel===""||this.state.jobdescribe===""||this.state.typeofapply==="")
          {window.alert("Enter all the fields:")}
         else{
         const data={
@@ -189,10 +193,10 @@ class RecruiterPostJob extends Component {
                       <div className="mt-3">
                         <input type="radio" name="typeofapply"  value="easyapply" onClick={this.handleEvent}></input>
                        <strong className="ml-2">Recommended:</strong> Let candidates apply with their LinkedIn profile and notify me by email
-                       <input type="text" onClick={this.handleRadio} value="a@a.com" className="w-75 h-100 mt-2 p-3"></input> <br></br>
+                       <input type="text" onClick={this.handleRadio} value={localStorage.getItem('userEmail')} className="w-75 h-100 mt-2 p-3"></input> <br></br>
 
-                       <input type="radio" onClick={this.handleEvent} name="typeofapply" value="apply" className="mt-4"/>Direct applicants to an external site to apply
-                       <div><input type="text" onChange={this.handleRadio} name="companyurl" className="mt-2 w-75 p-3"></input></div>
+                       <input type="radio" onClick={this.handleRadio} name="typeofapply" value="apply" className="mt-4"></input> Direct applicants to an external site to apply
+                       <div><input type="text" onChange={this.handleEvent} name="companyurl" className="mt-2 w-75 p-3"></input></div>
                     </div>
                    </div>
                 </div>

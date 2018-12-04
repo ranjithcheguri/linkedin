@@ -12,6 +12,8 @@ import { submitLogin } from '../actions/loginActions';
 import { searchUserInfo } from '../actions/connectionActions';
 /* REDUX IMPORTS END */
 
+var displayError;
+
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -60,7 +62,12 @@ class Profile extends Component {
             isNewResumeUploading: false,
             isConnected: 2,
             check: true,
-            displayView:0
+            displayView: 0,
+            formValidated: false,
+            errorMessage: "",
+            fadeModel: "dummy",
+            phoneNoValid:false,
+            zipcodeValid:false,
         }
     }
     // 0-->pending
@@ -82,17 +89,17 @@ class Profile extends Component {
         this.updateViews();
     }
 
-    updateViews=()=>{
+    updateViews = () => {
         //alert("views")
         console.log("updating views")
-        if(this.state.email!=localStorage.getItem('userEmail')){
+        if (this.state.email != localStorage.getItem('userEmail')) {
             const data = {
-                email : this.state.email,
+                email: this.state.email,
             }
-            axios.put(IP_backEnd+'/applicant/updateProfile/updateViews',data)
-            .then((res)=>{
-                console.log("view incremented");
-            })
+            axios.put(IP_backEnd + '/applicant/updateProfile/updateViews', data)
+                .then((res) => {
+                    console.log("view incremented");
+                })
         }
     }
 
@@ -193,20 +200,25 @@ class Profile extends Component {
     }
 
     submitResume = async () => {
-        console.log("in Submit Resume");
-        this.setState({ resume: '' });
-        let formData = new FormData();
-        formData.append('email', this.state.email);
-        formData.append('resume', this.state.tempResume);
-        console.log("resume file :: before uploading ::", this.state.tempResume);
-        await axios.post(IP_backEnd + '/applicant/updateProfile/resumeUpload', formData)
-            .then((response) => {
-                console.log(response.data);
-            });
-        //this.getResume();
-        console.log("after uploading Resume");
-        //setTimeout(() => this.getResume(), 1500);
-        //this.setState({ isNewResumeUploading: false });
+        let extension = this.state.tempResume.name.slice(- 4);
+        console.log("in Submit Resume", extension);
+        if (extension == ".pdf") {
+            this.setState({ resume: '' });
+            let formData = new FormData();
+            formData.append('email', this.state.email);
+            formData.append('resume', this.state.tempResume);
+            console.log("resume file :: before uploading ::", this.state.tempResume);
+            await axios.post(IP_backEnd + '/applicant/updateProfile/resumeUpload', formData)
+                .then((response) => {
+                    console.log(response.data);
+                });
+            //this.getResume();
+            console.log("after uploading Resume");
+            //setTimeout(() => this.getResume(), 1500);
+            //this.setState({ isNewResumeUploading: false });
+        } else {
+            alert("ONLY .pdf allowed");
+        }
 
     }
 
@@ -220,21 +232,25 @@ class Profile extends Component {
     }
 
     submitProfilePic = async () => {
-
-        this.setState({ profilePic: "" });
-
-        console.log(this.state.profilePic);
-        let formData = new FormData();
-        formData.append('email', this.state.email);
-        formData.append('profilePic', this.state.profilePic);
-        console.log("before setting profile pic")
-        await axios.post(IP_backEnd + '/applicant/updateProfile/profilePicUpload', formData)
-            .then((response) => {
-                console.log(response.data);
-            });
-        //this.getProfilePic();
-        console.log("after setting profile pic")
-        setTimeout(() => this.getProfilePic(), 1500);
+        let extension = this.state.profilePic.name.slice(- 4);
+        console.log("in Submit ProfilePic", extension);
+        if (extension == ".jpg") {
+            this.setState({ profilePic: "" });
+            console.log(this.state.profilePic);
+            let formData = new FormData();
+            formData.append('email', this.state.email);
+            formData.append('profilePic', this.state.profilePic);
+            console.log("before setting profile pic")
+            await axios.post(IP_backEnd + '/applicant/updateProfile/profilePicUpload', formData)
+                .then((response) => {
+                    console.log(response.data);
+                });
+            //this.getProfilePic();
+            console.log("after setting profile pic")
+            setTimeout(() => this.getProfilePic(), 1500);
+        } else {
+            alert("only .jpg allowed for profile pic");
+        }
     }
 
 
@@ -284,17 +300,72 @@ class Profile extends Component {
         })
     }
 
+    doValidations = () => {
+        //console.log("Invalidations", this.state);
+        displayError = (
+            <div>{this.state.errorMessage}</div>
+        )
+        var phonenoRegex = /^\d{10}$/;
+        var zipcodeRegex = /^\b\d{5}(-\d{4})?\b$/;
+
+        if (!this.state.personalProfile.firstName) {
+            alert("firstName required");
+            this.setState({
+                errorMessage: "firstName Required",
+                fadeModel: "dummy"
+            })
+        } else if (!this.state.personalProfile.lastName) {
+            alert("lastName required");
+            this.setState({
+                errorMessage: "lastName Required",
+                fadeModel: "dummy"
+            })
+        } else if (!this.state.personalProfile.country) {
+            alert("City required");
+            this.setState({
+                errorMessage: "City Required",
+                fadeModel: "dummy"
+            })
+        }else if(!(phonenoRegex.test(this.state.personalProfile.contactInfo))){
+            alert("invalid phone no");
+            this.setState({
+                errorMessage: "Invalid Phone No.",
+                fadeModel: "dummy"
+            })
+        } else if(!(zipcodeRegex.test(this.state.personalProfile.zipcode))){
+            alert("invalid zip code");
+            this.setState({
+                errorMessage: "Invalid Zip Code",
+                fadeModel: "dummy"
+            })
+        }else {
+            localStorage.setItem("userCity", this.state.country);
+            this.setState({
+                formValidated: true,
+                fadeModel: "modal",
+                errorMessage: ""
+            })
+        }
+    }
+
     submitPersonalProfile = async () => {
-        console.log("personal profile data : ", this.state);
-        this.setState({
-            tempResume: "",
-            resume: "",
-        })
-        await axios.put(IP_backEnd + '/applicant/updateProfile', this.state)
-            .then(response => {
-                console.log(response);
-            });
-        await this.getProfileData();
+        this.doValidations();
+        if (this.state.formValidated) {
+            console.log("form validated");
+            console.log("personal profile data : ", this.state);
+            this.setState({
+                tempResume: "",
+                resume: "",
+            })
+            await axios.put(IP_backEnd + '/applicant/updateProfile', this.state)
+                .then(response => {
+                    console.log(response);
+                });
+            await this.getProfileData();
+            //alert("form Submitted");
+        } else {
+            //alert("do validations");
+        }
     }
 
     submitExperienceDetails = async () => {
@@ -357,12 +428,17 @@ class Profile extends Component {
         }
 
         var otherButtons;
+        var viewsCard;
         if (this.state.email != localStorage.getItem('userEmail')) {
+            //////////////////// donot display views count
+            viewsCard = (<div></div>);
+            ///////////////////
             if (this.state.isConnected === 1) {
                 otherButtons = (
                     <div className="mr-auto  borderMe">
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
                         <button className="btn btn-success linkedInBtn marginLeft disabled">Connected</button>
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.messagesBtn} >messages</button>
                     </div>
                 )
             } else if (this.state.isConnected === 0) {
@@ -370,6 +446,7 @@ class Profile extends Component {
                     <div className="mr-auto  borderMe">
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
                         <button className="btn btn-warning linkedInBtn marginLeft" onClick={this.addConnection}>Pending...</button>
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.messagesBtn}>messages</button>
                     </div>)
             }
             else {
@@ -377,10 +454,21 @@ class Profile extends Component {
                     <div className="mr-auto  borderMe">
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.addConnection}>Connect</button>
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.messagesBtn}>messages</button>
                     </div>)
             }
 
         } else {
+
+            viewsCard = (<div className="col-md-12 profileCard">
+                <div className="column insideCard paddingLeft">
+                    <h4>Your Dashboard</h4>
+                    <p><i>private to you</i></p>
+                    <p className=""><i className="far fa-eye fa-2x">&nbsp;{this.state.personalProfile.views}</i></p>
+                    <p>Who viewed your profile</p>
+                </div>
+            </div>);
+
             otherButtons = (
                 <div className="mr-auto  borderMe">
                     <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
@@ -459,15 +547,8 @@ class Profile extends Component {
                                         <p>profile views</p>
                                     </div>
                                 </div> */}
+                                {viewsCard}
 
-                                <div className="col-md-12 profileCard">
-                                    <div className="column insideCard paddingLeft">
-                                        <h4>Your Dashboard</h4>
-                                        <p><i>private to you</i></p>
-                                        <p className=""><i className="far fa-eye fa-2x">&nbsp;{this.state.personalProfile.views}</i></p>
-                                        <p>Who viewed your profile</p>
-                                    </div>
-                                </div>
                                 <div className="col-md-12 profileCard">
                                     <div className="col-md-12 row insideCard">
                                         <div className="row col-md-12">
@@ -549,6 +630,7 @@ class Profile extends Component {
                                     <div class="modal-body form">
                                         <div class="row paddingLeft">
                                             <div class="column">
+                                                {displayError}
                                                 <label className="">First Name</label>
                                                 <input type="text" id="" className="form-control" name="firstName" value={this.state.personalProfile.firstName} onChange={this.handlePersonalProfileChange}></input>
                                             </div>
@@ -595,6 +677,7 @@ class Profile extends Component {
                                                         <input type="text" id="" className="form-control" name="empCity" value={this.state.experience.empCity} onChange={this.handleExperienceChange}></input>
                                                     </div>
                                                     <div class="column paddingLeft">
+                                                        {/* country field, dummy name city */}
                                                         <label className="">Country</label>
                                                         <input type="text" id="" className="form-control" name="empCountry" value={this.state.experience.empCountry} onChange={this.handleExperienceChange}></input>
                                                     </div>
@@ -652,7 +735,8 @@ class Profile extends Component {
                                         </div>
                                         <div class="row paddingLeft">
                                             <div class="column">
-                                                <label className="">Country</label>
+                                                {/* Country label is replaced by dummylabel CIty */}
+                                                <label className="">City</label>
                                                 <input type="text" id="" className="form-control" name="country" value={this.state.personalProfile.country} onChange={this.handlePersonalProfileChange}></input>
                                             </div>
                                             <div class="column paddingLeft">
@@ -683,7 +767,7 @@ class Profile extends Component {
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary linkedInBtn" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary linkedInBtn" onClick={this.submitPersonalProfile} data-dismiss="modal">Save changes</button>
+                                        <button type="button" class="btn btn-primary linkedInBtn" onClick={this.submitPersonalProfile} data-dismiss={this.state.fadeModel}>Save changes</button>
                                     </div>
                                 </div>
                             </div>

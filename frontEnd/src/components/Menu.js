@@ -10,11 +10,20 @@ import EasyApply from './EasyApply';
 //import PostAJob from './PostAJob';
 //import RecHome from './RecHome';
 import newsFeed from './newsFeed';
+import CityWiseApplications from './Dashboard/CityWiseApplications';
 
 
 import RecHome from './RecHome'
 import Home from './Home';
+
 import PostAJob from './PostAJob'
+
+
+import ApplicantDashboard from './ApplicantDashboard';
+
+
+
+
 import JobDisplay from './JobDisplay';
 import RecruiterPostJob from './RecruiterPostJob';
 import Dashboard from './AdminDashboard';
@@ -48,11 +57,16 @@ class Menu extends Component {
                 <Route path='/recHome' component={RecHome} />
                 <Route path='/postAJob' component={PostAJob} />
                 <Route path='/reactPDF' component={ReactPDF} />
+                <Route path='/applicantDashboard' component={ApplicantDashboard}/>
                 <Route path='/apply' component={Apply} />
                 <Route path='/easyApply' component={EasyApply} />
                 <Route path='/savedJobs' component={savedJobs} />
+
                 <Route path='/top5Less' exact component={top5Less} />
                 <Route path='/getTop10' exact component={getTop10} />
+
+                <Route path='/citywise' component={CityWiseApplications}/>
+
             </div>
         );
     }

@@ -12,9 +12,7 @@ export default function (state = initialState, action) {
             participant : action.payload,
         }
         default: {
-            return{
-                state,
-            }
+            return state;
         }
     }
 }

@@ -5,6 +5,7 @@ import axios from "axios";
 import {Link} from 'react-router-dom';
 import { IP_NODE_PORT, IP_backEnd } from '../config/config.js'
 import '../css/Jobdisplay.css'; 
+import EasyApply from './EasyApply';
 
 class JobDisplay extends Component {
     constructor(props) {
@@ -16,22 +17,130 @@ class JobDisplay extends Component {
             experience_level:"",
             type_of_apply:"any",
             company:"",
-            timelapse:23445
+            timelapse:23445,
+            applydisplay:"",
+            firstName: "",
+            lastName: "",
+            email: "",
+            resume: "",
+            headLine: "",
+            contactInfo: ""
          }
          this.handleEvent=this.handleEvent.bind(this)
          this.handleArray=this.handleArray.bind(this)
          this.submitJobCriteria=this.submitJobCriteria.bind(this)
          this.submitAdvanceJobCriteria=this.submitAdvanceJobCriteria.bind(this)
+         this.submitJobApplication=this.submitJobApplication.bind(this);
     }
 
 
 
-    componentDidMount(){
-        const data={email:"abc"}
+    async componentDidMount(){
+        const data={email: localStorage.getItem('userEmail')}
         this.props.submitJobDisplay(data)
         this.setState({id:this.props.jobid})
-       
+        //alert(localStorage.getItem('userEmail'))
+        await axios.get(IP_backEnd+`/userProfile?email=${localStorage.getItem('userEmail')}`)
+        .then((res)=>{
+            console.log("Getting user profile");
+            //console.log(res.data[0].personalProfile.firstName);
+            if(res.status==200){
+                this.setState({
+                    email:localStorage.getItem('userEmail'),
+                    firstName:res.data[0].personalProfile.firstName,
+                    lastName:res.data[0].personalProfile.lastName,
+                    contactInfo:res.data[0].personalProfile.contactInfo
+                })
+                //console.log(this.state)
+            }
+        }).catch(err=>{
+            console.log(err);
+        })
     }
+
+
+    submitJobApplication = (e) => {
+        console.log("Inside Job Application submit", this.state);
+        e.preventDefault();
+        console.log(this.state);
+        const jobdata = { 
+            jobID:localStorage.getItem('easyapplyid'),
+            resume: "",
+            email: localStorage.getItem('userEmail'),
+            cover: "",
+            firstName: "",
+            lastName: "",
+            address: "",
+            city: "",
+            hear: "",
+            sponsorship: "",
+            disability: "",
+            resume: '',
+            tempResume:'',
+            isNewResumeUploading: false,};
+    var ackmessage;
+    axios.defaults.withCredentials = true;
+    if(this.state.email=="" || this.state.fName=="" || this.state.lastName==""){
+        ackmessage="One or more required fields are empty. PLease fill the information."
+    }
+    else{
+        axios.post(IP_backEnd + '/jobApplication/apply', jobdata)
+        .then(response => {
+            if (response.status === 200) {
+                alert("Applied to the position successfull !");
+                ackmessage="sucess"
+                
+                console.log("Job Application successful, data inserted");
+                // this.props.history.push('/Login');
+            }
+        })
+        .catch((error) => {
+            alert("Data invalid");
+            console.log("Response status : ", error.response.status, "Response : ", error.response.data);
+        })
+
+        const data={
+            clicks:0,
+            job_id:localStorage.getItem('easyapplyid'),
+            recruiter_email:localStorage.getItem('userEmail'),
+            city:"SF",
+            // city:window.localStorage.getItem('city'),
+            half_filled:0,
+            full_filled:1
+        }
+        this.props.logData(data)
+         console.log("Inside handleNew")
+
+    }
+
+    this.setState({message:ackmessage})
+    }
+
+    handleSaveJob=(operation,email,title)=>{
+        const data={
+            job_id:operation,
+            recruiter_email:email,
+            title:title
+        }
+        const data1={
+            saveJob:operation,
+            email:localStorage.getItem('userEmail'),
+        }
+        alert(data1.saveJob+data1.email)
+        axios.put(IP_backEnd + '/savejob', data1)
+        .then(response => {
+            if (response.status === 200) {
+                alert("saved successfull !");
+                
+                
+                console.log("Job Application successful, data inserted");
+                // this.props.history.push('/Login');
+            }
+        })
+
+
+    }
+
 
     handleEvent(e){
         let target=e.target;
@@ -53,11 +162,13 @@ class JobDisplay extends Component {
         this.setState({experience_level:this.state.experience_level.concat(value+",")})
         console.log("Hello in select checkbox")
     }
+
     resetJob=(e)=>{
             console.log("reset data of type of apply")
             this.setState({type_of_apply:"any"})
             // this.submitAdvanceJobCriteria()
             const data={
+                email: localStorage.getItem('userEmail'),
                 search:true,
                 searchjob:this.state.searchjob,
                 searchlocation:this.state.searchlocation,
@@ -80,6 +191,7 @@ class JobDisplay extends Component {
             searchonly:true,
             searchjob:this.state.searchjob,
             searchlocation:this.state.searchlocation,
+            email: localStorage.getItem('userEmail')
         }
         this.props.submitJobSearch(data)
     }
@@ -108,10 +220,21 @@ class JobDisplay extends Component {
         console.log("reaced inside"+ operation + email) 
         console.log("operation")
         this.setState({id:operation})
+
+        const formData={
+            jobId:operation,
+            email:localStorage.getItem('userEmail')
+        }
+        axios.post(IP_backEnd + '/singleJobApplication', formData)
+        .then((response) => {
+            console.log(response.data);
+            this.setState({applydisplay:response.data})
+        });
+
         const data={
             clicks:1,
             job_id:operation,
-            recruiter_email:"aditi12395@gmail.com",
+            recruiter_email:localStorage.getItem('userEmail'),
             city:"SF",
             // city:window.localStorage.getItem('city'),
             half_filled:0,
@@ -122,7 +245,49 @@ class JobDisplay extends Component {
         
        
     }
+
+    handleHalffilled1=(operation,email)=>{
+        console.log("I am called for half filled east")
+        localStorage.setItem('easyapplyid',operation)
+        this.props.applyWindow(operation)
+        console.log(this.props.applyid)
+        
+        const data={
+            clicks:0,
+            job_id:operation,
+            recruiter_email:localStorage.getItem('userEmail'),
+            city:"SF",
+            // city:window.localStorage.getItem('city'),
+            half_filled:1,
+            full_filled:0
+        }
+        this.props.logData(data)
+        
+    }
+
+    handleHalffilled=(operation,email)=>{
+        console.log("I am called for half filled")
+        this.props.applyWindow(operation)
+        console.log(this.props.applyid)
+       localStorage.setItem('jobapplyid',operation)
+       console.log(localStorage.getItem('jobapplyid'))
+        window.open("/apply", "_blank")
+        
+        const data={
+            clicks:0,
+            job_id:operation,
+            recruiter_email:localStorage.getItem('userEmail'),
+            city:"SF",
+            // city:window.localStorage.getItem('city'),
+            half_filled:1,
+            full_filled:0
+        }
+        this.props.logData(data)
+        
+    }
+
     render() { 
+
         var tempDate = new Date()-new Date("2018-11-24T07:04:13.000Z");
         console.log(tempDate)
         var day = 1000 * 60 * 60 * 24;
@@ -173,7 +338,7 @@ class JobDisplay extends Component {
                      
                         <div className="col-lg-4 mt-2"> <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} /></div>
                         <div className="col-lg-7 mt-2 ml-2">
-                        <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={()=>this.handleNew(job.job_id,job.job_id)}><h5>{job.title}</h5></button>
+                        <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={()=>this.handleNew(job.job_id,job.recruiter_email)}><h5>{job.title}</h5></button>
                         <h6 className="text-capitalize m-0 p-0">{job.company}</h6>
                         <div className="text-muted text-capitalize">{job.location}</div>
                         <div className="jobdescribe"><small>{job.description}</small></div>
@@ -208,27 +373,122 @@ class JobDisplay extends Component {
                           console.log(days)
                           console.log(months)
                           var diffdate=hours>24?days+" days ago": hours+" hours ago"
-                          if(months>0)
+                          if(months>0){
                                 diffdate= months+" months ago"
-                        if(job.type_of_apply=="easyapply")
-                        al=(<button className="btn btn-primary text-white ml-2 p-2"><i className=" fa fa-lg text-white fa-linkedin-square"></i> <strong>Easy Apply</strong></button>)
-                        else
-                            al=(<button className="btn btn-primary text-white ml-2 p-2"> <strong>Apply</strong></button>)
-                        //  if(this.state.id==0) this.setState({id:this.props.jobid})
-                        if(job.job_id==this.state.id)
+                          }    
+                        
+                        //   onClick={()=>{localStorage.setItem('easyapplyid',job.job_id)}}
+                        //  && this.state.applydetails=="210"
+                        if(job.type_of_apply=="easyapply" )
+
+                            al=(<button className="btn btn-primary text-white ml-2 p-2" data-toggle="modal" data-target="#easyApplyModal" 
+                            onClick={()=>this.handleHalffilled1(job.job_id,job.recruiter_email)}>
+                        <i className=" fa fa-lg text-white fa-linkedin-square"></i> <strong>Easy Apply</strong></button>)
+                        
+                        else 
+                 
+                            al=(<button className="btn btn-primary text-white ml-2 p-2 " type="submit" onClick={()=>this.handleHalffilled(job.job_id,job.recruiter_email)} > <strong>Apply</strong></button>)
+                   
+                        
+                    
+                       
+                    if(job.job_id==this.state.id){
+                         if(this.state.applydisplay=="200")
+                                al=(<h5 className="text-danger mt-2" >Already applied</h5>) 
                     return(
                         <div className="ml-2">    
+
+               <div class="modal fade" id="easyApplyModal" tabindex="-1" role="dialog" aria-labelledby="easyApplyModalTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="easyApplyModal">Apply to (company name)</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                {/*<div className="row borderMe">
+                                    <div className="profilePic-easyApply" >
+                                        <img className="img-fluid"></img>
+                                        <div className="ml-auto paddingLeft-easyApply paddingRight-easyApply ">
+                                            <p>Actively seeking summer'19 Internship | pursuing Master's in Software Engineering, San Jose State University.
+                                            <br></br><a href="/profile">Review Profile</a></p>
+                                             <p>{this.state.headLine}</p> 
+                                        Review Profile link
+                                        
+                                        
+
+                                        </div>
+                                    </div>
+                                </div>*/}
+
+                                {/* Image with name and summary */}
+
+                                <div class="modal-body form">
+                                <div class="row marginTop">
+                                        <div class="col">
+                                            <label className="">First Name</label>
+                                            <input type="text" id="" className="form-control" name="firstName" value={this.state.firstName} onChange={this.handlePersonalProfileChange} ></input>
+                                        </div>
+                                        <div class="col">
+                                            <label className="">Last Name</label>
+                                            <input type="text" id="" className="form-control" name="lastName" value={this.state.lastName}onChange={this.handlePersonalProfileChange} ></input>
+                                        </div>
+                                    </div>
+                                    <div class="row paddingLeft">
+                                        <div class="column">
+                                            <label className="">Email</label>
+                                            <input type="text" id="" className="form-control" name="firstName" value={this.state.email} onChange={this.handlePersonalProfileChange}></input>
+                                        </div>
+                                    </div>
+                                    <div class="row paddingLeft">
+                                        <div class="column">
+                                            <label className="">Phone</label>
+                                            <input type="text" id="" className="form-control" name="contactInfo" value={this.state.contactInfo} onChange={this.handlePersonalProfileChange}></input>
+                                        </div>
+                                    </div>
+                                    <div class="row marginTop">
+                                        <div class="col-md-12 cursorMe" data-toggle="collapse" data-target="#experienceCollapse">
+                                            <label className=""> Resume (Optional) </label>
+                                            <input type="text" id="" className="form-control" name="resume" value="Resume taken from Linkedin" onChange={this.handlePersonalProfileChange} disabled></input>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row paddingLeft">
+                                        
+                                            <p> We include a copy of your full profile with your application
+                                            <br></br>
+                                            <a href="">Learn</a> "what we do with your phone number and resume.</p>
+                                       
+                                    </div>
+                                    <div>
+                                        <input id="follow-company" type="checkbox" value="" checked/>
+                                        <label>&nbsp;Follow Us</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary linkedInBtn" data-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary linkedInBtn" onClick={this.submitJobApplication}>Submit Application</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                         <div className="row smooth-scroll mt-3">
                             <div className="col-lg-4 mt-2"> <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} /></div>
                             <div className="col-lg-7 mt-2 ml-2">
-                            <button className="btn btn-link m-0 p-0 text-primary text-capitalize"><h4>{job.title}</h4>
+                            <button className="btn btn-link m-0 p-0 text-primary text-capitalize"><h4>{job.title}  {this.state.applydisplay}</h4>
                             </button>
                             <h4 className="text-capitalize ">{job.company}</h4>
                             <div className="text-muted text-capitalize">{job.location}</div>
                             <div className="text-muted">
                             <small>Posted {diffdate} ago <span>-- views</span></small></div> 
                             <div className="mt-2">
-                            <button className="btn btn-primary text-white p-2 "><strong>Save</strong></button> 
+                            <button className="btn btn-primary text-white p-2 " 
+                            onClick={()=>this.handleSaveJob(job.job_id,job.recruiter_email,job.title)}><strong>Save</strong></button> 
                             {al}
                                
                              </div>                  
@@ -273,8 +533,9 @@ class JobDisplay extends Component {
                          <div className="ml-3 mr-3 mt-2">
                          <q><i><small>Any unsolicited resumes/candidate profiles submitted through our website or to personal email accounts of employees of {job.company} and any subsidiaries of {job.company} are considered property of {job.company} and any subsidiaries of {job.company} and are not subject to payment of agency fees.</small></i></q>
                          </div>
-                         </div>)
+                         </div>)}
                      })
+                    
          }
 
 
@@ -418,12 +679,14 @@ class JobDisplay extends Component {
             </div>
         );
     }
+
 }
 const mapStateToProps = state =>{
     return {
        jobdetails : state.jobDisplay.jobdetails,
         history: state.history,
-        jobid:state.jobDisplay.jobid
+        jobid:state.jobDisplay.jobid,
+        applyid:state.jobDisplay.applyid
     };
 }
 
@@ -458,6 +721,10 @@ const mapDispatchStateToProps = dispatch => {
                 dispatch({type: 'FULLDETAILS',payload : response.data,statusCode : response.status})
         });
         },
+        applyWindow:(operation)=>{
+            console.log("inside reducer call: before " + operation)
+            dispatch({type:'JOB_ID',payload:operation})
+        }
         
     }
 }
