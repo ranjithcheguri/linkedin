@@ -60,7 +60,7 @@ class Profile extends Component {
             resume: '',
             tempResume: '',
             isNewResumeUploading: false,
-            isConnected: 2,
+            //isConnected: 2,
             check: true,
             displayView: 0,
             formValidated: false,
@@ -68,6 +68,7 @@ class Profile extends Component {
             fadeModel: "dummy",
             phoneNoValid:false,
             zipcodeValid:false,
+            resumeCheck:''
         }
     }
     // 0-->pending
@@ -120,6 +121,11 @@ class Profile extends Component {
                     else if (res.data.status == 1) {
                         this.setState({
                             isConnected: 1
+                        })
+                    }
+                    else{
+                        this.setState({
+                            isConnected: 2
                         })
                     }
                 })
@@ -177,6 +183,9 @@ class Profile extends Component {
                 this.setState({
                     ...response.data[0]
                 })
+                localStorage.setItem('city',response.data[0].personalProfile.country)
+                localStorage.setItem('resumeCheck',response.data[0].resumeCheck)
+                //alert(localStorage.getItem('resumeCheck'))
             })
         this.props.getProfileDataAction(this.state.email);
 
@@ -226,7 +235,8 @@ class Profile extends Component {
         //this.setState({isNewResumeUploading: true})
         if (e.target.name == 'resume') {
             this.setState({
-                tempResume: e.target.files[0]
+                tempResume: e.target.files[0],
+                resumeCheck:localStorage.getItem('userEmail')
             })
         }
     }
@@ -359,6 +369,8 @@ class Profile extends Component {
             })
             await axios.put(IP_backEnd + '/applicant/updateProfile', this.state)
                 .then(response => {
+                    localStorage.setItem('city',this.state.personalProfile.country)
+                localStorage.setItem('resumeCheck',this.state.resumeCheck)
                     console.log(response);
                 });
             await this.getProfileData();
@@ -433,7 +445,7 @@ class Profile extends Component {
             //////////////////// donot display views count
             viewsCard = (<div></div>);
             ///////////////////
-            if (this.state.isConnected === 1) {
+            if (this.state.isConnected == 1) {
                 otherButtons = (
                     <div className="mr-auto  borderMe">
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
@@ -441,7 +453,7 @@ class Profile extends Component {
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.messagesBtn} >messages</button>
                     </div>
                 )
-            } else if (this.state.isConnected === 0) {
+            } else if (this.state.isConnected == 0) {
                 otherButtons = (
                     <div className="mr-auto  borderMe">
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>

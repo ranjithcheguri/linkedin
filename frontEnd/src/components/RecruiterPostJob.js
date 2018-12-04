@@ -45,7 +45,7 @@ class RecruiterPostJob extends Component {
     onSubmitForm =async (e) =>{
         console.log("here in form");
         let formData = new FormData();
-        formData.append('email', this.state.recruiter_email+this.state.company);
+        formData.append('email', this.state.recruiter_email);
         formData.append('companylogo', this.state.companylogo);
         console.log("Logo before uploading: ", this.state.companylogo);
         await axios.post(IP_backEnd + '/recruiter/logoUpload', formData)
