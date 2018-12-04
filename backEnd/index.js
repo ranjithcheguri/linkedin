@@ -24,7 +24,7 @@ var viewJobApplications = require('./apis/viewJobApplications');
 var searchJob = require('./apis/searchjob');
 var logData =require('./apis/logData')
 var logSavedJob=require('./apis/logSavedJob')
-
+var getOneJob = require('./apis/getOneJob');
 
 //Only for AWS
 const busboy = require('connect-busboy');
@@ -96,7 +96,6 @@ app.use('/',logData)
 app.use('/',logSavedJob)
 app.use('/',userLogin);
 
-
 //Route imports
 var viewUserProfile = require('./apis/viewUserProfile');
 var deleteUserProfile = require('./apis/deleteUserProfile');
@@ -124,6 +123,7 @@ var changeMessageStatus = require('./apis/changeMessageStatus')
 var getAllPostedJobs = require('./apis/getAllPostedJobs')
 var authRecruiter = require('./apis/authRecruiter')
 var bottomTop5 = require('./apis/bottomTop5')
+var getTop10 = require('./apis/getTop10')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);
@@ -166,9 +166,18 @@ app.use('/',changeMessageStatus)
 app.use('/',getAllPostedJobs)
 //this route is used to authenticate the recruiter before posting the job
 app.use('/',authRecruiter)
+
+
 //this route will return top 5 job posting with less number of applications
 app.use('/',bottomTop5)
 
+//this route will return top 10 job posting with it's application/month
+app.use('/',getTop10)
+
+
+
+//get one job at a time, used in displaying saved jobs.
+app.use('/',getOneJob)
 
 
 
