@@ -1,7 +1,8 @@
 
 const initialState = {
    jobdetails:"",
-   jobid:0
+   jobid:0,
+   applyid:0
   };
   
   export default function (state = initialState, action) {
@@ -9,6 +10,15 @@ const initialState = {
 
         console.log(action.type+ "a")
         console.log(action.statusCode)
+        if(action.type === "JOB_ID"){
+          console.log("Reducer : Job id setting for use!");
+          console.log(action.payload)
+          return {
+            ...state,
+            applyid:action.payload
+          
+          }
+        }
       if(action.type === "JOB_DISPLAY" && action.statusCode===200 ){
           console.log("Reducer : Job details found successful !");
           console.log(action.payload)

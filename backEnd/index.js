@@ -24,6 +24,8 @@ var viewJobApplications = require('./apis/viewJobApplications');
 var searchJob = require('./apis/searchJob');
 var logData =require('./apis/logData')
 var logSavedJob=require('./apis/logSavedJob')
+var particularjobapplication=require('./apis/viewParticularJobApplication')
+
 var getOneJob = require('./apis/getOneJob');
 var cityWiseApplications = require('./apis/cityWiseApplications');
 
@@ -96,6 +98,7 @@ app.use('/',searchJob)
 app.use('/',logData)
 app.use('/',logSavedJob)
 app.use('/',userLogin);
+app.use('/',particularjobapplication)
 
 //Route imports
 var viewUserProfile = require('./apis/viewUserProfile');
@@ -124,6 +127,7 @@ var getConnections = require('./apis/getConnections');
 var changeMessageStatus = require('./apis/changeMessageStatus')
 var getAllPostedJobs = require('./apis/getAllPostedJobs')
 var authRecruiter = require('./apis/authRecruiter')
+var particularjobapplication=require('./apis/viewParticularJobApplication')
 
 //This route is used to view the user profile by email
 app.use('/', viewUserProfile);

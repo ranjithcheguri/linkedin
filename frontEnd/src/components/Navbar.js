@@ -56,12 +56,12 @@ class Navbar extends Component {
             window.location.reload();
         }
         else {
-            alert("Give a valid Email ID")
+            alert("Give a valid Email ID");
         }
     }
 
     openProfile = () => {
-        this.props.history.push("/profile",localStorage.getItem('userEmail'));
+        this.props.history.push("/profile", localStorage.getItem('userEmail'));
         window.location.reload();
     }
 

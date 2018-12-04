@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 const jobApplicationschema= new mongoose.Schema({
     jobID : {
-        type : String
+        type : Number
     },
     resume : {
         type : String
