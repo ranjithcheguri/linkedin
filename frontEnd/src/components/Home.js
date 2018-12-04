@@ -41,6 +41,51 @@ class Home extends Component {
         })
     }
 
+    pushCodeToMongoDB = () => {
+        // //*********************      PUSH USER TO MONGO  START      **************************** */
+        const data = {
+            email: this.state.email,
+            personalProfile: {
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                headLine: "headline comes here",
+                city: "SAN JOSE",
+                country: "ujbekistaaaaan",
+                zipcode: "",
+                contactInfo: "contactInfo",
+                summary: "summary comes here",
+            },
+            experience: {
+                designation: "Please Enter your experience details",
+                company: "",
+                empStart: "",
+                empEnd: "",
+                empCity: "",
+                empCountry: ""
+            },
+            education: {
+                college: "Please Enter your education details",
+                major: "",
+                eduStart: "",
+                eduEnd: ""
+            },
+            skills: "",
+            generateSkillFlag: true,
+            isLoading: true,
+            profilePic: "",
+            resume: '',
+            tempResume: '',
+            isNewResumeUploading: false,
+            isConnected: 2,
+            check: true,
+            displayView: 0
+        }
+        axios.put(IP_backEnd + '/applicant/updateProfile', data)
+            .then(response => {
+                console.log(response);
+            });
+    }
+
     handleClick(e) {
         console.log("I am here inside form submit")
         e.preventDefault();
@@ -70,6 +115,9 @@ class Home extends Component {
         }
         else {
             this.setState({ flag: 0 })
+
+            setTimeout(this.pushCodeToMongoDB(),2000); 
+
             axios.post(IP_backEnd + '/signup', data)
                 .then(response => {
                     if (response.status === 200) {
@@ -84,6 +132,7 @@ class Home extends Component {
                     alert("Email already exists");
                     // console.log("Response status : ", error.response.status, "Response : ", error.response.data);
                 })
+
         }
         this.setState({ message: ackmessage })
     }
@@ -111,7 +160,7 @@ class Home extends Component {
                 }
                 else if (this.props.response === 200) {
                     //localStorage.setItem('userEmail',email);
-                    this.props.history.push('/profile',email);
+                    this.props.history.push('/profile', email);
                 }
             }, 1000);
         } else { alert("Wrong email format") }

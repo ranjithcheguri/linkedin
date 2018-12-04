@@ -25,7 +25,7 @@ router.put('/applicant/updateProfile', function (req, res) {
 router.put('/applicant/updateProfile/updateViews', function (req, res) {
     console.log("Inside Profile views", req.body);
     console.log("........................................................................................................................................................................");
-    applicantProfiles.updateOne({ email: req.body.email }, { $inc: { "personalProfile.views": 1 } }, { upsert: true }, function (err, result) {
+    applicantProfiles.updateOne({ email: req.body.email }, { $inc: { "personalProfile.views": 1 } }, function (err, result) {
         if (err) {
             console.log("Error updating the Profile views.");
             console.log(err)

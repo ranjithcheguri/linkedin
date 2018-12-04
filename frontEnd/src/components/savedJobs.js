@@ -46,6 +46,10 @@ class savedJobs extends Component {
             });
     }
 
+    redirectToApplyJob=()=>{
+        
+    }
+
 
     displayJob = () => {
         //this.props.history.push("/jobDisplay")
@@ -57,13 +61,14 @@ class savedJobs extends Component {
             var jobsList = this.state.savedJobsDetails.map(job => {
                 return (<div className="row col-md-12 paddingTop ">
                     <div className="col-md-2"><img></img></div>
-                    <div className="col-md-10  skills">
+                    <div className="col-md-8  skills">
                         <a onClick={this.displayJob()}>
                             <div className="col-md-12"><h5>{job.title}</h5></div>
                             <div className="col-md-12">{job.company}</div>
                             <div className="col-md-12">{job.location}</div>
                         </a>
                     </div>
+                    <div className="col-md-2"><button className="btn btn-primary linkedInBtn" onClick={this.redirectToApplyJob}>{job.type_of_apply}</button></div>
                 </div>);
             })
         } else {

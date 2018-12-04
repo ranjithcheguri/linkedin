@@ -53,6 +53,7 @@ class Navbar extends Component {
         if (this.state.searchString.length > 0) {
             this.props.searchUserInfo(this.state.searchString);
             this.props.history.push("/profile", this.state.searchString)
+            window.location.reload();
         }
         else {
             alert("Give a valid Email ID")
@@ -60,7 +61,8 @@ class Navbar extends Component {
     }
 
     openProfile = () => {
-        this.props.history.push("/Profile",localStorage.getItem('userEmail'));
+        this.props.history.push("/profile",localStorage.getItem('userEmail'));
+        window.location.reload();
     }
 
     logout = () => {
@@ -93,7 +95,7 @@ class Navbar extends Component {
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="/connections"><i class="fal fa-users fa-lg iconColour">
-                                            <Badge count={this.state.acceptedConnections.length} showZero>
+                                            <Badge count={this.state.acceptedConnections.length} >
                                                 <a href="/connections" className="head-example" />
                                             </Badge></i><br />
                                             <span class="nav-icon-text">My Network</span></a>
@@ -108,7 +110,7 @@ class Navbar extends Component {
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fal fa-bell fa-lg iconColour">
-                                            <Badge count={this.state.acceptedConnections.length} showZero>
+                                            <Badge count={this.state.acceptedConnections.length} >
                                                 <a href="/connections" className="head-example" />
                                             </Badge></i><br />
                                             <span class="nav-icon-text">Notifications </span></a>
@@ -130,11 +132,11 @@ class Navbar extends Component {
                             <div class="borderLeft mr-auto mt-2 mt-lg-0">
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
-                                        <Link to="/recHome" className="nav-link" href="#"><i class="fal fa-building fa-lg iconColour"></i><br />
+                                        <Link to="/recHome" className="nav-link" href=""><i class="fal fa-building fa-lg iconColour"></i><br />
                                             <span class="nav-icon-text">Work</span></Link>
                                     </li>
                                     <li className="nav-item ">
-                                        <a className="nav-link align-middle" href="#">
+                                        <a className="nav-link align-middle" href="">
                                             <span class="nav-icon-text orangeText">Free upgrade to</span>
                                             <span class="nav-icon-text orangeText">Premium</span>
                                         </a>
