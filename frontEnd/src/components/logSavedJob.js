@@ -15,7 +15,7 @@ class LogSaveJob extends Component {
     componentDidMount() {
         console.log("I am here")
         const data={
-            recruiter_email:"aditi.singh@gmail.com",
+            recruiter_email:localStorage.getItem('userEmail'),
             search:true
         }
         axios.put(IP_backEnd+'/logSavedJob',data)
