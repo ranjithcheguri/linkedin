@@ -61,7 +61,6 @@ class Menu extends Component {
                 <Route path='/apply' component={Apply} />
                 <Route path='/easyApply' component={EasyApply} />
                 <Route path='/savedJobs' component={savedJobs} />
-
                 <Route path='/top5Less' exact component={top5Less} />
                 <Route path='/getTop10' exact component={getTop10} />
 

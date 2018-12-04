@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { IP_NODE_PORT, IP_backEnd } from '../config/config.js'
 import '../css/Jobdisplay.css';
 import EasyApply from './EasyApply';
+import '../css/Profile.css';
 
 class JobDisplay extends Component {
     constructor(props) {
@@ -310,6 +311,16 @@ class JobDisplay extends Component {
 
     }
 
+    openAppliedJobs = () => {
+        this.props.history.push("/applicantDashboard");
+    }
+
+    openSavedJobs = (e) => {
+        e.preventDefault();
+        this.props.history.push("/savedJobs");
+        //this.context.history.push('/savedJobs')
+    }
+
     getCompanyLogo = async (email) => {
         //console.log("fetching user profile pic...");
         //alert("inside company logo");
@@ -323,6 +334,8 @@ class JobDisplay extends Component {
                 })
             })
     }
+
+
 
     render() {
 
@@ -713,6 +726,10 @@ class JobDisplay extends Component {
                                 </div>
                             </li>
                         </ul>
+                        <div className="mx-auto">
+                            <Link to='/savedJobs'><button class="btn btn-primary linkedInBtn" >SAVED JODS</button></Link>
+                            <Link to='/applicantDashboard'><button class="btn btn-primary marginLeft linkedInBtn">APPLIED JOBS</button></Link>
+                        </div>
                     </div>
                 </nav><hr className="shadow"></hr>
 

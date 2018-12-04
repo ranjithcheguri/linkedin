@@ -17,13 +17,24 @@ class ViewConversation extends Component {
     }
 
     componentDidMount(){
-        axios.get(IP_backEnd+"/messages/user?participant1="+this.props.messagesState.participant+"&&participant2="+window.localStorage.getItem('userEmail'))
+        axios.get(IP_backEnd+"/messages/user?participant1="+this.props.location.state.participant+"&&participant2="+window.localStorage.getItem('userEmail'))
             .then(response => {
                 console.log(response.data);
+                if(response.data){
+                    this.setState({
+                        Message : this.state.Message.concat(response.data.messages),
+                    }) 
+                }
+                else{
+                    this.setState({
+                        Message:[]
+                    })
+            }
+            }).catch=(e)=>{
                 this.setState({
-                    Message : this.state.Message.concat(response.data.messages),
+                    Message:[]
                 })
-            })
+            }
     }
 
     replyChangeHandler = (e) => {

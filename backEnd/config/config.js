@@ -21,7 +21,7 @@ MongoClient.connect("mongodb://52.53.77.103:27017/admin", function(err, db) {
 const IP_MYSQL_DATABASE='cmpe273db.cqumuz1tfjsq.us-east-1.rds.amazonaws.com'
 
 const IP_KAFKA = 'localhost:2181';
-const CORS_ORIGIN = 'http://localhost:3000';
+const CORS_ORIGIN = 'http://linkiedinfrontend-274699885.us-west-1.elb.amazonaws.com:3000';
 
 //AWS credentials:Vinay
 const BUCKET_NAME = 'cmpe273';
