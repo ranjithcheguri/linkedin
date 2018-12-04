@@ -183,7 +183,7 @@ class Profile extends Component {
                 this.setState({
                     ...response.data[0]
                 })
-                localStorage.setItem('city',response.data[0].personalProfile.country)
+                localStorage.setItem('userCity',response.data[0].personalProfile.country)
                 localStorage.setItem('resumeCheck',response.data[0].resumeCheck)
                 //alert(localStorage.getItem('resumeCheck'))
             })
@@ -370,7 +370,7 @@ class Profile extends Component {
             })
             await axios.put(IP_backEnd + '/applicant/updateProfile', this.state)
                 .then(response => {
-                    localStorage.setItem('city',this.state.personalProfile.country)
+                    localStorage.setItem('userCity',this.state.personalProfile.country)
                 localStorage.setItem('resumeCheck',this.state.resumeCheck)
                     console.log(response);
                 });
