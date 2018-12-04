@@ -60,7 +60,7 @@ class Profile extends Component {
             isNewResumeUploading: false,
             isConnected: 2,
             check: true,
-            displayView:0
+            displayView: 0
         }
     }
     // 0-->pending
@@ -82,17 +82,17 @@ class Profile extends Component {
         this.updateViews();
     }
 
-    updateViews=()=>{
+    updateViews = () => {
         //alert("views")
         console.log("updating views")
-        if(this.state.email!=localStorage.getItem('userEmail')){
+        if (this.state.email != localStorage.getItem('userEmail')) {
             const data = {
-                email : this.state.email,
+                email: this.state.email,
             }
-            axios.put(IP_backEnd+'/applicant/updateProfile/updateViews',data)
-            .then((res)=>{
-                console.log("view incremented");
-            })
+            axios.put(IP_backEnd + '/applicant/updateProfile/updateViews', data)
+                .then((res) => {
+                    console.log("view incremented");
+                })
         }
     }
 
@@ -193,20 +193,25 @@ class Profile extends Component {
     }
 
     submitResume = async () => {
-        console.log("in Submit Resume");
-        this.setState({ resume: '' });
-        let formData = new FormData();
-        formData.append('email', this.state.email);
-        formData.append('resume', this.state.tempResume);
-        console.log("resume file :: before uploading ::", this.state.tempResume);
-        await axios.post(IP_backEnd + '/applicant/updateProfile/resumeUpload', formData)
-            .then((response) => {
-                console.log(response.data);
-            });
-        //this.getResume();
-        console.log("after uploading Resume");
-        //setTimeout(() => this.getResume(), 1500);
-        //this.setState({ isNewResumeUploading: false });
+        let extension = this.state.tempResume.name.slice(- 4);
+        console.log("in Submit Resume", extension);
+        if (extension == ".pdf") {
+            this.setState({ resume: '' });
+            let formData = new FormData();
+            formData.append('email', this.state.email);
+            formData.append('resume', this.state.tempResume);
+            console.log("resume file :: before uploading ::", this.state.tempResume);
+            await axios.post(IP_backEnd + '/applicant/updateProfile/resumeUpload', formData)
+                .then((response) => {
+                    console.log(response.data);
+                });
+            //this.getResume();
+            console.log("after uploading Resume");
+            //setTimeout(() => this.getResume(), 1500);
+            //this.setState({ isNewResumeUploading: false });
+        } else {
+            alert("ONLY .pdf allowed");
+        }
 
     }
 
@@ -221,20 +226,26 @@ class Profile extends Component {
 
     submitProfilePic = async () => {
 
-        this.setState({ profilePic: "" });
+        let extension = this.state.profilePic.name.slice(- 4);
+        console.log("in Submit ProfilePic", extension);
+        if (extension == ".jpg") {
+            this.setState({ profilePic: "" });
+            console.log(this.state.profilePic);
+            let formData = new FormData();
+            formData.append('email', this.state.email);
+            formData.append('profilePic', this.state.profilePic);
+            console.log("before setting profile pic")
+            await axios.post(IP_backEnd + '/applicant/updateProfile/profilePicUpload', formData)
+                .then((response) => {
+                    console.log(response.data);
+                });
+            //this.getProfilePic();
+            console.log("after setting profile pic")
+            setTimeout(() => this.getProfilePic(), 1500);
+        } else {
+            alert("only .jpg allowed for profile pic");
+        }
 
-        console.log(this.state.profilePic);
-        let formData = new FormData();
-        formData.append('email', this.state.email);
-        formData.append('profilePic', this.state.profilePic);
-        console.log("before setting profile pic")
-        await axios.post(IP_backEnd + '/applicant/updateProfile/profilePicUpload', formData)
-            .then((response) => {
-                console.log(response.data);
-            });
-        //this.getProfilePic();
-        console.log("after setting profile pic")
-        setTimeout(() => this.getProfilePic(), 1500);
     }
 
 
@@ -360,7 +371,7 @@ class Profile extends Component {
         var viewsCard;
         if (this.state.email != localStorage.getItem('userEmail')) {
             //////////////////// donot display views count
-            viewsCard=(<div></div>);
+            viewsCard = (<div></div>);
             ///////////////////
             if (this.state.isConnected === 1) {
                 otherButtons = (
@@ -389,14 +400,14 @@ class Profile extends Component {
 
         } else {
 
-            viewsCard=(<div className="col-md-12 profileCard">
-            <div className="column insideCard paddingLeft">
-                <h4>Your Dashboard</h4>
-                <p><i>private to you</i></p>
-                <p className=""><i className="far fa-eye fa-2x">&nbsp;{this.state.personalProfile.views}</i></p>
-                <p>Who viewed your profile</p>
-            </div>
-        </div>);
+            viewsCard = (<div className="col-md-12 profileCard">
+                <div className="column insideCard paddingLeft">
+                    <h4>Your Dashboard</h4>
+                    <p><i>private to you</i></p>
+                    <p className=""><i className="far fa-eye fa-2x">&nbsp;{this.state.personalProfile.views}</i></p>
+                    <p>Who viewed your profile</p>
+                </div>
+            </div>);
 
             otherButtons = (
                 <div className="mr-auto  borderMe">
@@ -477,7 +488,7 @@ class Profile extends Component {
                                     </div>
                                 </div> */}
                                 {viewsCard}
-                                
+
                                 <div className="col-md-12 profileCard">
                                     <div className="col-md-12 row insideCard">
                                         <div className="row col-md-12">
