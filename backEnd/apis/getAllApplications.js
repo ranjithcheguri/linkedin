@@ -1,6 +1,6 @@
 const router = require('express').Router();
 var { jobApplications } = require('../models/jobApplication');
-//var _ = require('lodash-node');
+var _ = require('lodash-node');
 var pool = require('../db/mysql');
 
 router.get('/applicant/applications', (req,res) => {
@@ -17,7 +17,7 @@ router.get('/applicant/applications', (req,res) => {
             res.end("Error finding mongo results for Job Applications");
         } else {
             var jobIDArray = _.chain(results).pluck('jobID').flatten().uniq().value();
-            let sql = "SELECT * FROM job where job_id IN(" + jobIDArray + ")";
+            let sql = "SELECT * FROM job where job_id IN(" + _.compact(jobIDArray) + ")";
             pool.getConnection(function (err, con) {
                 if (err) {
                     console.log("SQL connection error");

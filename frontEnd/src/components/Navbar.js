@@ -104,10 +104,13 @@ class Navbar extends Component {
                                         <Link to="/jobdisplay" className="nav-link" href="#"><i class="fal fa-suitcase fa-lg iconColour"></i><br />
                                             <div class="nav-icon-text">Jobs</div></Link>
                                     </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="#"><i class="fal fa-envelope fa-lg iconColour"></i><br />
-                                            <span class="nav-icon-text">Messaging</span></a>
-                                    </li>
+                                    <Link to='/messages'>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="#"><i class="fal fa-envelope fa-lg iconColour"></i><br />
+                                                <span class="nav-icon-text">Messaging</span>
+                                            </a>
+                                        </li>
+                                    </Link>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fal fa-bell fa-lg iconColour">
                                             <Badge count={this.state.acceptedConnections.length} >
