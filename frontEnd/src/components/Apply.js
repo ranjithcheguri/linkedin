@@ -19,7 +19,7 @@ class Apply extends Component {
         this.state = {
                 jobID:localStorage.getItem('jobapplyid'),
                 resume: "",
-                email: localStorage.getItem('userEmail'),
+                email: localStorage.getItem('applyrecruiteremail'),
                 cover: "",
                 firstName: "",
                 lastName: "",
@@ -106,12 +106,13 @@ class Apply extends Component {
                 sponsorship: this.state.sponsorship,
                 disability: this.state.disability,
                 tempResume:this.state.tempResume,
+                month:"December"
             //pull all the field details this.state....
         }
     var ackmessage;
     axios.defaults.withCredentials = true;
     if(this.state.email=="" || this.state.firstName=="" || this.state.lastName==""){
-        ackmessage="One or more required fields are empty. PLease fill the information."
+        alert("One or more required fields are empty. PLease fill the information.")
     }
     else{
         axios.post(IP_backEnd + '/jobApplication/apply', data)
@@ -128,17 +129,17 @@ class Apply extends Component {
     }
     this.setState({message:ackmessage})
 
-    // const data={
-    //     clicks:0,
-    //     job_id:localStorage.getItem('jobapplyid'),
-    //     recruiter_email:"aditi12395@gmail.com",
-    //     city:"SF",
-    //     // city:window.localStorage.getItem('city'),
-    //     half_filled:0,
-    //     full_filled:1
-    // }
-    // this.props.logData(data)
-    //  console.log("Inside handleNew")
+    const data1={
+        clicks:0,
+        job_id:localStorage.getItem('jobapplyid'),
+        recruiter_email:localStorage.getItem('applyrecruiteremail'),
+        city:localStorage.getItem('userCity'),
+        // city:window.localStorage.getItem('city'),
+        half_filled:0,
+        full_filled:1
+    }
+     this.props.logData(data1)
+     console.log("Inside handleNew")
     
     }
 
@@ -159,9 +160,10 @@ class Apply extends Component {
 
             {/* try to add the logo and name of the company */}
 
-            <h3>Engineering Intern (Summer 2019)</h3>
+            <h3>{localStorage.getItem('applytitle')}</h3>
             <br></br>
-            <h4>SAN FRANCISCO, CA UNIVERSITY (INTERNSHIPS) – ENGINEERING INTERN</h4>
+            <h4>{localStorage.getItem('applycompany')}</h4>
+            {/* <h5>{localStorage.getItem('applylocation')}</h5> */}
             <br></br>
                 <div >
                     <form onSubmit={this.submitEvent}>
@@ -474,8 +476,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchStateToProps = dispatch => {
     return {
-    logData:(data) => {
-        axios.put(IP_backEnd+'/recruiter/logData', data)
+    logData:(data1) => {
+        axios.put(IP_backEnd+'/recruiter/logData', data1)
         .then((response) => {
             dispatch({type: 'FULLDETAILS',payload : response.data,statusCode : response.status})
     });

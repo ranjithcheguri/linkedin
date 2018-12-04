@@ -1,48 +1,48 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import axios from "axios";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { IP_NODE_PORT, IP_backEnd } from '../config/config.js'
 import Navbar from './RecHomeNavbar'
-import RecruiterPostJobReducer  from './RecruiterPostJob'
+import RecruiterPostJobReducer from './RecruiterPostJob'
 class RecruiterPostJob extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            company:"",
-            location:"",
-            title:"",
-            jobfunction:"",
-            industry:"",
-            employementtype:"",
-            seniorlevel:"",
-            jobdescribe:"",
-            companyurl:"",
-            typeofapply:"",
-            companylogo:"",
-            recruiter_email:window.localStorage.getItem('userEmail')
-            
-         }
-         this.handleEvent=this.handleEvent.bind(this);
-        this.handleRadio=this.handleRadio.bind(this);
-        this.submitJobPost=this.submitJobPost.bind(this);
+        this.state = {
+            company: "",
+            location: "",
+            title: "",
+            jobfunction: "",
+            industry: "",
+            employementtype: "",
+            seniorlevel: "",
+            jobdescribe: "",
+            companyurl: "",
+            typeofapply: "",
+            companylogo: "",
+            recruiter_email: window.localStorage.getItem('userEmail')
+
+        }
+        this.handleEvent = this.handleEvent.bind(this);
+        this.handleRadio = this.handleRadio.bind(this);
+        this.submitJobPost = this.submitJobPost.bind(this);
     }
 
-    onFileSelect =(e)=>{
+    onFileSelect = (e) => {
         // console.log(files)
-        if(this.state.company==""){
+        if (this.state.company == "") {
             alert("Enter the company name and choose the file")
         }
-        else{
+        else {
             //alert(this.state.company)
             this.setState({
-                companylogo:e.target.files[0]
+                companylogo: e.target.files[0]
             });
         }
 
     }
 
-    onSubmitForm =async (e) =>{
+    onSubmitForm = async (e) => {
         console.log("here in form");
         let formData = new FormData();
         formData.append('email', this.state.recruiter_email);
@@ -55,90 +55,89 @@ class RecruiterPostJob extends Component {
         console.log("After uploading Logo");
     }
 
-    handleEvent(e){
-        let target=e.target;
-        let value=target.value;
-        let name=target.name;
+    handleEvent(e) {
+        let target = e.target;
+        let value = target.value;
+        let name = target.name;
         this.setState({
-            [name]:value,
-          
+            [name]: value,
+
         });
-        
+
         console.log("Hello")
     }
 
-    handleRadio(e){
-        let target=e.target;
-        let value=target.value;
-        let name=target.name;
+    handleRadio(e) {
+        let target = e.target;
+        let value = target.value;
+        let name = target.name;
         this.setState({
-            typeofapply:value,
-          
+            typeofapply: value,
+
         });
-        
+
         console.log("Hello")
     }
 
-    submitJobPost(){
+    submitJobPost() {
         console.log(this.state.typeofapply)
-        if(this.state.company===""||this.state.location===""||this.state.title===""||this.state.jobfunction===""||this.state.industry===""||this.state.employementtype===""||this.state.seniorlevel===""||this.state.jobdescribe===""||this.state.typeofapply==="")
-         {window.alert("Enter all the fields:")}
-        else{
-        const data={
-            recruiter_email:window.localStorage.getItem('userEmail'),
-            company:this.state.company,
-            location:this.state.location,
-            title:this.state.title,
-            jobfunction:this.state.jobfunction,
-            industry:this.state.industry,
-            employementtype:this.state.employementtype,
-            seniorlevel:this.state.seniorlevel,
-            jobdescribe:this.state.jobdescribe,
-            companyurl:this.state.companyurl,
-            typeofapply:this.state.typeofapply,
-           
-        }
-        this.props.submitJobPost(data)
-    }
-}
+        if (this.state.company === "" || this.state.location === "" || this.state.title === "" || this.state.jobfunction === "" || this.state.industry === "" || this.state.employementtype === "" || this.state.seniorlevel === "" || this.state.jobdescribe === "" || this.state.typeofapply === "") { window.alert("Enter all the fields:") }
+        else {
+            const data = {
+                recruiter_email: window.localStorage.getItem('userEmail'),
+                company: this.state.company,
+                location: this.state.location,
+                title: this.state.title,
+                jobfunction: this.state.jobfunction,
+                industry: this.state.industry,
+                employementtype: this.state.employementtype,
+                seniorlevel: this.state.seniorlevel,
+                jobdescribe: this.state.jobdescribe,
+                companyurl: this.state.companyurl,
+                typeofapply: this.state.typeofapply,
 
-    render() { 
+            }
+            this.props.submitJobPost(data)
+        }
+    }
+
+    render() {
         console.log("inside render")
         console.log(this.props.postjobstatus)
-        if(this.props.postjobstatus===true)
+        if (this.props.postjobstatus === true)
             window.alert("Job Posted successfully!")
-        return ( <div >
+        return (<div >
             <Navbar />
-             <div className="row bg-light">
-             <div class="col-sm-3 col-md-6 col-lg-7 border ml-5 mt-5 bg-white mb-5" >
-                   
+            <div className="row bg-light">
+                <div class="col-sm-3 col-md-6 col-lg-7 border ml-5 mt-5 bg-white mb-5" >
+
                     <h4 className="mt-3">Step 1: What job do you want to post?</h4>
 
                     {/* company. job title and location */}
                     <div className="row mt-4">
-                    <div className="col-sm-3 col-md-6 col-lg-4 ">
-                        <div>Company <sup className="text-primary"> *</sup></div>
-                        <input type="text" name="company" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2 "></input>
-                    </div>
-                    <div className="col-sm-3 col-md-6 col-lg-4 ">
-                        <div ><small>Job Title<sup className="text-primary"> *</sup></small></div>
-                        <input type="text" name="title" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2"></input>
-                    </div>
-                    <div className="col-sm-3 col-md-6 col-lg-4 ">
-                        <div ><small>Location<sup className="text-primary"> *</sup> </small></div>
-                        <input type="text" name="location" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2"></input></div>
+                        <div className="col-sm-3 col-md-6 col-lg-4 ">
+                            <div>Company <sup className="text-primary"> *</sup></div>
+                            <input type="text" name="company" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2 "></input>
+                        </div>
+                        <div className="col-sm-3 col-md-6 col-lg-4 ">
+                            <div ><small>Job Title<sup className="text-primary"> *</sup></small></div>
+                            <input type="text" name="title" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2"></input>
+                        </div>
+                        <div className="col-sm-3 col-md-6 col-lg-4 ">
+                            <div ><small>Location<sup className="text-primary"> *</sup> </small></div>
+                            <input type="text" name="location" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2"></input></div>
                     </div>
 
                     {/* Job function, employemnet type */}
                     <div className="row mt-4">
-                    <div className="col-sm-3 col-md-6 col-lg-8 mt-3 ">
-                        <div ><small>Job function(Select up to 3)<sup className="text-primary"> *</sup></small></div>
-                        <input type="text" name="jobfunction" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2 pl-2"></input>
-                    </div>
-                    <div className="col-sm-3 col-md-6 col-lg-4 mt-3  ">
-                        <div ><small>Employement type <sup className="text-primary"> *</sup></small></div>
-                        <select className="w-100 h-100" name="employementtype" onClick={this.handleEvent} onClick={this.handleEvent}>
-                            <option disabled selected value> Choose type ...</option>
+                        <div className="col-sm-3 col-md-6 col-lg-8 mt-3 ">
+                            <div ><small>Job function(Select up to 3)<sup className="text-primary"> *</sup></small></div>
+                            <input type="text" name="jobfunction" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2 pl-2"></input>
+                        </div>
+                        <div className="col-sm-3 col-md-6 col-lg-4 mt-3  ">
+                            <div ><small>Employement type <sup className="text-primary"> *</sup></small></div>
+                            <select className="w-100 h-100" name="employementtype" onClick={this.handleEvent} onClick={this.handleEvent}>
+                                <option disabled selected value> Choose type ...</option>
                                 <option value="fulltime">Full-time</option>
                                 <option value="parttime">Part-time</option>
                                 <option value="contract">Contract</option>
@@ -149,16 +148,16 @@ class RecruiterPostJob extends Component {
                         </div>
                     </div>
 
-                     {/* Company industry */}
-                     <div className="row mt-4">
-                    <div className="col-sm-3 col-md-6 col-lg-8 mt-3 ">
-                        <div ><small>Company industry(Select up to 3)<sup className="text-primary"> *</sup></small></div>
-                        <input type="text" name="industry" className="h-100 w-100 pl-2 pr-2" onChange={this.handleEvent}></input>
-                    </div>
-                    <div className="col-sm-3 col-md-6 col-lg-4 mt-3  ">
-                        <div ><small>Seniority Level<sup className="text-primary"> *</sup></small> </div>
-                        <select className="w-100 h-100" onChange={this.handleEvent} name="seniorlevel" onClick={this.handleEvent}>
-                            <option disabled selected value> Choose type ...</option>
+                    {/* Company industry */}
+                    <div className="row mt-4">
+                        <div className="col-sm-3 col-md-6 col-lg-8 mt-3 ">
+                            <div ><small>Company industry(Select up to 3)<sup className="text-primary"> *</sup></small></div>
+                            <input type="text" name="industry" className="h-100 w-100 pl-2 pr-2" onChange={this.handleEvent}></input>
+                        </div>
+                        <div className="col-sm-3 col-md-6 col-lg-4 mt-3  ">
+                            <div ><small>Seniority Level<sup className="text-primary"> *</sup></small> </div>
+                            <select className="w-100 h-100" onChange={this.handleEvent} name="seniorlevel" onClick={this.handleEvent}>
+                                <option disabled selected value> Choose type ...</option>
                                 <option value="internship">Internship</option>
                                 <option value="entrylevel">Entry level</option>
                                 <option value="associate">Associate</option>
@@ -167,7 +166,7 @@ class RecruiterPostJob extends Component {
                                 <option value="executive">Executive</option>
                                 <option value="notapplicable">Not applicable</option>
                             </select>
-                            </div>
+                        </div>
                     </div>
 
 
@@ -180,67 +179,67 @@ class RecruiterPostJob extends Component {
                     {/* Company Logo */}
                     <div className="mt-3">
                         <div className=""><small>Upload your Company Logo</small>
-                        <sup className="text-primary"> *</sup></div>
-                        <input type="file" name="files" onChange={this.onFileSelect} multiple/>
-                      <button  onClick={this.onSubmitForm} className="btn btn-primary w-25 ml-5 text-center btn-btn-lg btn-rounded btn-save">Save</button>
+                            <sup className="text-primary"> *</sup></div>
+                        <input type="file" name="files" onChange={this.onFileSelect} multiple />
+                        <button onClick={this.onSubmitForm} className="btn btn-primary w-25 ml-5 text-center btn-btn-lg btn-rounded btn-save">Save</button>
                     </div>
 
 
-                {/* Easy apply or noyt */}
-               <div className="row mt-4">
-                    <div className="col-sm-3 col-md-6 col-lg-12 ">
-                    <h6>How would you like to receive your applicants?<sup className="text-primary"> *</sup></h6>
-                      <div className="mt-3">
-                        <input type="radio" name="typeofapply"  value="easyapply" onClick={this.handleEvent}></input>
-                       <strong className="ml-2">Recommended:</strong> Let candidates apply with their LinkedIn profile and notify me by email
+                    {/* Easy apply or noyt */}
+                    <div className="row mt-4">
+                        <div className="col-sm-3 col-md-6 col-lg-12 ">
+                            <h6>How would you like to receive your applicants?<sup className="text-primary"> *</sup></h6>
+                            <div className="mt-3">
+                                <input type="radio" name="typeofapply" value="easyapply" onClick={this.handleEvent}></input>
+                                <strong className="ml-2">Recommended:</strong> Let candidates apply with their LinkedIn profile and notify me by email
                        <input type="text" onClick={this.handleRadio} value={localStorage.getItem('userEmail')} className="w-75 h-100 mt-2 p-3"></input> <br></br>
 
-                       <input type="radio" onClick={this.handleRadio} name="typeofapply" value="apply" className="mt-4"></input> Direct applicants to an external site to apply
+                                <input type="radio" onClick={this.handleRadio} name="typeofapply" value="apply" className="mt-4"></input> Direct applicants to an external site to apply
                        <div><input type="text" onChange={this.handleEvent} name="companyurl" className="mt-2 w-75 p-3"></input></div>
+                            </div>
+                        </div>
                     </div>
-                   </div>
+                    <div className="mt-3 ml-3"><sup className="text-primary">*</sup>  indicates required</div>
+                    <button className="btn btn-primary btn-lg float-right mt-4 mb-4" onClick={this.submitJobPost}>Submit </button>
+
                 </div>
-                <div className="mt-3 ml-3"><sup className="text-primary">*</sup>  indicates required</div>
-                <button className="btn btn-primary btn-lg float-right mt-4 mb-4" onClick={this.submitJobPost}>Submit </button>
-                    
-            </div>
 
-            <div class="col-sm-3 col-md-6 col-lg-4 mt-5 border ml-5" >
+                <div class="col-sm-3 col-md-6 col-lg-4 mt-5 border ml-5" >
                     <div className="container-fluid">
-                    <h6 className="mt-5">Show your job to the right candidates</h6>
-                    <div>Include more details such as relevant job functions, industries, and seniority level to help us advertise your job post to qualified candidates and recommend matches for you to reach out to.</div>
+                        <h6 className="mt-5">Show your job to the right candidates</h6>
+                        <div>Include more details such as relevant job functions, industries, and seniority level to help us advertise your job post to qualified candidates and recommend matches for you to reach out to.</div>
                     </div>
-            </div>
+                </div>
 
             </div>
-        </div> );
+        </div>);
     }
 }
- 
-const mapStateToProps = state =>{
+
+const mapStateToProps = state => {
     return {
-        authFlag : state.authFlag,
-        newproperty:state.newproperty,
-        postjobstatus:state.postjobstatus
+        authFlag: state.authFlag,
+        newproperty: state.newproperty,
+        postjobstatus: state.postjobstatus
     };
 }
 
 const mapDispatchStateToProps = dispatch => {
     return {
-        submitJobPost : (data) => {
-            axios.post(IP_backEnd+'/postJob', data)
+        submitJobPost: (data) => {
+            axios.post(IP_backEnd + '/postJob', data)
                 .then((response) => {
                     console.log("After post job request")
-                    if(response.status===200) window.alert("Successfully posted")
-                    else{
+                    if (response.status === 200) window.alert("Successfully posted")
+                    else {
                         window.alert("There was some error")
                     }
-                    dispatch({type: 'JOB_POST',payload : response.data,statusCode : response.status})
-            });
+                    dispatch({ type: 'JOB_POST', payload: response.data, statusCode: response.status })
+                });
         },
-        
+
     }
 }
 
- 
-export default connect(mapStateToProps,mapDispatchStateToProps)(RecruiterPostJob); 
+
+export default connect(mapStateToProps, mapDispatchStateToProps)(RecruiterPostJob); 

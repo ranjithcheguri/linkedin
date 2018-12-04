@@ -68,10 +68,11 @@ class JobDisplay extends Component {
             resume: "",
             email: localStorage.getItem('userEmail'),
             cover: "",
-            firstName: "",
-            lastName: "",
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
             address: "",
-            city: "",
+            city: localStorage.getItem('userCity'),
+            month:"December",
             hear: "",
             sponsorship: "",
             disability: "",
@@ -102,8 +103,8 @@ class JobDisplay extends Component {
         const data={
             clicks:0,
             job_id:localStorage.getItem('easyapplyid'),
-            recruiter_email:localStorage.getItem('userEmail'),
-            city:"SF",
+            recruiter_email:localStorage.getItem('recruiteremail'),
+            city:localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled:0,
             full_filled:1
@@ -117,22 +118,34 @@ class JobDisplay extends Component {
     }
 
     handleSaveJob=(operation,email,title)=>{
-        const data={
-            job_id:operation,
-            recruiter_email:email,
-            title:title
-        }
+      
         const data1={
             saveJob:operation,
             email:localStorage.getItem('userEmail'),
         }
-        alert(data1.saveJob+data1.email)
+        // alert(data1.saveJob+data1.email)
         axios.put(IP_backEnd + '/savejob', data1)
         .then(response => {
             if (response.status === 200) {
                 alert("saved successfull !");
                 
                 
+                console.log("Job Application successful, data inserted");
+                // this.props.history.push('/Login');
+            }
+        })
+
+        const data={
+            job_id:operation,
+            recruiter_email:email,
+            title:title,
+            saved_job:1
+        }
+
+        axios.put(IP_backEnd + '/logSavedJob', data)
+        .then(response => {
+            if (response.status === 200) {
+                alert("saved successfull !"); 
                 console.log("Job Application successful, data inserted");
                 // this.props.history.push('/Login');
             }
@@ -204,6 +217,7 @@ class JobDisplay extends Component {
         window.alert("First enter search criteria")
         else{
         const data={
+            email: localStorage.getItem('userEmail'),
             search:true,
             searchjob:this.state.searchjob,
             searchlocation:this.state.searchlocation,
@@ -234,8 +248,8 @@ class JobDisplay extends Component {
         const data={
             clicks:1,
             job_id:operation,
-            recruiter_email:localStorage.getItem('userEmail'),
-            city:"SF",
+            recruiter_email:email,
+            city:localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled:0,
             full_filled:0
@@ -246,17 +260,22 @@ class JobDisplay extends Component {
        
     }
 
-    handleHalffilled1=(operation,email)=>{
+    handleHalffilled1=(operation,email,company,title,location)=>{
         console.log("I am called for half filled east")
         localStorage.setItem('easyapplyid',operation)
+
         this.props.applyWindow(operation)
+        localStorage.setItem('recruiteremail',email)
+        localStorage.setItem('easycompany',company)
+         localStorage.setItem('easytitle',title)
+         localStorage.setItem('easylocation',location)
         console.log(this.props.applyid)
         
         const data={
             clicks:0,
             job_id:operation,
-            recruiter_email:localStorage.getItem('userEmail'),
-            city:"SF",
+            recruiter_email:email,
+            city:localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled:1,
             full_filled:0
@@ -265,19 +284,23 @@ class JobDisplay extends Component {
         
     }
 
-    handleHalffilled=(operation,email)=>{
+    handleHalffilled=(operation,email,company,title,location)=>{
         console.log("I am called for half filled")
         this.props.applyWindow(operation)
         console.log(this.props.applyid)
-       localStorage.setItem('jobapplyid',operation)
-       console.log(localStorage.getItem('jobapplyid'))
-        window.open("/apply", "_blank")
+         localStorage.setItem('jobapplyid',operation)
+         console.log(localStorage.getItem('jobapplyid'))
+         localStorage.setItem('applycompany',company)
+         localStorage.setItem('applytitle',title)
+         localStorage.setItem('applylocation',location)
+         localStorage.setItem('applyrecruiteremail',email)
+         window.open("/apply", "_blank")
         
         const data={
             clicks:0,
             job_id:operation,
-            recruiter_email:localStorage.getItem('userEmail'),
-            city:"SF",
+            recruiter_email:email,
+            city:localStorage.getItem('userCity'),
             // city:window.localStorage.getItem('city'),
             half_filled:1,
             full_filled:0
@@ -306,47 +329,50 @@ class JobDisplay extends Component {
         if(this.props.jobdetails.length==0){
             details= <h4 className="text-danger text-center">No job matches your search criteria! Search again</h4>
         }
-        else{
-                // Displaying whole list
-                // <h6>Showing {this.props.jobdetails.length} results</h6>
-                    details=
-                   
-                     this.props.jobdetails.map(job => {
-                          var al
-                          var tempDate = new Date()-new Date(job.posted_date_time);
-                          console.log(tempDate)
-                          var day = 1000 * 60 * 60 * 24;
-                          var hours=1000 * 60 * 60
-                          var hours=Math.floor(tempDate/hours)
-                          var days = Math.floor(tempDate/day);
-                          var months = Math.floor(days/31);
-                          console.log("hours"+hours)
-                          console.log(days)
-                          console.log(months)
-                          var diffdate=hours>24?days+" days ago": hours+" hours ago"
-                          if(months>0)
-                                diffdate= months+" months ago"
-                      
-                        if(job.type_of_apply=="easyapply")
-                        al=(<span><i className=" fa fa-lg text-primary fa-linkedin-square"></i>
-                        <span className="ml-1">Easy Apply</span></span>)
-                        else
-                            al=(<span className="ml-1 text-primary">Apply</span>)
-                    return(
-                        <div >    
-                        <div className="row smooth-scroll  ">
-                     
-                        <div className="col-lg-4 mt-2"> <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} /></div>
-                        <div className="col-lg-7 mt-2 ml-2">
-                        <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={()=>this.handleNew(job.job_id,job.recruiter_email)}><h5>{job.title}</h5></button>
-                        <h6 className="text-capitalize m-0 p-0">{job.company}</h6>
-                        <div className="text-muted text-capitalize">{job.location}</div>
-                        <div className="jobdescribe"><small>{job.description}</small></div>
-                        <div className="text-muted">
-                        <small>{diffdate} -{al}</small></div>
-                        <hr></hr>
-                        </div>
-                        </div>
+        else {
+            // Displaying whole list
+            // <h6>Showing {this.props.jobdetails.length} results</h6>
+            details =
+                this.props.jobdetails.map((job, index) => {
+                    //alert(index)
+                    var al
+                    var tempDate = new Date() - new Date(job.posted_date_time);
+                    console.log(tempDate)
+                    var day = 1000 * 60 * 60 * 24;
+                    var hours = 1000 * 60 * 60
+                    var hours = Math.floor(tempDate / hours)
+                    var days = Math.floor(tempDate / day);
+                    var months = Math.floor(days / 31);
+                    //this.getCompanyLogo(job.recruiter_email);
+                    //console.log("hours" + hours)
+                    //console.log(days)
+                    //console.log(months)
+                    var diffdate = hours > 24 ? days + " days ago" : hours + " hours ago"
+                    if (months > 0)
+                        diffdate = months + " months ago"
+
+                    if (job.type_of_apply == "easyapply")
+                        al = (<span><i className=" fa fa-lg text-primary fa-linkedin-square"></i>
+                            <span className="ml-1">Easy Apply</span></span>)
+                    else
+                        al = (<span className="ml-1 text-primary">Apply</span>)
+                    return (
+                        <div >
+                            <div className="row smooth-scroll  ">
+
+                                <div className="col-lg-4 mt-2">
+                                    {(this.state.companyLogoBase64[index]) ? <img className="img-fluid ml-2 mr-2" src={'data:image/jpeg;base64,' + this.state.companyLogoBase64[index]} /> : <img className="img-fluid ml-2 mr-2" src={require('../images/1.jpg')} />}
+                                </div>
+                                <div className="col-lg-7 mt-2 ml-2">
+                                    <button className="btn btn-link m-0 p-0 text-primary text-capitalize" onClick={() => this.handleNew(job.job_id, job.recruiter_email)}><h5>{job.title}</h5></button>
+                                    <h6 className="text-capitalize m-0 p-0">{job.company}</h6>
+                                    <div className="text-muted text-capitalize">{job.location}</div>
+                                    <div className="jobdescribe"><small>{job.description}</small></div>
+                                    <div className="text-muted">
+                                        <small>{diffdate} -{al}</small></div>
+                                    <hr></hr>
+                                </div>
+                            </div>
                         </div>)
                     })
         }
@@ -382,12 +408,12 @@ class JobDisplay extends Component {
                         if(job.type_of_apply=="easyapply" )
 
                             al=(<button className="btn btn-primary text-white ml-2 p-2" data-toggle="modal" data-target="#easyApplyModal" 
-                            onClick={()=>this.handleHalffilled1(job.job_id,job.recruiter_email)}>
+                            onClick={()=>this.handleHalffilled1(job.job_id,job.recruiter_email,job.company,job.title,job.location)}>
                         <i className=" fa fa-lg text-white fa-linkedin-square"></i> <strong>Easy Apply</strong></button>)
                         
                         else 
                  
-                            al=(<button className="btn btn-primary text-white ml-2 p-2 " type="submit" onClick={()=>this.handleHalffilled(job.job_id,job.recruiter_email)} > <strong>Apply</strong></button>)
+                            al=(<button className="btn btn-primary text-white ml-2 p-2 " type="submit" onClick={()=>this.handleHalffilled(job.job_id,job.recruiter_email,job.company,job.title,job.location)} > <strong>Apply</strong></button>)
                    
                         
                     
@@ -402,7 +428,9 @@ class JobDisplay extends Component {
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="easyApplyModal">Apply to (company name)</h5>
+                                    <h5 class="modal-title" id="easyApplyModal">Apply to {localStorage.getItem('easycompany')}</h5>
+                                    <h5 class="modal-title" id="easyApplyModal">{localStorage.getItem('easytitle')}</h5>
+                                    <h5 class="modal-title" id="easyApplyModal"> {localStorage.getItem('easylocation')}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>

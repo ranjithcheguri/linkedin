@@ -16,10 +16,10 @@ const jobApplicationschema= new mongoose.Schema({
     cover : {
         type : String
     },
-    fName : {
+    firstName : {
         type : String
     },
-    lName : {
+    lastName : {
         type : String
     },
     address : {
