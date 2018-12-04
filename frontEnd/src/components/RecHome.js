@@ -81,7 +81,9 @@ class RecHome extends Component {
     editClickHandler = (e, jobID) => {
         e.preventDefault();
         this.props.setCurrentJob(jobID);
-        this.props.history.push('/postjob');
+        this.props.history.push('/postjob',{
+            jobID : jobID
+        });
     }
 
     searchFilterChangeHandler=(e)=>{

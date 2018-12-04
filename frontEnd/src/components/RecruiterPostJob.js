@@ -21,7 +21,8 @@ class RecruiterPostJob extends Component {
             typeofapply:"",
             companylogo:"",
             recruiter_email:window.localStorage.getItem('userEmail'),
-            flag:false
+            flag:false,
+            jobID:null
          }
          this.handleEvent=this.handleEvent.bind(this);
         this.handleRadio=this.handleRadio.bind(this);
@@ -29,39 +30,40 @@ class RecruiterPostJob extends Component {
     }
 
     componentDidMount(){
-        console.log("inside component did mount recruiter fetch job details")
+        console.log("inside component did mount recruiter fetch job details","Received JOB ID",this.props.location.state.jobID)
         axios.get("http://localhost:3002/fetchPostedJobDetails",{
             params: {
-                //email : window.localStorage.getItem("userEmail")
-                //jobID
-                email   :   "aditi12395@gmail.com",
-                jobID   :   1
+                email : window.localStorage.getItem("userEmail"),
+                jobID : this.props.location.state.jobID
+                //email           :   "aditi12395@gmail.com",
+                //jobID           :   1
             }
         })
-                .then(response => {
-                    console.log(response);
+            .then(response => {
+                console.log("Response received from backend",response.data.job,response.data.job[0].company);
+                if(response.data.job,response.data.job.length>0){
                     this.setState({
-                        job :   response.data.jobs
-                    },
-                    ()=>{
-                            let labels=[];
-                            let data=[];
-                            this.state.job.forEach((ele)=>{
-                                labels.push(ele._id);
-                            })
-                            this.state.job.forEach((ele)=>{
-                                data.push(ele.count);
-                            })
-                            this.setState({
-                                labels  : [...labels],
-                                data    : [...data]
-                        },()=>{
-                            console.log("Displaying state",this.state)
-                        })
+                        company         :   response.data.job[0].company,
+                        location        :   response.data.job[0].location,
+                        title           :   response.data.job[0].title,
+                        jobfunction     :   response.data.job[0].job_function,
+                        industry        :   response.data.job[0].industry,
+                        employementtype :   response.data.job[0].employment_type,
+                        seniorlevel     :   response.data.job[0].experience_level,
+                        jobdescribe     :   response.data.job[0].description,
+                        companyurl      :   response.data.job[0].company_url,
+                        flag            :   true,
+                        jobID           :   response.data.job[0].job_id
+    
                     })
-                }).catch(err=>{
-                    console.log(err);
-                })
+                }else{
+                    this.setState({
+                        flag    :   false
+                    })
+                }
+            }).catch(err=>{
+                console.log("Component did mount error",err);
+            })
       }
 
     onFileSelect =(e)=>{
@@ -152,7 +154,8 @@ class RecruiterPostJob extends Component {
                 jobdescribe: this.state.jobdescribe,
                 companyurl: this.state.companyurl,
                 typeofapply: this.state.typeofapply,
-
+                new_flag:this.state.flag,
+                jobID:this.state.jobID
             }
             this.props.submitJobPost(data)
         }
@@ -174,22 +177,22 @@ class RecruiterPostJob extends Component {
                     <div className="row mt-4">
                         <div className="col-sm-3 col-md-6 col-lg-4 ">
                             <div>Company <sup className="text-primary"> *</sup></div>
-                            <input type="text" name="company" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2 "></input>
+                            <input type="text" name="company" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2 " value={this.state.company}></input>
                         </div>
                         <div className="col-sm-3 col-md-6 col-lg-4 ">
                             <div ><small>Job Title<sup className="text-primary"> *</sup></small></div>
-                            <input type="text" name="title" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2"></input>
+                            <input value={this.state.title} type="text" name="title" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2"></input>
                         </div>
                         <div className="col-sm-3 col-md-6 col-lg-4 ">
                             <div ><small>Location<sup className="text-primary"> *</sup> </small></div>
-                            <input type="text" name="location" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2"></input></div>
+                            <input value={this.state.location} type="text" name="location" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2"></input></div>
                     </div>
 
                     {/* Job function, employemnet type */}
                     <div className="row mt-4">
                         <div className="col-sm-3 col-md-6 col-lg-8 mt-3 ">
                             <div ><small>Job function(Select up to 3)<sup className="text-primary"> *</sup></small></div>
-                            <input type="text" name="jobfunction" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2 pl-2"></input>
+                            <input value={this.state.jobfunction} type="text" name="jobfunction" onChange={this.handleEvent} className="h-100 w-100 pl-2 pr-2 pl-2"></input>
                         </div>
                         <div className="col-sm-3 col-md-6 col-lg-4 mt-3  ">
                             <div ><small>Employement type <sup className="text-primary"> *</sup></small></div>
@@ -209,7 +212,7 @@ class RecruiterPostJob extends Component {
                     <div className="row mt-4">
                         <div className="col-sm-3 col-md-6 col-lg-8 mt-3 ">
                             <div ><small>Company industry(Select up to 3)<sup className="text-primary"> *</sup></small></div>
-                            <input type="text" name="industry" className="h-100 w-100 pl-2 pr-2" onChange={this.handleEvent}></input>
+                            <input value={this.state.industry} type="text" name="industry" className="h-100 w-100 pl-2 pr-2" onChange={this.handleEvent}></input>
                         </div>
                         <div className="col-sm-3 col-md-6 col-lg-4 mt-3  ">
                             <div ><small>Seniority Level<sup className="text-primary"> *</sup></small> </div>
@@ -230,7 +233,7 @@ class RecruiterPostJob extends Component {
                     {/* Job Description */}
                     <div className="mt-5">
                         <div className=""><small>Job Description</small><sup className="text-primary"> *</sup></div>
-                        <textarea rows="4" cols="88.5" onChange={this.handleEvent} name="jobdescribe" className="pl-2 pr-2"></textarea>
+                        <textarea value={this.state.jobdescribe} rows="4" cols="88.5" onChange={this.handleEvent} name="jobdescribe" className="pl-2 pr-2"></textarea>
                     </div>
 
                     {/* Company Logo */}
