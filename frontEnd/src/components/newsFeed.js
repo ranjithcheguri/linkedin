@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import '../css/newsFeed.css';
 import '../css/Profile.css';
+import Navbar from './Navbar';
 
 class newsFeed extends Component {
     render() {
         return (
+            
             <div>
+                <Navbar/>
                 <div className="row free-space"></div>
                 
                 <div className="row">

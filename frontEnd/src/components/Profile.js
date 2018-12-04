@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { getProfileDataAction } from '../actions/profileActions';
 import { submitLogin } from '../actions/loginActions';
 import { searchUserInfo } from '../actions/connectionActions';
+import Navbar from './Navbar';
 /* REDUX IMPORTS END */
 
 var displayError;
@@ -497,6 +498,7 @@ class Profile extends Component {
             generateSkills = skillsList.map((item, index) => {
                 //console.log(item);
                 return (<div className="column col-md-12 mr-auto borderRed">
+                  
                     <p className="skills" >{item}</p>
                 </div>);
             })
@@ -507,12 +509,14 @@ class Profile extends Component {
         if (this.state.isLoading) {
             return (
                 <div>
+                <Navbar/>
                     <Loading />
                 </div>
             )
         } else {
             return (
                 <div className="profilePageBody" >
+                <Navbar/>
                     <div className="container">
                         <div className="row">
                             <div className="col-md-8 column paddingBottom">

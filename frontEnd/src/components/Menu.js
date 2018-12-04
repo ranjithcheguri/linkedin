@@ -43,7 +43,7 @@ class Menu extends Component {
         return (
             <div>
                 <Route path="/home" exact component={Home} />
-                <Route path="/" component={Navbar} />
+                <Route path="/" exact component={Navbar} />
                 <Route path="/jobdisplay" component={JobDisplay} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/postJob" component={RecruiterPostJob} />
