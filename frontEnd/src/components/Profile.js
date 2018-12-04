@@ -357,7 +357,11 @@ class Profile extends Component {
         }
 
         var otherButtons;
+        var viewsCard;
         if (this.state.email != localStorage.getItem('userEmail')) {
+            //////////////////// donot display views count
+            viewsCard=(<div></div>);
+            ///////////////////
             if (this.state.isConnected === 1) {
                 otherButtons = (
                     <div className="mr-auto  borderMe">
@@ -384,6 +388,16 @@ class Profile extends Component {
             }
 
         } else {
+
+            viewsCard=(<div className="col-md-12 profileCard">
+            <div className="column insideCard paddingLeft">
+                <h4>Your Dashboard</h4>
+                <p><i>private to you</i></p>
+                <p className=""><i className="far fa-eye fa-2x">&nbsp;{this.state.personalProfile.views}</i></p>
+                <p>Who viewed your profile</p>
+            </div>
+        </div>);
+
             otherButtons = (
                 <div className="mr-auto  borderMe">
                     <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
@@ -462,15 +476,8 @@ class Profile extends Component {
                                         <p>profile views</p>
                                     </div>
                                 </div> */}
-
-                                <div className="col-md-12 profileCard">
-                                    <div className="column insideCard paddingLeft">
-                                        <h4>Your Dashboard</h4>
-                                        <p><i>private to you</i></p>
-                                        <p className=""><i className="far fa-eye fa-2x">&nbsp;{this.state.personalProfile.views}</i></p>
-                                        <p>Who viewed your profile</p>
-                                    </div>
-                                </div>
+                                {viewsCard}
+                                
                                 <div className="col-md-12 profileCard">
                                     <div className="col-md-12 row insideCard">
                                         <div className="row col-md-12">
