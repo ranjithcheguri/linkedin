@@ -14,6 +14,7 @@ class Navbar extends Component {
         this.state = {
             acceptedConnections: [],
             searchString: '',
+            isValidUser: false
         }
     }
     async componentWillMount() {
@@ -47,13 +48,30 @@ class Navbar extends Component {
         })
     }
 
-    searchUser = () => {
+    searchUser = async () => {
         console.log("inside search user");
         console.log("state", this.state);
         if (this.state.searchString.length > 0) {
-            this.props.searchUserInfo(this.state.searchString);
-            this.props.history.push("/profile", this.state.searchString)
-            window.location.reload();
+            const data = { "email": this.state.searchString }
+            await axios.post(IP_backEnd + '/isUserValid', data)
+                .then((response) => {
+                    if (response.status == 200) {
+                        this.setState({
+                            isValidUser: true
+                        })
+                        this.props.searchUserInfo(this.state.searchString);
+                        this.props.history.push("/profile", this.state.searchString)
+                        window.location.reload();
+                    } else {
+                        this.setState({
+                            isValidUser: false
+                        })
+                        alert("invalid user");
+                    }
+
+                }).catch(e => {
+                    alert("invalid user");
+                })
         }
         else {
             alert("Give a valid Email ID");
@@ -65,6 +83,10 @@ class Navbar extends Component {
         window.location.reload();
     }
 
+    searchUsersinMYSQL = () => {
+
+    }
+
     logout = () => {
         console.log("signout button")
         localStorage.removeItem('userEmail');
@@ -74,16 +96,16 @@ class Navbar extends Component {
         window.location.reload();
     }
 
-    jobsDisplay=()=>{
-        if(localStorage.getItem('resumeCheck')==='undefined' || localStorage.getItem('userCity')==='undefined'){
+    jobsDisplay = () => {
+        if (localStorage.getItem('resumeCheck') === 'undefined' || localStorage.getItem('userCity') === 'undefined') {
             // alert(localStorage.getItem('resumeCheck'))
             alert("Please Enter the basic details before applying for the jobs.")
             this.props.history.push("/Profile");
         }
-        else{
+        else {
             this.props.history.push("/JobDisplay");
         }
-        
+
         // if(!localStorage.getItem('userCity')  || localStorage.getItem('userCity').length==0){
         //     alert("Fill the basic profile with City and Resume.")
         //     this.props.history.push("/Profile");
@@ -93,7 +115,7 @@ class Navbar extends Component {
         //     this.props.history.push("/Profile");
         // }
         // else if(localStorage.getItem('userCity').length>0 && localStorage.getItem('resumeCheck')){
-            
+
         //     this.props.history.push("/JobDisplay");
         // }
     }
@@ -126,7 +148,7 @@ class Navbar extends Component {
                                             <span class="nav-icon-text">My Network</span></a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" onClick={()=>{this.jobsDisplay()}}><i class="fal fa-suitcase fa-lg iconColour"></i><br />
+                                        <a className="nav-link" onClick={() => { this.jobsDisplay() }}><i class="fal fa-suitcase fa-lg iconColour"></i><br />
                                             <span class="nav-icon-text">Jobs</span></a>
                                     </li>
                                     <Link to='/messages'>

@@ -311,16 +311,6 @@ class JobDisplay extends Component {
 
     }
 
-    openAppliedJobs = () => {
-        this.props.history.push("/applicantDashboard");
-    }
-
-    openSavedJobs = (e) => {
-        e.preventDefault();
-        this.props.history.push("/savedJobs");
-        //this.context.history.push('/savedJobs')
-    }
-
     getCompanyLogo = async (email) => {
         //console.log("fetching user profile pic...");
         //alert("inside company logo");

@@ -48,6 +48,7 @@ class savedJobs extends Component {
                 })
             });
     }
+    
 
     redirectToApplyJob = () => {
 

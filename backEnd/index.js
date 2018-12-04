@@ -25,6 +25,7 @@ var searchJob = require('./apis/searchJob');
 var logData =require('./apis/logData')
 var logSavedJob=require('./apis/logSavedJob')
 var particularjobapplication=require('./apis/viewParticularJobApplication')
+var isUserValid = require('./apis/isUserValid');
 
 var getOneJob = require('./apis/getOneJob');
 var cityWiseApplications = require('./apis/cityWiseApplications');
@@ -196,7 +197,7 @@ app.use('/',getOneJob);
 //This route is used to check if the recruiter has already posted this job
 app.use('/',fetchPostedJobDetails)
 
-
+app.use('/',isUserValid);
 
 
 app.listen(ENV_VAR.PORT);
