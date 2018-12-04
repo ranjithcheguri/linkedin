@@ -42,8 +42,8 @@ class Menu extends Component {
     render() {
         return (
             <div>
-                <Route exact path="/" exact component={Home} />
-                <Route path="/" exact component={Navbar} />
+                <Route path="/home" exact component={Home} />
+                <Route path="/" component={Navbar} />
                 <Route path="/jobdisplay" component={JobDisplay} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/postJob" component={RecruiterPostJob} />

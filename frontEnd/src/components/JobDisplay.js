@@ -69,8 +69,8 @@ class JobDisplay extends Component {
             resume: "",
             email: localStorage.getItem('userEmail'),
             cover: "",
-            firstName: "",
-            lastName: "",
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
             address: "",
             city: localStorage.getItem('userCity'),
             month: "December",
@@ -343,7 +343,7 @@ class JobDisplay extends Component {
                     var hours = Math.floor(tempDate / hours)
                     var days = Math.floor(tempDate / day);
                     var months = Math.floor(days / 31);
-                    this.getCompanyLogo(job.recruiter_email);
+                    //this.getCompanyLogo(job.recruiter_email);
                     //console.log("hours" + hours)
                     //console.log(days)
                     //console.log(months)
