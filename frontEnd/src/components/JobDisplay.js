@@ -71,7 +71,8 @@ class JobDisplay extends Component {
             firstName: "",
             lastName: "",
             address: "",
-            city: "",
+            city: localStorage.getItem('userCity'),
+            month:"December",
             hear: "",
             sponsorship: "",
             disability: "",
@@ -251,6 +252,9 @@ class JobDisplay extends Component {
         localStorage.setItem('easyapplyid',operation)
 
         this.props.applyWindow(operation)
+        localStorage.setItem('easycompany',company)
+         localStorage.setItem('easytitle',title)
+         localStorage.setItem('easylocation',location)
         console.log(this.props.applyid)
         
         const data={
@@ -406,7 +410,9 @@ class JobDisplay extends Component {
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="easyApplyModal">Apply to (company name)</h5>
+                                    <h5 class="modal-title" id="easyApplyModal">Apply to {localStorage.getItem('easycompany')}</h5>
+                                    <h5 class="modal-title" id="easyApplyModal">{localStorage.getItem('easytitle')}</h5>
+                                    <h5 class="modal-title" id="easyApplyModal"> {localStorage.getItem('easylocation')}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
