@@ -23,9 +23,9 @@ var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
 var searchJob = require('./apis/searchjob');
 var logData =require('./apis/logData')
-var logSavedJob=require('./apis/logSavedJob');
+var logSavedJob=require('./apis/logSavedJob')
+var getOneJob = require('./apis/getOneJob');
 var cityWiseApplications = require('./apis/cityWiseApplications');
-
 
 //Only for AWS
 const busboy = require('connect-busboy');
@@ -96,7 +96,6 @@ app.use('/',searchJob)
 app.use('/',logData)
 app.use('/',logSavedJob)
 app.use('/',userLogin);
-
 
 //Route imports
 var viewUserProfile = require('./apis/viewUserProfile');
@@ -172,6 +171,8 @@ app.use('/',authRecruiter)
 
 app.use('/', cityWiseApplications);
 
+//get one job at a time, used in displaying saved jobs.
+app.use('/',getOneJob)
 
 
 

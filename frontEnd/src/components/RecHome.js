@@ -39,6 +39,7 @@ class RecHome extends Component {
 
     componentDidMount=()=>{
         console.log("Inside componentDidMount of recruiter Home")
+        console.log(window.localStorage.getItem("userEmail"));
         axios.get("http://localhost:3002/recruiter/getPostedJobs",{
             params: {
             email : window.localStorage.getItem("userEmail")

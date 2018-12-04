@@ -45,7 +45,7 @@ class ViewAllApplicants extends Component {
 
     return (
       <div>
-        <Navbar/>
+        {/* <Navbar/> */}
         <div class="container">
         <h3>Applications</h3>
         <div class="applications-table">

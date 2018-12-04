@@ -28,8 +28,8 @@ class ViewAllMessages extends Component {
 
   viewConversation = (e, participant) => {
     e.preventDefault();
-    this.props.setCurrentConversation(participant);
-    this.props.history.push('/conversation');
+    // this.props.setCurrentConversation(participant);
+    this.props.history.push('/conversation',{participant});
   }
 
   render() {
@@ -41,7 +41,7 @@ class ViewAllMessages extends Component {
         let participant = (window.localStorage.getItem('userEmail')==message.participants[0])?message.participants[1]:message.participants[0];
         return (
           <tr onClick={(e)=>this.viewConversation(e,participant)}>
-            <td>{message.messages[0].from}</td>
+            <td>{participant}</td>
             <td>{message.messages[0].msg}</td>
             <td>
               {(message.messages[0].status == 'NR')? "Unread" : "Read"}
@@ -53,14 +53,14 @@ class ViewAllMessages extends Component {
 
     return (
       <div>
-        <Navbar/>
+        {/* <Navbar/> */}
         <div class="container">
           <br />
           <h1>Inbox</h1>
           <table class="table">
             <thead>
               <tr>
-                <th>From</th>
+                <th>To</th>
                 <th>Message</th>
                 <th>Status</th>
               </tr>

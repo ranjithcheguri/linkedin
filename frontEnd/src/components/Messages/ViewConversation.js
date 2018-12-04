@@ -35,7 +35,7 @@ class ViewConversation extends Component {
     sendMessage = (e) => {
         console.log(this.state.Reply);
         let data={
-            participants : [window.localStorage.getItem('userEmail'), this.props.messagesState.participant],
+            participants : [window.localStorage.getItem('userEmail'), this.props.location.state.participant],
             messages : {
                 from: window.localStorage.getItem('userEmail'),
                 msg : this.state.Reply,
@@ -63,9 +63,9 @@ class ViewConversation extends Component {
 
     return (
       <div>
-        <Navbar/>
+        {/* <Navbar/> */}
         <div class="container">
-            <h3>{this.props.messagesState.participant}</h3>
+            <h3>{this.props.location.state.participant}</h3>
             <table class="table">
                 <thead>
                     <th>From</th>
@@ -76,7 +76,7 @@ class ViewConversation extends Component {
                 </tbody>
             </table>
             <div class="form-inline">
-                <input class="form-control" type="text" onChange={this.replyChangeHandler} placeholder="Reply to Suhas"/>
+                <input class="form-control" type="text" onChange={this.replyChangeHandler} placeholder="Reply"/>
                 <button class="btn btn-primary" onClick={this.sendMessage}>Reply</button>
             </div> <br/><hr/>
         </div>
