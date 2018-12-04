@@ -18,8 +18,8 @@ class GetTop10 extends Component {
   componentDidMount(){
     axios.get("http://localhost:3002/getTop10",{
         params: {
-            //email : window.localStorage.getItem("userEmail")
-            email   :   "aditi12395@gmail.com"
+            email : window.localStorage.getItem("userEmail")
+            // email   :   "aditi12395@gmail.com"
         }
     })
             .then(response => {
