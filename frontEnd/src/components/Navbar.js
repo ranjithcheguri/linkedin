@@ -66,7 +66,7 @@ class Navbar extends Component {
     }
 
     logout = () => {
-        console.log("signout button")
+        //console.log("signout button")
         localStorage.removeItem('userEmail');
         localStorage.removeItem('searchUser');
         //alert("successfully signed out!")
