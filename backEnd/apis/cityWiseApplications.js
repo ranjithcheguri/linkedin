@@ -8,8 +8,15 @@ router.get('/dashboard/city', (req,res) => {
         $match : {jobID}
     },
        { "$group" : {
-            _id : "$month",
-            "count" : {"$sum" : 1}
+            _id : {
+                "month" : "$month",
+                "city" : "$city"
+            },
+            "applications" : {$push : "$city"}
+        }
+    }, {
+        $project : {
+            "applicationCount" : {$size : "$applications"}
         }
     }
     ]).then(results => {
@@ -18,7 +25,7 @@ router.get('/dashboard/city', (req,res) => {
         })
         res.end(JSON.stringify(results));
     }, (error)=>{
-        console.log("Error retrieving city wise applications");
+        console.log(error);
         res.writeHead(400, {
             'Content-type': 'text/plain'
         })

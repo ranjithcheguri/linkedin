@@ -10,6 +10,7 @@ import EasyApply from './EasyApply';
 //import PostAJob from './PostAJob';
 //import RecHome from './RecHome';
 import newsFeed from './newsFeed';
+import CityWiseApplications from './Dashboard/CityWiseApplications';
 
 
 import RecHome from './RecHome'
@@ -54,6 +55,7 @@ class Menu extends Component {
                 <Route path='/apply' component={Apply} />
                 <Route path='/easyApply' component={EasyApply} />
                 <Route path='/savedJobs' component={savedJobs} />
+                <Route path='/citywise' component={CityWiseApplications}/>
             </div>
         );
     }
