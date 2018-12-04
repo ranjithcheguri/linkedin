@@ -20,6 +20,20 @@ router.post('/recruiter/logoUpload', function (req, res) {
     res.sendStatus(200).end('Logo upload success!');
 });
 
+//Getting the logo
+router.get('/recruiter/logoDownload', function (req, res) {
+    console.log("Inside get Logo");
+    let email = req.query.email;
+    console.log(email);
+    if (email !== null) {
+        console.log("sending request to AWS S3 operations");
+        let fileType = "logo";
+        AWS_operations.downloadFromS3(email, fileType, res);
+    } else {
+        res.sendStatus(400).end("empty email");
+    }
+});
+
 //Route to handle Post Request Call
 router.post('/postJob', function (req, res) {
 

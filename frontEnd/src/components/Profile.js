@@ -339,12 +339,13 @@ class Profile extends Component {
                 fadeModel: "dummy"
             })
         }else {
-            localStorage.setItem("userCity", this.state.country);
+            localStorage.setItem("userCity", this.state.personalProfile.country);
             this.setState({
                 formValidated: true,
                 fadeModel: "modal",
                 errorMessage: ""
             })
+            console.log("state in abcd",this.state);
         }
     }
 
