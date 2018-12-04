@@ -61,7 +61,8 @@ class Navbar extends Component {
     }
 
     openProfile = () => {
-        this.props.history.push("/Profile",localStorage.getItem('userEmail'));
+        this.props.history.push("/profile",localStorage.getItem('userEmail'));
+        window.location.reload();
     }
 
     logout = () => {
