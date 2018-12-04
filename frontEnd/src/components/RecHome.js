@@ -9,6 +9,7 @@ import Select from 'react-select';
 import 'react-dropdown/style.css';
 import { bindActionCreators } from 'redux';
 import {connect} from 'react-redux';
+import { IP_NODE_PORT, IP_backEnd } from '../config/config.js'
 
 const options = [
     { value: 'Active', label: 'Active' },
@@ -40,7 +41,7 @@ class RecHome extends Component {
     componentDidMount=()=>{
         console.log("Inside componentDidMount of recruiter Home")
         console.log(window.localStorage.getItem("userEmail"));
-        axios.get("http://localhost:3002/recruiter/getPostedJobs",{
+        axios.get(IP_backEnd+"/recruiter/getPostedJobs",{
             params: {
             email : window.localStorage.getItem("userEmail")
             }
@@ -81,7 +82,7 @@ class RecHome extends Component {
     editClickHandler = (e, jobID) => {
         e.preventDefault();
         this.props.setCurrentJob(jobID);
-        this.props.history.push('/postjob',{
+        this.props.history.push('/postJob',{
             jobID : jobID
         });
     }

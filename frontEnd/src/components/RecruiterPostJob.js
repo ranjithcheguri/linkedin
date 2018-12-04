@@ -30,11 +30,12 @@ class RecruiterPostJob extends Component {
     }
 
     componentDidMount(){
-        console.log("inside component did mount recruiter fetch job details","Received JOB ID",this.props.location.state.jobID)
-        axios.get("http://localhost:3002/fetchPostedJobDetails",{
+        let jobID = (!this.props.location.state)?-1:this.props.location.state.jobID;
+        console.log("inside component did mount recruiter fetch job details","Received JOB ID",jobID)
+        axios.get(IP_backEnd+"/fetchPostedJobDetails",{
             params: {
                 email : window.localStorage.getItem("userEmail"),
-                jobID : this.props.location.state.jobID
+                jobID : jobID
                 //email           :   "aditi12395@gmail.com",
                 //jobID           :   1
             }

@@ -2,9 +2,23 @@ import React, { Component } from 'react';
 import '../css/Navbar.css';
 import '../fontawesome/css/all.css';
 import { Grid, Row, Col, Image } from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 
 
 class Navbar extends Component {
+
+    constructor(props) {
+        super(props);
+        
+    }
+
+    // postAJobHandler=(e)=>{
+    //     e.preventDefault();
+    //     this.props.history.push('/postJob',{
+    //         jobID : 1
+    //     })
+    // }
+
     render() {
         return (
             <div className="">
@@ -18,7 +32,7 @@ class Navbar extends Component {
                         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span>
                         <a style={{color : "white"}} href="/recHome">HOME</a>
                         <span>&emsp;&emsp;&emsp;&emsp;&emsp;</span>
-                        <a style={{color : "white"}} href="/postAJob">POST A JOB</a>
+                        <Link to="/postAJob"><a style={{color : "white"}} >POST A JOB</a></Link>
                         <span>&emsp;&emsp;&emsp;&emsp;&emsp;</span>
                         <a style={{color : "white"}} href="/messages">MESSAGES</a>
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
