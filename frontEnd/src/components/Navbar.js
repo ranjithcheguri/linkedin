@@ -95,7 +95,7 @@ class Navbar extends Component {
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="/connections"><i class="fal fa-users fa-lg iconColour">
-                                            <Badge count={this.state.acceptedConnections.length} showZero>
+                                            <Badge count={this.state.acceptedConnections.length} >
                                                 <a href="/connections" className="head-example" />
                                             </Badge></i><br />
                                             <span class="nav-icon-text">My Network</span></a>
@@ -110,7 +110,7 @@ class Navbar extends Component {
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" href="#"><i class="fal fa-bell fa-lg iconColour">
-                                            <Badge count={this.state.acceptedConnections.length} showZero>
+                                            <Badge count={this.state.acceptedConnections.length} >
                                                 <a href="/connections" className="head-example" />
                                             </Badge></i><br />
                                             <span class="nav-icon-text">Notifications </span></a>
