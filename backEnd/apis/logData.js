@@ -22,7 +22,7 @@ router.put('/recruiter/logData', function (req, res) {
     }
 
 else if(req.body.search==true){
-    logDetails.find({job_id:"100"})
+    logDetails.find({job_id:"123"})
     .then((results)=>{ 
         console.log(results)
         res.status(200).json({ success: true, results:results });

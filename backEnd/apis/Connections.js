@@ -61,7 +61,7 @@ router.post('/checkConnection', function (req, res) {
             res.end(JSON.stringify(result));
         }
         else{
-            console.log("NOT CONENCTED");
+            console.log("Not Connected!");
             res.sendStatus(400).end();
         }
     })

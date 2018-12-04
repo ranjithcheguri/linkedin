@@ -41,6 +41,9 @@ const applicantProfileschema = new mongoose.Schema({
     resume: {
         type: String
     },
+    resumeCheck: {
+        type: String
+    },
     savedJobs: [{
         type: String
     }],
