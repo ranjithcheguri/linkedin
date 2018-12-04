@@ -31,6 +31,12 @@ class ViewAllApplicants extends Component {
       })
   }
 
+  onResumeClose=()=>{
+    this.setState({
+      resume:""
+    })
+  }
+
   getResume = async (email) => {
     console.log("fetching user resume");
     await axios.get(IP_backEnd + '/userProfile/getResume/?email=' + email)
@@ -96,7 +102,7 @@ class ViewAllApplicants extends Component {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="viewResumeTitle">Resume</h5>
-                <button type="button" class="close linkedInBtn" data-dismiss="modal" onClick={this.onResumeClose} aria-label="Close">
+                <button type="button" class="close linkedInBtn" data-dismiss="modal" onClick={()=>this.onResumeClose()} aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -109,7 +115,7 @@ class ViewAllApplicants extends Component {
                                         </div> */}
               </div>
               <div class="modal-footer">
-                <button type="button" className="btn btn-primary linkedInBtn" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-primary linkedInBtn" onClick={()=>this.onResumeClose()} data-dismiss="modal">Close</button>
               </div>
             </div>
           </div>
