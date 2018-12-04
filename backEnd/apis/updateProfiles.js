@@ -9,7 +9,6 @@ var AWS_operations = require('../AWS_s3/s3BucketOperations');
 // Two ways of upserting the documents.
 router.put('/applicant/updateProfile', function (req, res) {
     console.log("Inside Applicant update handler", req.body);
-
     applicantProfiles.updateOne({ email: req.body.email }, { $set: { ...req.body } }, { upsert: true }, function (err, result) {
         if (err) {
             console.log("Error updating the Profile information.");
@@ -22,6 +21,24 @@ router.put('/applicant/updateProfile', function (req, res) {
         }
     })
 });
+
+router.put('/applicant/updateProfile/updateViews', function (req, res) {
+    console.log("Inside Profile views", req.body);
+    console.log("........................................................................................................................................................................");
+    applicantProfiles.updateOne({ email: req.body.email }, { $inc: { "personalProfile.views": 1 } }, function (err, result) {
+        if (err) {
+            console.log("Error updating the Profile views.");
+            console.log(err)
+            res.sendStatus(400).end();
+        }
+        else if (result) {
+            console.log(" Profile  views updated: ", result);
+            res.sendStatus(200).end();
+        }
+    })
+});
+
+
 
 router.post('/applicant/updateProfile/profilePicUpload', function (req, res) {
     console.log("inside profile pic upload", req.body);

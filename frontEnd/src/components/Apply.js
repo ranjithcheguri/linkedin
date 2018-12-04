@@ -151,7 +151,7 @@ class Apply extends Component {
     }
 
     render(){
-        console.log("render of apply"+this.props.jobDisplay.applyid)
+       
         return(
             <div className="section page-centered">
           <div className="profilePageBody">

@@ -29,27 +29,30 @@ class RecruiterPostJob extends Component {
     }
 
     onFileSelect =(e)=>{
-        const files = e.target.files
-        console.log(files)
-        this.setState({
-            photos:files
-        });
+        // console.log(files)
+        if(this.state.company==""){
+            alert("Enter the company name and choose the file")
+        }
+        else{
+            //alert(this.state.company)
+            this.setState({
+                companylogo:e.target.files[0]
+            });
+        }
+
     }
 
-    onSubmitForm =(e) =>{
+    onSubmitForm =async (e) =>{
         console.log("here in form");
         let formData = new FormData();
-        const files = this.state.photos;
-        console.log(files.originalname)
-        for(var i=0;i<files.length;++i){
-            formData.append("files",files[i]);
-        }
-        this.setState({pid:true})
-        const config= {
-            headers:{
-                'content-type':'multipart/form-data'
-            }
-        }
+        formData.append('email', this.state.recruiter_email+this.state.company);
+        formData.append('companylogo', this.state.companylogo);
+        console.log("Logo before uploading: ", this.state.companylogo);
+        await axios.post(IP_backEnd + '/recruiter/logoUpload', formData)
+            .then((response) => {
+                console.log(response.data);
+            });
+        console.log("After uploading Logo");
     }
 
     handleEvent(e){

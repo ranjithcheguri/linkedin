@@ -1,6 +1,24 @@
 var router = require('express').Router();
 var pool = require("../db/mysql");
+const Busboy = require('busboy');
+const AWS = require('aws-sdk');
+var AWS_operations = require('../AWS_s3/s3BucketOperations');
 
+//Posting the Logo
+router.post('/recruiter/logoUpload', function (req, res) {
+    console.log("Inside Logo upload", req.body);
+    var busboy = new Busboy({ headers: req.headers });
+    busboy.on('finish', function () {
+        //console.log('Upload finished');
+        const file = req.files.companylogo;
+        console.log("LogoUpload", file);
+        // Begins the upload to the AWS S3
+        fileType = "logo";
+        AWS_operations.uploadToS3(file, req.body.email, fileType);
+    });
+    req.pipe(busboy);
+    res.sendStatus(200).end('Logo upload success!');
+});
 
 //Route to handle Post Request Call
 router.post('/postJob', function (req, res) {

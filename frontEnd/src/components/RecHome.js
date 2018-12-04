@@ -39,6 +39,7 @@ class RecHome extends Component {
 
     componentDidMount=()=>{
         console.log("Inside componentDidMount of recruiter Home")
+        console.log(window.localStorage.getItem("userEmail"));
         axios.get("http://localhost:3002/recruiter/getPostedJobs",{
             params: {
             email : window.localStorage.getItem("userEmail")
@@ -75,6 +76,12 @@ class RecHome extends Component {
         e.preventDefault();
         this.props.setCurrentJob(jobID);
         this.props.history.push('/viewApplicants');
+    }
+
+    editClickHandler = (e, jobID) => {
+        e.preventDefault();
+        this.props.setCurrentJob(jobID);
+        this.props.history.push('/postjob');
     }
 
     searchFilterChangeHandler=(e)=>{
@@ -197,9 +204,9 @@ class RecHome extends Component {
                                             <small className="text-muted">Number of Applicants: {job.no_of_applicants}<br/>
                                             &emsp;&emsp;Number of Views:&nbsp;{job.no_of_views}</small>
                                         </CardText>
-                                        <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.jobID)}>Details</button>
+                                        <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.job_id)}>Details</button>
                                         &nbsp;&nbsp;&nbsp;
-                                        <button class="btn btn-primary" onClick={(e)=>this.detailsClickHandler(e,job.jobID)}>Edit</button>
+                                        <button class="btn btn-primary" onClick={(e)=>this.editClickHandler(e,job.job_id)}>Edit</button>
                                         </CardImgOverlay>
                                     </Card>
                                     <hr></hr>

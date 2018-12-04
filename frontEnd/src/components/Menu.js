@@ -10,11 +10,13 @@ import EasyApply from './EasyApply';
 //import PostAJob from './PostAJob';
 //import RecHome from './RecHome';
 import newsFeed from './newsFeed';
+import CityWiseApplications from './Dashboard/CityWiseApplications';
 
 
 import RecHome from './RecHome'
 import Home from './Home';
-import PostAJob from './PostAJob'
+import PostAJob from './PostAJob';
+import ApplicantDashboard from './ApplicantDashboard';
 
 
 
@@ -23,6 +25,7 @@ import RecruiterPostJob from './RecruiterPostJob';
 import Dashboard from './AdminDashboard';
 import LogSaveJob from './logSavedJob';
 import ReactPDF from './ReactPDF';
+import savedJobs from './savedJobs';
 
 import ViewConversation from './Messages/ViewConversation';
 class Menu extends Component {
@@ -34,7 +37,7 @@ class Menu extends Component {
         return (
             <div>
                 <Route exact path="/" component={Home} />
-                <Route path="/home" component={Home} />
+                <Route path="/" component={Navbar} />
                 <Route path="/jobdisplay" component={JobDisplay} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/postJob" component={RecruiterPostJob} />
@@ -48,8 +51,11 @@ class Menu extends Component {
                 <Route path='/recHome' component={RecHome} />
                 <Route path='/postAJob' component={PostAJob} />
                 <Route path='/reactPDF' component={ReactPDF} />
+                <Route path='/applicantDashboard' component={ApplicantDashboard}/>
                 <Route path='/apply' component={Apply} />
                 <Route path='/easyApply' component={EasyApply} />
+                <Route path='/savedJobs' component={savedJobs} />
+                <Route path='/citywise' component={CityWiseApplications}/>
             </div>
         );
     }

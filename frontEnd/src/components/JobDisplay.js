@@ -36,7 +36,7 @@ class JobDisplay extends Component {
 
 
     async componentDidMount(){
-        const data={email:"abc"}
+        const data={email: localStorage.getItem('userEmail')}
         this.props.submitJobDisplay(data)
         this.setState({id:this.props.jobid})
         //alert(localStorage.getItem('userEmail'))
@@ -168,6 +168,7 @@ class JobDisplay extends Component {
             this.setState({type_of_apply:"any"})
             // this.submitAdvanceJobCriteria()
             const data={
+                email: localStorage.getItem('userEmail'),
                 search:true,
                 searchjob:this.state.searchjob,
                 searchlocation:this.state.searchlocation,
@@ -190,6 +191,7 @@ class JobDisplay extends Component {
             searchonly:true,
             searchjob:this.state.searchjob,
             searchlocation:this.state.searchlocation,
+            email: localStorage.getItem('userEmail')
         }
         this.props.submitJobSearch(data)
     }

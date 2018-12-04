@@ -21,11 +21,13 @@ var viewParticularAppDetails = require('./apis/viewParticularAppDetails')
 var viewPostedJob = require('./apis/viewPostedJob');
 var editPostedJob = require('./apis/editPostedJob');
 var viewJobApplications = require('./apis/viewJobApplications');
-var searchJob = require('./apis/searchjob');
+var searchJob = require('./apis/searchJob');
 var logData =require('./apis/logData')
 var logSavedJob=require('./apis/logSavedJob')
 var particularjobapplication=require('./apis/viewParticularJobApplication')
 
+var getOneJob = require('./apis/getOneJob');
+var cityWiseApplications = require('./apis/cityWiseApplications');
 
 //Only for AWS
 const busboy = require('connect-busboy');
@@ -98,12 +100,12 @@ app.use('/',logSavedJob)
 app.use('/',userLogin);
 app.use('/',particularjobapplication)
 
-
 //Route imports
 var viewUserProfile = require('./apis/viewUserProfile');
 var deleteUserProfile = require('./apis/deleteUserProfile');
 var jobApplication = require('./apis/jobApplication');
 var updateProfiles = require('./apis/updateProfiles');
+var getAllApplications = require('./apis/getAllApplications');
 
 var searchJob = require('./apis/searchJob');
 var postJob = require('./apis/postJob');
@@ -138,6 +140,8 @@ app.use('/', searchJob);
 app.use('/', viewPostedJob);
 app.use('/', editPostedJob);
 app.use('/', viewJobApplications);
+//To view all the jobs the applicant has applied to
+app.use('/', getAllApplications);
 //save Job
 app.use('/', savejob)
 //This route is used to post a job
@@ -169,6 +173,10 @@ app.use('/',getAllPostedJobs)
 //this route is used to authenticate the recruiter before posting the job
 app.use('/',authRecruiter)
 
+app.use('/', cityWiseApplications);
+
+//get one job at a time, used in displaying saved jobs.
+app.use('/',getOneJob)
 
 
 
