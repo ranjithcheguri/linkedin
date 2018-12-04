@@ -54,32 +54,66 @@ router.post('/postJob', function (req, res) {
         req.body.companyurl,
         req.body.recruiter_email
     ]
-    let sql = 'insert into job(title,description, industry, employment_type, location, job_function, no_of_applicants, no_of_views,company,experience_level,type_of_apply,company_url,recruiter_email) values(?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
-    pool.getConnection(function (err, con) {
-        if (err) {
-            //con.release();
-            res.writeHead(400, {
-                'Content-Type': 'text/plain'
-            })
-            res.end("Could Not Get Connection Object");
-        } else {
-            con.query(sql, job, (err, result) => {
-                con.release();
-                if (err) {
-                    throw err;
-                } else {
-                    console.log('Posted the job details successfully into job table');
-                    console.log("Result after inserting job details", result)
-                    res.send({
-                        status: 200,
-                        message: "Job posted successfully"
-                    })
-                }
-            });
+    console.log("Flag value............................",req.body.new_flag);
+    if(req.body.new_flag){
+
+        // employment_type="${req.body.employementtype}",
+        // location="${req.body.location}",job_function="${req.body.jobfunction}",company="${req.body.company}",
+        // experience_level="${req.body.seniorlevel}",company_url="${req.body.companyurl}"
+        let sql = `UPDATE job SET title = "${req.body.title}",description = "${req.body.jobdescribe}",industry= "${req.body.industry}",location="${req.body.location}",
+        job_function="${req.body.jobfunction}",company="${req.body.company}", experience_level="${req.body.seniorlevel}",company_url="${req.body.companyurl}",
+        employment_type="${req.body.employementtype}" where job_id=${req.body.jobID}`;
+        pool.getConnection(function (err, con) {
+            if (err) {
+                //con.release();
+                res.writeHead(400, {
+                    'Content-Type': 'text/plain'
+                })
+                res.end("Could Not Get Connection Object");
+            } else {
+                con.query(sql, job, (err, result) => {
+                    con.release();
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('Edited the job details successfully');
+                        console.log("Result after inserting job details", result)
+                        res.send({
+                            status: 200,
+                            message: "Job edited successfully"
+                        })
+                    }
+                });
+            }
+        });
+     }else{
+        let sql = 'insert into job(title,description, industry, employment_type, location, job_function, no_of_applicants, no_of_views,company,experience_level,type_of_apply,company_url,recruiter_email) values(?,?,?,?,?,?,?,?,?,?,?,?,?)';
+
+        pool.getConnection(function (err, con) {
+            if (err) {
+                //con.release();
+                res.writeHead(400, {
+                    'Content-Type': 'text/plain'
+                })
+                res.end("Could Not Get Connection Object");
+            } else {
+                con.query(sql, job, (err, result) => {
+                    con.release();
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('Posted the job details successfully into job table');
+                        console.log("Result after inserting job details", result)
+                        res.send({
+                            status: 200,
+                            message: "Job posted successfully"
+                        })
+                    }
+                });
+            }
+        });
         }
-    });
-
 });
 
 

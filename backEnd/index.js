@@ -132,6 +132,7 @@ var bottomTop5 = require('./apis/bottomTop5')
 var getTop10 = require('./apis/getTop10')
 
 var particularjobapplication=require('./apis/viewParticularJobApplication')
+var fetchPostedJobDetails=require('./apis/fetchPostedJobDetails')
 
 
 //This route is used to view the user profile by email
@@ -186,13 +187,14 @@ app.use('/',bottomTop5)
 //this route will return top 10 job posting with it's application/month
 app.use('/',getTop10)
 
-
-
 app.use('/', cityWiseApplications);
 
 
 //get one job at a time, used in displaying saved jobs.
-app.use('/',getOneJob)
+app.use('/',getOneJob);
+
+//This route is used to check if the recruiter has already posted this job
+app.use('/',fetchPostedJobDetails)
 
 
 

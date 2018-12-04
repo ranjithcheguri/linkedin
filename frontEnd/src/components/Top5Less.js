@@ -16,7 +16,12 @@ class Top5Less extends Component {
 
   componentDidMount(){
     console.log("inside component did mount")
-    axios.get("http://localhost:3002/bottomTop5")
+    axios.get("http://localhost:3002/bottomTop5",{
+        params: {
+             email : window.localStorage.getItem("userEmail")
+        //   email   :   "aditi12395@gmail.com"
+        }
+    })
             .then(response => {
                 console.log(response);
                 this.setState({

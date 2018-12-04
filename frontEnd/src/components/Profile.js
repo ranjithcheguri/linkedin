@@ -336,26 +336,26 @@ class Profile extends Component {
                 errorMessage: "City Required",
                 fadeModel: "dummy"
             })
-        }else if(!(phonenoRegex.test(this.state.personalProfile.contactInfo))){
+        } else if (!(phonenoRegex.test(this.state.personalProfile.contactInfo))) {
             alert("invalid phone no");
             this.setState({
                 errorMessage: "Invalid Phone No.",
                 fadeModel: "dummy"
             })
-        } else if(!(zipcodeRegex.test(this.state.personalProfile.zipcode))){
+        } else if (!(zipcodeRegex.test(this.state.personalProfile.zipcode))) {
             alert("invalid zip code");
             this.setState({
                 errorMessage: "Invalid Zip Code",
                 fadeModel: "dummy"
             })
-        }else {
+        } else {
             localStorage.setItem("userCity", this.state.personalProfile.country);
             this.setState({
                 formValidated: true,
                 fadeModel: "modal",
                 errorMessage: ""
             })
-            console.log("state in abcd",this.state);
+            console.log("state in abcd", this.state);
         }
     }
 
@@ -408,6 +408,10 @@ class Profile extends Component {
             .then(response => {
                 console.log(response);
             });
+    }
+
+    messagesBtn = () => {
+    this.props.history.push('/conversation',{participant :this.state.email});
     }
 
     render() {

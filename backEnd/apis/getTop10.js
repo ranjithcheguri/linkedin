@@ -6,8 +6,8 @@ var mongoose = require("mongoose");
 
 router.get('/getTop10', (req, res) => {
     console.log("Inside getTop10 GET request");
-    //let recEmail = req.query.email;
-   let recEmail = 'aditi12395@gmail.com';
+    let recEmail = req.query.email;
+   //let recEmail = 'aditi12395@gmail.com';
     console.log(typeof recEmail,recEmail);
     let sql = `select * from cmpe273db.job where recruiter_email="${recEmail}" order by  posted_date_time asc limit 10;`;
     pool.getConnection((err, con) => {
