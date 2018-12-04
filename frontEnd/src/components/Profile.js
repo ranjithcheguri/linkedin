@@ -363,6 +363,7 @@ class Profile extends Component {
                     <div className="mr-auto  borderMe">
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
                         <button className="btn btn-success linkedInBtn marginLeft disabled">Connected</button>
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.messagesBtn} >messages</button>
                     </div>
                 )
             } else if (this.state.isConnected === 0) {
@@ -370,6 +371,7 @@ class Profile extends Component {
                     <div className="mr-auto  borderMe">
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
                         <button className="btn btn-warning linkedInBtn marginLeft" onClick={this.addConnection}>Pending...</button>
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.messagesBtn}>messages</button>
                     </div>)
             }
             else {
@@ -377,6 +379,7 @@ class Profile extends Component {
                     <div className="mr-auto  borderMe">
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" data-toggle="modal" onClick={this.getResume} data-target="#viewResume"> view resume</button>
                         <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.addConnection}>Connect</button>
+                        <button className="btn btn-outline-dark linkedInBtn marginLeft" onClick={this.messagesBtn}>messages</button>
                     </div>)
             }
 
