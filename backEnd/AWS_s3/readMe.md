@@ -1,12 +1,12 @@
 1. Create an AWS S3 Bucket
 
 //AWS S3 Bucket details //ranjith
-bucketName = 'cmpe273bucket';
+bucketName = 'cmp***bucket';
 
 2. create IAM user and NOTE DOWN the below one time generated credentials.
 
-IAM_userKey = 'AKIAJ4J3CVFRPQG3MY5Q';
-IAM_userSecret = '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';
+IAM_userKey = 'AKI******MY5Q';
+IAM_userSecret = '****************************';
 
 3. go to bucket --> permissions --> bucket policy
 //add the below code : make sure you put correct bucketname in resource && user details in principal/AWS ( get 'arn:aws:iam::' details from user info in IAM)
